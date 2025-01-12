@@ -1,0 +1,19 @@
+.header-logo-text {
+  background: -webkit-linear-gradient(35deg, #4796e3, #6658ff, #ff5546);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.link-color {
+  background: -webkit-linear-gradient(35deg, #4796e3, #6658ff, #ff5546);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.logoAnime {
+  animation: LogoAnime 1s infinite ease-in-out;
+}
+
+@keyframes LogoAnime {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

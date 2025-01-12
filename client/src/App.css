@@ -1,0 +1,124 @@
+.header-logo-text {
+  background: -webkit-linear-gradient(35deg, #4796e3, #6658ff, #ff5546);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.link-color {
+  background: -webkit-linear-gradient(35deg, #4796e3, #6658ff, #ff5546);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.chatList_Section {
+  overflow: scroll;
+  scrollbar-width: none;
+}
+
+.chatList_Section::-webkit-scrollbar {
+  display: none;
+}
+
+.logo-rotate-anime {
+  animation: rotate 10s infinite ease-in-out;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+ul {
+  list-style-type: none;
+}
+
+/* -------------------------------------- */
+/* Response Loading */
+/* -------------------------------------- */
+.activeLoading {
+  animation: LogoAnime 2s infinite linear;
+}
+@keyframes LogoAnime {
+    0% { transform: rotate(0deg) } 
+    100% { transform: rotate(360deg)  }
+} */
+
+
+/* -------------------------------------- */
+/* Response Ai Formating */
+/* -------------------------------------- */
+pre {
+  background: #1e1f20 !important; 
+  border-radius: 5px 5px 10px 10px !important;
+  max-width: 60vw;
+  overflow: scroll;
+}
+
+code {
+  background: #1e1f20 !important; 
+  border-radius: 5px 5px 10px 10px !important;
+  max-width: 60vw;
+  overflow: scroll;
+}
+
+.aiResponse hr {
+  border-color: #555;
+  margin: 15px 0;
+}
+
+.glowingEffect {
+  /* max-width: 250px; */
+  /* padding: 2px; */
+  position: relative;
+  z-index:1;
+  /* background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);  */
+  /* margin-right:25px; */
+  /* filter: brightness(120%); */
+}
+
+.glowingEffect::before {
+  z-index:0;
+  position: absolute;
+  content:"";
+  width:50vw;
+  height:50px;
+  left:10px;
+  top:0;
+  border-radius: 50px;
+  background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%); 
+  filter: blur(10px);
+}
+
+
+/* From Uiverse.io by tiagoadag1203 */ 
+.input {
+  box-shadow: none;
+  transition: all .3s ease-in-out;
+}
+
+.input.active {
+  animation: rotateShadow 3s infinite linear;
+  transition: all .3s ease-in-out;
+}
+
+@keyframes rotateShadow {
+  0% {
+    box-shadow: -2px -2px 8px 1px #64b1fe, 2px 2px 8px 1px #502fd5;
+  }
+  25% {
+    box-shadow: -2px 2px 8px 1px #d52f3d, 2px -2px 8px 1px #64b1fe;
+  }
+  50% {
+    box-shadow: 2px 2px 8px 1px #502fd5, -2px -2px 8px 1px #d52f3d;
+  }
+  75% {
+    box-shadow: 2px -2px 8px 1px #64b1fe, -2px 2px 8px 1px #502fd5;
+  }
+  100% {
+    box-shadow: -2px -2px 8px 1px #d52f3d, 2px 2px 8px 1px #64b1fe;
+  }
+}
+
