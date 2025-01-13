@@ -100,7 +100,7 @@ const HomePage = () => {
         <Grid gridTemplateColumns={'1fr 1fr'} gap={2} mt={'50px'} height={'500px'} mx={20} px={20}>
           <Flex justifyContent={'center'} alignItems={'center'}>
             <Box w={'500px'}>
-              <Text className="header-logo-text" fontSize={'100px'} fontWeight={'500'}>Scholara</Text>
+              <Text className="header-logo-text" fontSize={'100px'} fontWeight={'500'}>Learnix</Text>
               <Text color={'#fff'} fontSize={'32px'} mt={-3} lineHeight={'35px'} fontWeight={'500'}>Your AI Study Companion for <br/>College Success</Text>
               <Text color={'#7f7f7f'} fontSize={'16px'} lineHeight={'22px'} mt={4} fontWeight={'300'}>Get instant access to subject materials, homework help, and expert answers to your academic questions.</Text>
               <Button
