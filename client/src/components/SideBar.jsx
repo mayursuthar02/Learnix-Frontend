@@ -8,7 +8,7 @@ import logoAi from "../assets/logoai.png";
 import { FaPlus } from "react-icons/fa6";
 import { BiSolidNotification } from "react-icons/bi";
 import { IoMdSettings } from "react-icons/io";
-import { BiMessageSquareError } from "react-icons/bi";
+import { MdQuestionMark } from "react-icons/md";
 import { LuMessageSquareMore } from "react-icons/lu";
 // Functions
 import { useRecoilValue } from "recoil";
@@ -90,14 +90,14 @@ const SideBar = ({isNewConversation}) => {
                 </Flex>
               </MenuButton>
             </Tooltip>
-            <MenuList marginLeft={"10px"} zIndex={3} borderRadius={'10px'} px={1} py={1} bg={"#222"} color={'#fff'} border={'none'}>
+            <MenuList marginLeft={"10px"} zIndex={3} borderRadius={'10px'} px={1} py={2} bg={"#222"} color={'#fff'} border={'none'}>
                 <MenuItem borderRadius={'full'} py={2} mb={0} display={'flex'} alignItems={'center'} bg={"#222"} color={'#fff'} _hover={{bg: "#333"}} transition={'background .3s ease'} gap={2} px={4}>
-                  <BiMessageSquareError color="#fff" fontSize={"20px"} />
-                  Questions
+                  <MdQuestionMark color="#fff" fontSize={"20px"} />
+                  Ask a Question
                 </MenuItem>
                 <MenuItem borderRadius={'full'} py={2} display={'flex'} alignItems={'center'} bg={"#222"} color={'#fff'} _hover={{bg: "#333"}} transition={'background .3s ease'} gap={2} px={4}>
                   <LuMessageSquareMore color="#fff" fontSize={"20px"} />
-                  Reply
+                  View Replies
                 </MenuItem>
             </MenuList>
           </Menu>

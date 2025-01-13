@@ -170,6 +170,8 @@ const HomePage = () => {
           <source src={BgVideo} type='video/mp4'/>
         </video>
       </Box> */}
+
+      {/* <Box className="container"></Box> */}
     </Box>
   );
 };

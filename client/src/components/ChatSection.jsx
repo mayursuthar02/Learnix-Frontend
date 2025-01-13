@@ -157,8 +157,8 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
                   <Avatar src={user?.profilePic}/>
                 </MenuButton>
               </Tooltip>
-              <MenuList marginLeft={'70px'} borderRadius={'50px'} px={1} py={1} bg={"#131313"} color={'#fff'} border={'1px solid #222'}>
-                  <MenuItem borderRadius={'full'} py={2} display={'flex'} alignItems={'center'} bg={"#131313"} color={'#fff'} _hover={{bg: "#222"}} transition={'background .3s ease'} gap={2} px={4} onClick={onOpen}>
+              <MenuList marginLeft={'70px'} borderRadius={'50px'} px={1} py={1} bg={"#222"} color={'#fff'} border={'none'}>
+                  <MenuItem borderRadius={'full'} py={2} display={'flex'} alignItems={'center'} bg={"#222"} color={'#fff'} _hover={{bg: "#333"}} transition={'background .3s ease'} gap={2} px={4} onClick={onOpen}>
                     <LuUserPen fontSize={'18px'}/> 
                     Update Profile
                   </MenuItem>
