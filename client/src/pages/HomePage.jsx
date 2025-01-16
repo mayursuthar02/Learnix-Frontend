@@ -162,16 +162,7 @@ const HomePage = () => {
           </Grid>
         </Box>
       </Box>
-
-
-
-      {/* <Box position={'fixed'} top={0} left={0} zIndex={'-1'} opacity={.3}>
-        <video autoPlay muted loop playsInline className='bg-video'>
-          <source src={BgVideo} type='video/mp4'/>
-        </video>
-      </Box> */}
-
-      {/* <Box className="container"></Box> */}
+      
     </Box>
   );
 };

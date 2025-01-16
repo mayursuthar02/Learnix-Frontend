@@ -25,6 +25,7 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [botResponseLoading, setBotResponseLoading] = useState(false);
+  const [userReplyLoading, setUserReplyLoading] = useState(false);
   const [isScholaraActive, setIsScholaraActive] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   
@@ -174,7 +175,7 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
 
       {/* Hello Message */}
       {messages.length > 0 && conversationId ? (
-        <ChatList botResponseLoading={botResponseLoading} setBotResponseLoading={setBotResponseLoading} messages={messages} setMessages={setMessages} conversationId={conversationId} isScholaraActive={isScholaraActive} />
+        <ChatList userReplyLoading={userReplyLoading} setUserReplyLoading={setUserReplyLoading} botResponseLoading={botResponseLoading} setBotResponseLoading={setBotResponseLoading} messages={messages} setMessages={setMessages} conversationId={conversationId} isScholaraActive={isScholaraActive} />
       ) : (
         <Flex flexDirection={'column'} alignItems={'center'} justifyContent={'center'} height={'100%'} >
           <Flex align={'center'} gap={2}>
@@ -185,9 +186,6 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
                 </Text>
               </motion.div>
             </AnimatePresence>
-            {/* <Text className="header-logo-text" fontSize={"50`px"} fontWeight={"500"} textTransform={"capitalize"}>
-            {user?.fullName}
-            </Text>` */}
           </Flex>
         
           <Text textAlign={'center'} color={'#7f7f7f'} fontSize={'16px'} mt={1} fontWeight={'300'} w={'500px'}>Get instant access to subject materials, homework help, and expert answers to your academic questions.</Text>
@@ -200,22 +198,8 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
         </Flex>
       )}
 
-      {/* {messages.length === 0 && (
-        <Flex flexDirection={'column'} alignItems={'center'} justifyContent={'center'} height={'100%'}>
-          <Text className="header-logo-text" fontSize={'50px'} fontWeight={'500'} textTransform={'capitalize'}>Hello! {user?.fullName}</Text>
-          <Text textAlign={'center'} color={'#7f7f7f'} fontSize={'16px'} mt={1} fontWeight={'300'} w={'500px'}>Get instant access to subject materials, homework help, and expert answers to your academic questions.</Text>
-          <Tooltip label="Start your conversation!" bg={'#222'} color={'#fff'}>
-            <Button onClick={startConversation} display={'flex'} alignItems={'center'} color={'#fff'} mt={10} gap={2} borderRadius={'full'} bg="linear-gradient(90deg, #4796E3, #6658ff, #ff5546)" transition="background-position 0.5s ease-in-out" bgSize="200% 200%" bgPos="0% 0%" _hover={{ bgPos: "100% 0%" }} _active={{bgPos: "0% 0%"}} px={5}>
-              <PiHandWavingBold/>
-              <Text fontWeight={'500'}>Hello!</Text>
-            </Button>
-          </Tooltip>
-        </Flex>
-      )}
-
-      // {messages.length > 0 && conversationId && <ChatList botResponseLoading={botResponseLoading} setBotResponseLoading={setBotResponseLoading} messages={messages} setMessages={setMessages} conversationId={conversationId} isScholaraActive={isScholaraActive} />} */}
-
-      <ChatInput conversationId={conversationId} botResponseLoading={botResponseLoading} startConversation={startConversation} isScholaraActive={isScholaraActive} setIsScholaraActive={setIsScholaraActive} activateScholara={activateScholara} setMessages={setMessages}/>
+      {/* Input Section */}
+      <ChatInput conversationId={conversationId} setUserReplyLoading={setUserReplyLoading} botResponseLoading={botResponseLoading} startConversation={startConversation} isScholaraActive={isScholaraActive} setIsScholaraActive={setIsScholaraActive} activateScholara={activateScholara} setMessages={setMessages}/>
 
       {/* Update Profile DialogBox */}
       <UpdateProfile isOpen={isOpen} onClose={onClose}/>

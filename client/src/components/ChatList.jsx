@@ -1,10 +1,10 @@
-import { Avatar, Box, Flex} from "@chakra-ui/react";
+import { Avatar, Box, Flex, Spinner} from "@chakra-ui/react";
 // import { _mockMessagesData } from "../_mock/Messages";
 import Logo from "../assets/logoai.png";
 import UserMessage from "./UserMessage";
 import BotMessage from "./BotMessage";
 // Icons
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 // State and Toast
 import useShowToast from '../hooks/useShowToast';
 import {useRecoilValue} from 'recoil';
@@ -12,13 +12,14 @@ import userAtom from "../atoms/userAtom";
 import AiResponse from "./AiResponse";
 import LoadingAnime from "./LoadingAnime";
 
-const ChatList = ({botResponseLoading, setBotResponseLoading, messages, setMessages, conversationId, isScholaraActive}) => {
+const ChatList = ({botResponseLoading, setBotResponseLoading, messages, setMessages, conversationId, isScholaraActive, userReplyLoading, setUserReplyLoading}) => {
   const user = useRecoilValue(userAtom);
   const showToast = useShowToast();
   const chatContainerRef = useRef(null);
   
   // User Reply
   const handleUserReply = async(reply, apiRoute) => {
+    setUserReplyLoading(true);
     try {
       const response = await fetch(`/api/messages/userPrompt`, {
         method: "POST",
@@ -29,11 +30,13 @@ const ChatList = ({botResponseLoading, setBotResponseLoading, messages, setMessa
       if (data.error) {
         showToast("Error", data.error, "error");
       }
-      console.log(data);
+      // console.log(data);
       setMessages((prev) => [...prev, data.data]);
       botResponse(apiRoute);
     } catch (error) {
       console.log(error);
+    } finally {
+      setUserReplyLoading(false);
     }
   };
 
@@ -82,7 +85,7 @@ const ChatList = ({botResponseLoading, setBotResponseLoading, messages, setMessa
           <Box>
             {message?.sender === "user" ? (
               <UserMessage message={message}/>
-              ) : message?.sender === "scholara" ? (
+              ) : message?.sender === "learnix" ? (
                 <BotMessage isScholaraActive={isScholaraActive} message={message} handleUserReply={handleUserReply}/>
             ) : (
               <AiResponse message={message} />
@@ -95,11 +98,19 @@ const ChatList = ({botResponseLoading, setBotResponseLoading, messages, setMessa
           )}
         </Flex>
       ))}
-
+    
+      {/* User reply Loading Animation */}
+      {userReplyLoading && (
+        <Flex mb={10} w={'100%'} gap={5} alignItems={'center'} justifyContent={'end'}>
+          <Spinner color="#333"/>
+          <Avatar name={user?.fullName} src={user?.profilePic} w={"40px"} h={"40px"} className={botResponseLoading ? "activeLoading" : ""} objectFit={"cover"} w={"40px"} h={"40px"}/>
+        </Flex>
+      )}
+    
       {/* Response Loading Animation */}
       {botResponseLoading && (
         <Flex mb={10} w={'100%'} gap={5} alignItems={'start'}>
-          <Avatar name="Ai" src={Logo} className={botResponseLoading ? "activeLoading" : ""} objectFit={"cover"} w={"40px"} h={"40px"} />
+          <Avatar name="Ai" src={Logo} className={botResponseLoading ? "activeLoading" : ""} objectFit={"cover"} w={"40px"} h={"40px"}/>
           <LoadingAnime/>
         </Flex>
       )}

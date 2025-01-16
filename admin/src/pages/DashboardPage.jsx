@@ -24,7 +24,7 @@ const DashboardPage = () => {
     { title: "Professors", link: "/dashboard/professors", icon: <PiUsersThreeBold /> },
     { title: "Resources", link: "/dashboard/resource", icon: <GrResources /> },
     { title: "FAQs", link: "/dashboard/faqs", icon: <LuMessagesSquare /> },
-    { title: "Questions", link: "/dashboard/faqs", icon: <MdOutlineQuestionMark /> },
+    { title: "Questions", link: "/dashboard/questions", icon: <MdOutlineQuestionMark /> },
     { title: "Updates", link: "/dashboard/updates", icon: <MdOutlineEditNotifications /> },
   ];
   const user = useRecoilValue(userAtom);

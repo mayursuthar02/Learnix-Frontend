@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 // Icons
 import { RiLinkM } from "react-icons/ri";
+import { FaUserLarge } from "react-icons/fa6";
 
 const MotionText = motion(Text);
 const MotionButton = motion(Button);
@@ -70,27 +71,23 @@ const BotMessage = ({ message, handleUserReply, isScholaraActive }) => {
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: index * 0.1 }}
             >
-              <Tooltip key={index} label={resource.resourceLink} bg={'#222'} color={'#fff'} fontWeight={'400'} borderRadius={'md'} p={3}>
-                <Link
-                  href={resource.resourceLink}
-                  border={'1px solid #222'}
-                  color={"#4b90ff"}
-                  borderRadius={"20px"}
-                  px={4}
-                  py={2}
-                  maxWidth={"400px"}
-                  minWidth={'auto'}
-                  fontWeight={"400"}
-                  display={"flex"}
-                  alignItems={"center"}
-                  gap={2}
-                  mb={3}
-                  target="_blank"
-                >
-                  <RiLinkM />
-                  {resource.title}
-                </Link>
-              </Tooltip>
+              <Box bg={'#222'} px={4} py={3} borderRadius={'10px'} mb={2}>
+                <Flex color={'#fff'} fontWeight={'500'} alignItems={'center'} gap={2} mb={1}><FaUserLarge/><Text fontWeight={'400'}>{resource.author}</Text></Flex>
+                <Tooltip key={index} label={resource.resourceLink} bg={'#222'} color={'#fff'} fontWeight={'400'} borderRadius={'md'} p={3}>
+                  <Link
+                    href={resource.resourceLink}
+                    color={"#4b90ff"}
+                    fontWeight={"400"}
+                    display={"flex"}
+                    alignItems={"center"}
+                    gap={2}
+                    target="_blank"
+                  >
+                    <RiLinkM />
+                    {resource.title}
+                  </Link>
+                </Tooltip>
+              </Box>
             </motion.li>
           ))}
         </Box>

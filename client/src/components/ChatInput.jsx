@@ -9,7 +9,7 @@ import { ImAttachment } from "react-icons/im";
 // Functions
 import useShowToast from "../hooks/useShowToast";
 
-const ChatInput = ({conversationId, startConversation, isScholaraActive, setIsScholaraActive, activateScholara, setMessages, botResponseLoading}) => {
+const ChatInput = ({conversationId, startConversation, isScholaraActive,setUserReplyLoading, setIsScholaraActive, activateScholara, setMessages, botResponseLoading}) => {
     const [prompt, setPrompt] = useState("");
     const [textAreaRow, setTextAreaRow] = useState(1);
     const [isMicPopupOpen, setIsMicPopupOpen] = useState(false); // Mic popup state
@@ -26,23 +26,26 @@ const ChatInput = ({conversationId, startConversation, isScholaraActive, setIsSc
     };
 
     const userPrompt = async() => {
-        try {
-            const response = await fetch(`/api/messages/userPrompt`, {
-              method: "POST",
-              headers: {"Content-Type" : "application/json"},
-              body: JSON.stringify({conversationId, prompt: prompt})
-            });
-            const data = await response.json();
-            if (data.error) {
-              showToast("Error", data.error, "error");
-            }
-            console.log(data);
-            setMessages((prev) => [...prev, data.data]);
-            activateScholara(prompt);
-            setPrompt('');       
-          } catch (error) {
-            console.log(error);
-          }
+      setUserReplyLoading(true);
+      try {
+        const response = await fetch(`/api/messages/userPrompt`, {
+          method: "POST",
+          headers: {"Content-Type" : "application/json"},
+          body: JSON.stringify({conversationId, prompt: prompt})
+        });
+        const data = await response.json();
+        if (data.error) {
+          showToast("Error", data.error, "error");
+        }
+        console.log(data);
+        setMessages((prev) => [...prev, data.data]);
+        activateScholara(prompt);
+        setPrompt('');       
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setUserReplyLoading(false);
+      }
     }
 
     const handleKeyDown = async(event) => {

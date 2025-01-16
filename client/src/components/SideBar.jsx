@@ -15,11 +15,13 @@ import { useRecoilValue } from "recoil";
 import FetchAllUpdates from "../helpers/FetchAllUpdates";
 import updatesAtom from "../atoms/updatesAtom";
 import { useEffect } from "react";
+import AskAQuestion from "./AskAQuestion";
 
 
 const SideBar = ({isNewConversation}) => {
   // Functions
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isOpenAskAQuestion, onOpen: onOpenAskAQuestion, onClose: onCloseAskAQuestion } = useDisclosure();
   const fetchAllUpdatesFunc = FetchAllUpdates();
   const updates = useRecoilValue(updatesAtom);
   
@@ -91,7 +93,7 @@ const SideBar = ({isNewConversation}) => {
               </MenuButton>
             </Tooltip>
             <MenuList marginLeft={"10px"} zIndex={3} borderRadius={'10px'} px={1} py={2} bg={"#222"} color={'#fff'} border={'none'}>
-                <MenuItem borderRadius={'full'} py={2} mb={0} display={'flex'} alignItems={'center'} bg={"#222"} color={'#fff'} _hover={{bg: "#333"}} transition={'background .3s ease'} gap={2} px={4}>
+                <MenuItem borderRadius={'full'} py={2} mb={0} display={'flex'} alignItems={'center'} bg={"#222"} color={'#fff'} _hover={{bg: "#333"}} transition={'background .3s ease'} gap={2} px={4} onClick={onOpenAskAQuestion}>
                   <MdQuestionMark color="#fff" fontSize={"20px"} />
                   Ask a Question
                 </MenuItem>
@@ -106,6 +108,9 @@ const SideBar = ({isNewConversation}) => {
 
       {/* Updates Drawer */}
       <UpdatesDrawer isOpen={isOpen} onClose={onClose}/>
+
+      {/* Ask A Question */}
+      <AskAQuestion isOpen={isOpenAskAQuestion} onClose={onCloseAskAQuestion}/>
     </Box>
   );
 };
