@@ -1,14 +1,20 @@
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Avatar, Box, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Flex, Grid, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Avatar, Box, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Flex, Grid, Text } from "@chakra-ui/react";
+
+// Functions
 import FetchAllUpdates from '../helpers/FetchAllUpdates';
 import { useRecoilState } from "recoil";
-import updatesAtom from "../atoms/updatesAtom";
 import { formatDistanceToNow } from 'date-fns'
+import updatesAtom from "../atoms/updatesAtom";
+
+
 
 const UpdatesDrawer = ({onClose, isOpen}) => {
+  // Functions
   const [updates, setUpdates] = useRecoilState(updatesAtom);
   const fetchAllUpdatesFunc = FetchAllUpdates();
   
+  // Fetch All Updates
   useEffect(() => {
     fetchAllUpdatesFunc();
   }, [])

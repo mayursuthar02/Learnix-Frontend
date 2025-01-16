@@ -1,16 +1,22 @@
 import { Box, Grid, Text } from "@chakra-ui/react"
 import { _mockConversationsData } from "../_mock/Conversations"
+
 // Hooks
 import { useEffect, useState } from "react"
 import useShowToast from '../hooks/useShowToast';
+
 // Components
 import Conversation from "./Conversation"
 import { useNavigate, useParams } from "react-router-dom";
 
+
+
+
 const ConversationHistoryTabs = ({isNewConversation}) => {
+  // States
   const [conversations, setConversations] = useState([]);
+  // Functions
   const {conversationId } = useParams();
-  // Function
   const showToast = useShowToast();
   const navigate = useNavigate();
   

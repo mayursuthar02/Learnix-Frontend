@@ -10,7 +10,7 @@ const Header = () => {
         <Box width={'40px'} height={'40px'} borderRadius={'full'} overflow={'hidden'}>
           <Image src={logoAi} w={'100%'} h={'100%'} objectFit={'cover'}/>
         </Box>
-        <Text className="header-logo-text" fontWeight={'600'} fontSize={'30px'}>Scholara</Text>
+        <Text className="header-logo-text" fontWeight={'600'} fontSize={'30px'}>Learnix</Text>
       </Flex>
 
       {/* Button */}  

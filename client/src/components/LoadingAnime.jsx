@@ -1,4 +1,4 @@
-import { Box, HStack } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { keyframes } from '@chakra-ui/react';
 
 const loadingBar = keyframes`
@@ -19,7 +19,6 @@ const LoadingAnime = () => {
           mb={2}
           h="16px"
           borderRadius="full"
-        //   bg="#222"
           position="relative"
           overflow="hidden"
         >

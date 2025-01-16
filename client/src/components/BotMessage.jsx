@@ -1,9 +1,13 @@
 import { Box, Button, Flex, Link, Text, Tooltip } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+
 // Icons
 import { RiLinkM } from "react-icons/ri";
 import { FaUserLarge } from "react-icons/fa6";
+
+// Styles
+import { TOOLTIP_STYLE } from "../styles/globleStyles";
 
 const MotionText = motion(Text);
 const MotionButton = motion(Button);
@@ -73,7 +77,7 @@ const BotMessage = ({ message, handleUserReply, isScholaraActive }) => {
             >
               <Box bg={'#222'} px={4} py={3} borderRadius={'10px'} mb={2}>
                 <Flex color={'#fff'} fontWeight={'500'} alignItems={'center'} gap={2} mb={1}><FaUserLarge/><Text fontWeight={'400'}>{resource.author}</Text></Flex>
-                <Tooltip key={index} label={resource.resourceLink} bg={'#222'} color={'#fff'} fontWeight={'400'} borderRadius={'md'} p={3}>
+                <Tooltip key={index} label={resource.resourceLink} {...TOOLTIP_STYLE} borderRadius={'md'} p={3}>
                   <Link
                     href={resource.resourceLink}
                     color={"#4b90ff"}

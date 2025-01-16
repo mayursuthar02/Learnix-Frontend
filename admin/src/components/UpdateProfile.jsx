@@ -1,12 +1,8 @@
 import {
   Button,
-  Flex,
   FormControl,
   FormLabel,
-  Heading,
   Input,
-  Stack,
-  useColorModeValue,
   Avatar,
   AvatarBadge,
   IconButton,
@@ -22,23 +18,50 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 // Icons
-import { SmallCloseIcon } from "@chakra-ui/icons";
 import { MdEdit } from "react-icons/md";
 // Function
 import usePriviewImg from '../hooks/usePriviewImg';
 import { useRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
 import { useRef, useState } from "react";
+import useShowToast from "../hooks/useShowToast";
 
 export default function UpdateProfile({ isOpen, onClose }) {
     // State
     const [user, setUser] = useRecoilState(userAtom);
     const [fullName, setFullName] = useState(user?.fullName);
     const [email, setEmail] = useState(user?.email);
+    const [isLoading, setIsLoading] = useState(false);
     // Functions
     const fileRef = useRef();
-    const {handleImageChange, imgUrl, setImgUrl} = usePriviewImg();
+    const {handleImageChange, imgUrl} = usePriviewImg();
+    const showToast = useShowToast();
     
+
+      // Update User Profile
+      const updateUserProfile = async() => {
+        setIsLoading(true);
+        try {
+          const response = await fetch('/api/users/updateUserProfile', {
+            method: "PUT",
+            headers: {"Content-Type" : "application/json"},
+            body: JSON.stringify({fullName, email, profilePic: imgUrl})
+          });
+          const data = await response.json();
+          if (data.error) {
+            showToast("Error", data.error, "error");
+            return;
+          }
+          setUser(data.user);
+          onClose();
+        } catch (error) {
+          console.log({error});
+          showToast("Error", error, "error");
+        } finally {
+          setIsLoading(false);
+        }
+      }
+
   return (
     <Box>
       <Modal
@@ -86,18 +109,11 @@ export default function UpdateProfile({ isOpen, onClose }) {
             <Input type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="email@example.com"/>
           </FormControl>
 
-          <FormControl id="role" isRequired mb={4} isDisabled={true}>
-            <FormLabel>Role</FormLabel>
-            <Input type="text" value={user?.role}/>
-          </FormControl>
-
           </ModalBody>
 
           <ModalFooter gap={2}>
-            <Button borderRadius={"full"} onClick={onClose}>Cancel</Button>
             <Button
-              // isLoading={isLoading}
-            //   size="lg"
+              isLoading={isLoading}
               bg="linear-gradient(90deg, #4796E3, #6658ff, #ff5546)"
               color="white"
               borderRadius="full"
@@ -106,10 +122,11 @@ export default function UpdateProfile({ isOpen, onClose }) {
               bgPos="0% 0%"
               _hover={{ bgPos: "100% 0%" }}
               _active={{ bgPos: "100% 0%", opacity: 0.9 }}
-              // onClick={handleSubmit}
+              onClick={updateUserProfile}
             >
               Update
             </Button>
+            <Button borderRadius={"full"} onClick={onClose}>Cancel</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

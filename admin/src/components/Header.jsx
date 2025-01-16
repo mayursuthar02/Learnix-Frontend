@@ -66,8 +66,8 @@ const Header = () => {
         </Text>
       </Flex>
 
-      <Flex align={'center'} gap={3}>
-        {/* Button */}
+      <Flex align={'center'} gap={3} bg={"#f0f4f9"} borderRadius={'full'}>
+        {/* Button */}  
         {user && (
           <Tooltip hasArrow label={user?.fullName} bg="#1f1f1f" color="#fff">
             <Avatar src={user?.profilePic} />

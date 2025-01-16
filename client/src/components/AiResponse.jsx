@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Box, Flex, IconButton, Text, Tooltip } from "@chakra-ui/react"; // Divider for the hr tag
 import { motion } from "framer-motion";
 // Text Format
@@ -7,36 +7,32 @@ import hljs from "highlight.js"; // Import Highlight.js
 import "highlight.js/styles/github-dark.css"; // Import Highlight.js theme
 // Icons
 import { TbCopy } from "react-icons/tb";
-import { LuCheck } from "react-icons/lu";
 // Function
 import useShowToast from '../hooks/useShowToast.js';
+import { BUTTON_STYLE, TOOLTIP_STYLE } from "../styles/globleStyles.js";
 
 // Create a motion component for the Box
 const MotionBox = motion(Box);
 
 const AiResponse = ({ message }) => {
   const showToast = useShowToast();
-  // const [isCopied, setIsCopied] = useState(false);
   
   useEffect(() => {
     hljs.highlightAll();
   }, [message]);
 
+  // Copy Code
   const handleCopy = (code) => {
     navigator.clipboard.writeText(code).then(
       () => {
-        // console.log("Code copied to clipboard!");
-        // setIsCopied(true);
         showToast("success", "Code copied to clipboard!", "success");
-        // setTimeout(() => {
-        //   setIsCopied(false);
-        // }, 1000);
       },
       (err) => {
         console.error("Failed to copy code: ", err);
       }
     );
   };
+
 
   return (
     <MotionBox
@@ -77,8 +73,8 @@ const AiResponse = ({ message }) => {
               <>
                 <Flex align={'center'} justifyContent={'space-between'} bg={'#1e1f20'} borderRadius={'10px 10px 5px 5px'} mt={5} py={2} pl={5} pr={3} fontWeight={'400'}>  
                   <Text fontSize={'15px'} textTransform={'capitalize'}>{language}</Text>
-                  <Tooltip label="Copy" bg={'#222'} color={'#fff'} fontWeight={'400'}>
-                    <IconButton bg={'#1e1f20'} _hover={{bg: "#333"}} transition={'background .3s ease'} color={'#fff'} size={'md'} borderRadius={'full'} icon={<TbCopy/>} onClick={() => handleCopy(codeContent)}/>
+                  <Tooltip label="Copy" {...TOOLTIP_STYLE}>
+                    <IconButton {...BUTTON_STYLE} size={'md'} icon={<TbCopy/>} onClick={() => handleCopy(codeContent)}/>
                   </Tooltip>
                 </Flex>
                 <Box

@@ -1,25 +1,27 @@
-import { Avatar, Badge, Button, Flex, IconButton, Menu, MenuButton, MenuItem, MenuList, Text, Tooltip, useDisclosure } from "@chakra-ui/react"
-import {useNavigate, useParams, Link as RouterLink} from 'react-router-dom';
+import { Avatar, Badge, Button, Flex, IconButton, Text, Tooltip } from "@chakra-ui/react"
+import {useNavigate, useParams} from 'react-router-dom';
+
 // Components
 import ChatList from "./ChatList"
 import ChatInput from "./ChatInput"
 import { motion, AnimatePresence } from "framer-motion";
-import UpdateProfile from '../components/UpdateProfile';
+
 // Icons
 import { MdLogout } from "react-icons/md";
 import { PiHandWavingBold } from "react-icons/pi";
-import { LuUserPen } from "react-icons/lu";
+
 // State and Toast, Function
 import {useRecoilState} from 'recoil';
 import userAtom from '../atoms/userAtom'
 import useShowToast from "../../../admin/src/hooks/useShowToast";
 import { useEffect, useState } from "react";
 
+// Styles
+import { GRADIENT_BUTTON_STYLE, TOOLTIP_STYLE } from "../styles/globleStyles";
+
+// MAIN FUNCTION
 const ChatSection = ({isNewConversation, setIsNewConversation}) => {
-  const languages = [
-    "Hello!",
-    "नमस्ते!", // Hindi
-  ];
+  const languages = ["Hello!","नमस्ते!"];
   // State
   const [user, setUser] = useRecoilState(userAtom);
   const [messages, setMessages] = useState([]);
@@ -30,7 +32,6 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   
   // Use Function
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const showToast = useShowToast();
   const navigate = useNavigate();
   const {conversationId} = useParams();
@@ -44,9 +45,9 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
     return () => clearInterval(interval); // Cleanup interval on component unmount
   }, []);
   
+
   // Fetch Messages
   useEffect(()=> {
-
     const getMessages = async() => {
       try {
         const response = await fetch(`/api/messages/getMessages/${conversationId}`);
@@ -55,7 +56,6 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
           showToast("Error", data.error, "error");
           return;
         }
-        console.log(data);
         setMessages(data.messages);
       } catch (error) {
         showToast("Error", error, "error");
@@ -66,6 +66,7 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
       getMessages();
     }
   },[conversationId]);
+
 
   // User LogOut
   const handleLogout = async() => {
@@ -89,7 +90,7 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
     }
   }
   
-  // Start API
+  // Start Conversation
   const startConversation = async() => {
     setBotResponseLoading(true);
     try {
@@ -114,6 +115,7 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
     }
   }
 
+  // Active Ai
   const activateScholara = async(prompt) => {
     setBotResponseLoading(true);
     try {
@@ -138,6 +140,7 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
     }
   }
 
+
   return (
     <Flex align={'center'} justifyContent={'space-between'} flexDir={'column'} bg={'#131313'}>
       {/* Header */}
@@ -147,26 +150,16 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
             <Badge bg={'#222'} color={'#fff'} fontWeight={'400'} textTransform={'lowercase'}>1.0v</Badge>
             <Flex alignItems={'center'} gap={1}>
               <Text>Learnix</Text>
-              {/* <MdKeyboardArrowDown/> */}
             </Flex>
           </Flex>
+
           {/* User Profile and Logout */}
           <Flex align={'center'} gap={3} bg={'#222'} borderRadius={'full'}>
-            <Menu>
-              <Tooltip label={user?.fullName} color={'#fff'} bg={'#222'}>
-                <MenuButton>
-                  <Avatar src={user?.profilePic}/>
-                </MenuButton>
-              </Tooltip>
-              <MenuList marginLeft={'70px'} borderRadius={'50px'} px={1} py={1} bg={"#222"} color={'#fff'} border={'none'}>
-                  <MenuItem borderRadius={'full'} py={2} display={'flex'} alignItems={'center'} bg={"#222"} color={'#fff'} _hover={{bg: "#333"}} transition={'background .3s ease'} gap={2} px={4} onClick={onOpen}>
-                    <LuUserPen fontSize={'18px'}/> 
-                    Update Profile
-                  </MenuItem>
-              </MenuList>
-            </Menu>
+            <Tooltip hasArrow label={user?.fullName} {...TOOLTIP_STYLE}>
+              <Avatar src={user?.profilePic}/>
+            </Tooltip>
             {user && (
-              <Tooltip hasArrow label={"Logout"} bg="#222" color="#fff">
+              <Tooltip hasArrow label={"Logout"} {...TOOLTIP_STYLE}>
                 <IconButton borderRadius={'full'} size={'lg'} fontSize={"25px"} bg={'#222'} _hover={{bg: '#222'}} transition={'background .3s ease'} color="#fff" pl={.5}  icon={<MdLogout fontSize={'22px'}/>} onClick={handleLogout} isLoading={loading}/>
               </Tooltip>
             )}
@@ -189,8 +182,8 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
           </Flex>
         
           <Text textAlign={'center'} color={'#7f7f7f'} fontSize={'16px'} mt={1} fontWeight={'300'} w={'500px'}>Get instant access to subject materials, homework help, and expert answers to your academic questions.</Text>
-          <Tooltip label="Start your conversation!" bg={'#222'} color={'#fff'}>
-            <Button onClick={() => {startConversation(); setIsNewConversation(!isNewConversation)}} display={'flex'} alignItems={'center'} color={'#fff'} mt={10} gap={2} borderRadius={'full'} bg="linear-gradient(90deg, #4796E3, #6658ff, #ff5546)" transition="background-position 0.5s ease-in-out" bgSize="200% 200%" bgPos="0% 0%" _hover={{ bgPos: "100% 0%" }} _active={{bgPos: "0% 0%"}} px={5}>
+          <Tooltip label="Start your conversation!" {...TOOLTIP_STYLE}>
+            <Button onClick={() => {startConversation(); setIsNewConversation(!isNewConversation)}} display={'flex'} alignItems={'center'} mt={10} gap={1} {...GRADIENT_BUTTON_STYLE}>
               <PiHandWavingBold/>
               <Text fontWeight={'500'}>Hello!</Text>
             </Button>
@@ -200,9 +193,6 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
 
       {/* Input Section */}
       <ChatInput conversationId={conversationId} setUserReplyLoading={setUserReplyLoading} botResponseLoading={botResponseLoading} startConversation={startConversation} isScholaraActive={isScholaraActive} setIsScholaraActive={setIsScholaraActive} activateScholara={activateScholara} setMessages={setMessages}/>
-
-      {/* Update Profile DialogBox */}
-      <UpdateProfile isOpen={isOpen} onClose={onClose}/>
     </Flex>
   )
 }

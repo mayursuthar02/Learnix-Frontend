@@ -1,15 +1,22 @@
-import { Box, Input, Flex, FormControl, IconButton, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, Textarea, Tooltip } from "@chakra-ui/react"
+import { Box, Input, Flex, FormControl, IconButton, Textarea, Tooltip } from "@chakra-ui/react"
 import { useRef, useState } from "react";
+
 // Icons
 import { BiSolidSend } from "react-icons/bi";
 import { BsStars } from "react-icons/bs";
 import { PiHandWavingBold } from "react-icons/pi";
 import { RiMic2AiFill } from "react-icons/ri";
 import { ImAttachment } from "react-icons/im";
+
 // Functions
 import useShowToast from "../hooks/useShowToast";
 
-const ChatInput = ({conversationId, startConversation, isScholaraActive,setUserReplyLoading, setIsScholaraActive, activateScholara, setMessages, botResponseLoading}) => {
+// Styles
+import {TOOLTIP_STYLE, GRADIENT_BUTTON_STYLE, BUTTON_STYLE} from '../styles/globleStyles';
+
+
+// MAIN FUNCTION
+const ChatInput = ({conversationId, startConversation, isScholaraActive,setUserReplyLoading, activateScholara, setMessages, botResponseLoading}) => {
     const [prompt, setPrompt] = useState("");
     const [textAreaRow, setTextAreaRow] = useState(1);
     const [isMicPopupOpen, setIsMicPopupOpen] = useState(false); // Mic popup state
@@ -17,15 +24,22 @@ const ChatInput = ({conversationId, startConversation, isScholaraActive,setUserR
     const [interimText, setInterimText] = useState(""); // Temporary text from speech recognition
     const [file, setFile] = useState("");
 
-      // Use Function
+    // Use Function
     const showToast = useShowToast();
     const fileRef = useRef();
      
+  
     const handleTextareaChange = (event) => {
         setPrompt(event.target.value);
-    };
+    }
 
+    // User prompt
     const userPrompt = async() => {
+      if (!prompt) {
+        showToast("Error", "Prompt is required", "error");
+        return;
+      }
+      
       setUserReplyLoading(true);
       try {
         const response = await fetch(`/api/messages/userPrompt`, {
@@ -65,7 +79,7 @@ const ChatInput = ({conversationId, startConversation, isScholaraActive,setUserR
     };
 
     // Speech Recognition Logic
-      const startSpeechRecognition = () => {
+    const startSpeechRecognition = () => {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
       // Check if the browser supports Speech Recognition
@@ -116,8 +130,8 @@ const ChatInput = ({conversationId, startConversation, isScholaraActive,setUserR
                 <Flex alignItems={'end'} border={'1px solid #333'} gap={1} borderRadius={'30px'} p={1} w={'50vw'} transition={'width .5s ease-in-out'} minH={'50px'} className={isListening ? "input active" : "input"}>
                     <Box>
                       <Input type="file" hidden ref={fileRef} onChange={(e) => setFile(e.target.files[0])}/>
-                      <Tooltip label={"Attachment"} bg={'#222'} color={'#fff'} fontWeight={'400'}>
-                        <IconButton borderRadius={'full'} onClick={() => {fileRef.current.click()}} bgColor={'#1e1f20'}  _hover={{bg: "#282a2c"}} _active={{opacity: 0.7}} icon={<ImAttachment color="#fff" fontSize={'20px'} />} isDisabled={!isScholaraActive}/>
+                      <Tooltip label={"Attachment"} {...TOOLTIP_STYLE}>
+                        <IconButton borderRadius={'full'} onClick={() => {fileRef.current.click()}} {...BUTTON_STYLE} _active={{opacity: 0.7}} icon={<ImAttachment color="#fff" fontSize={'20px'} />} isDisabled={!isScholaraActive}/>
                       </Tooltip>
                     </Box>
                   
@@ -144,16 +158,16 @@ const ChatInput = ({conversationId, startConversation, isScholaraActive,setUserR
                         />
                     </FormControl>
                         
-                    <IconButton borderRadius={'full'} onClick={() => {userPrompt(); setPrompt('')}} bgColor={'#1e1f20'}  _hover={{bg: "#282a2c"}} _active={{opacity: 0.7}} icon={<BiSolidSend color="#fff" fontSize={'20px'} />} isDisabled={!isScholaraActive}/>
+                    <IconButton borderRadius={'full'} onClick={() => {userPrompt(); setPrompt('')}} {...BUTTON_STYLE} _active={{opacity: 0.7}} icon={<BiSolidSend color="#fff" fontSize={'20px'} />} isDisabled={!isScholaraActive}/>
                     
-                    <IconButton borderRadius={'full'} onClick={() => {setIsMicPopupOpen(true); startSpeechRecognition()}} bgColor={'#1e1f20'}  _hover={{bg: "#282a2c"}} _active={{opacity: 0.7}} icon={<RiMic2AiFill color="#fff" fontSize={'20px'} />} isDisabled={botResponseLoading || !isScholaraActive}/>
+                    <IconButton borderRadius={'full'} onClick={() => {setIsMicPopupOpen(true); startSpeechRecognition()}} {...BUTTON_STYLE} _active={{opacity: 0.7}} icon={<RiMic2AiFill color="#fff" fontSize={'20px'} />} isDisabled={botResponseLoading || !isScholaraActive}/>
 
-                    <Tooltip label={"Hello!"} bg={'#222'} color={'#fff'} fontWeight={'400'}>
-                        <IconButton borderRadius={'full'} onClick={() => {startConversation()}} bg="linear-gradient(90deg, #4796E3, #6658ff, #ff5546)" transition="background-position 0.5s ease-in-out" bgSize="200% 200%" bgPos="0% 0%" _hover={{ bgPos: "100% 0%" }} _active={{bgPos: "0% 0%"}} isDisabled={botResponseLoading} icon={<PiHandWavingBold color="#fff" fontSize={'20px'} />}/>
+                    <Tooltip label={"Hello!"} {...TOOLTIP_STYLE}>
+                        <IconButton onClick={() => {startConversation()}} {...GRADIENT_BUTTON_STYLE} isDisabled={botResponseLoading} icon={<PiHandWavingBold color="#fff" fontSize={'20px'} />}/>
                     </Tooltip>
                     
-                    <Tooltip label={"Activate Scholara"} bg={'#222'} color={'#fff'} fontWeight={'400'}>
-                        <IconButton borderRadius={'full'} onClick={()=> {activateScholara("hello!")}} bg="linear-gradient(90deg, #4796E3, #6658ff, #ff5546)" transition="background-position 0.5s ease-in-out" bgSize="200% 200%" bgPos="0% 0%" _hover={{ bgPos: "100% 0%" }} _active={{bgPos: "0% 0%"}} isDisabled={botResponseLoading} icon={<BsStars color="#fff" fontSize={'20px'} />}/>
+                    <Tooltip label={"Activate Scholara"} {...TOOLTIP_STYLE}>
+                        <IconButton onClick={()=> {activateScholara("hello!")}} {...GRADIENT_BUTTON_STYLE} isDisabled={botResponseLoading} icon={<BsStars color="#fff" fontSize={'20px'} />}/>
                     </Tooltip>
                 </Flex>
             </form>
