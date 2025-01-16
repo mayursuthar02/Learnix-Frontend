@@ -1,13 +1,18 @@
 import { useState } from 'react'
 import {Box, Button, Flex, FormControl, FormLabel, Heading, Input, InputGroup, InputRightElement, Stack, Text, Link, Image} from '@chakra-ui/react';
-import { Link as RouterLink, useNavigate} from 'react-router-dom';
 
+// Icons and Logo
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import AiLogo from '../assets/logoai.png'
 
+// Functions
 import useShowToast from '../hooks/useShowToast';
 import {useRecoilState} from 'recoil';
 import userAtom from '../atoms/userAtom';
+import { Link as RouterLink, useNavigate} from 'react-router-dom';
+
+// Styles
+import { GRADIENT_BUTTON_STYLE, INPUT_STYLE } from '../styles/globleStyles';
 
 
 const LoginPage = () => {
@@ -61,7 +66,7 @@ const LoginPage = () => {
             <Flex align={'center'} gap={2} mb={2}>
               <Image src={AiLogo} w={'35px'} h={'35px'}/>
               <Heading fontSize={"30px"} fontWeight={'700'} textAlign={"center"} className='link-color'>
-                Scholara
+                Learnix
               </Heading>
             </Flex>
             <Text fontSize={"17px"} fontWeight={'400'}>
@@ -71,13 +76,13 @@ const LoginPage = () => {
         
           <FormControl id="email" isRequired mb={4}>
             <FormLabel fontWeight={'400'}>Email</FormLabel>
-            <Input borderColor={'#222'} _hover={{borderColor: "#444"}} type="text" value={email} onChange={e => setEmail(e.target.value)} placeholder="example@gmail.com"/>
+            <Input {...INPUT_STYLE} type="text" value={email} onChange={e => setEmail(e.target.value)} placeholder="example@gmail.com"/>
           </FormControl>
 
           <FormControl id="password" isRequired mb={4}>
             <FormLabel fontWeight={'400'}>Password</FormLabel>
             <InputGroup>
-              <Input borderColor={'#222'}  _hover={{borderColor: "#444"}} type={showPassword ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)} placeholder="******"/>
+              <Input {...INPUT_STYLE} type={showPassword ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)} placeholder="******"/>
               <InputRightElement h={"full"}>
                 <Button
                   _hover={{bg: "#222"}}
@@ -94,22 +99,7 @@ const LoginPage = () => {
           </FormControl>
 
           <Stack spacing={10} pt={2}>
-              <Button
-                isLoading={isLoading}
-                fontWeight={'500'}
-                size="lg"
-                bg="linear-gradient(90deg, #4796E3, #6658ff, #ff5546)"
-                color="white"
-                borderRadius="full"
-                transition="background-position 0.3s ease-in-out"
-                bgSize="200% 200%"
-                bgPos="0% 0%"
-                _hover={{ bgPos: "100% 0%" }}
-                _active={{ bgPos: "100% 0%", opacity: 0.9}}
-                onClick={handleSubmit}
-              >
-                Login
-              </Button>
+              <Button isLoading={isLoading} onClick={handleSubmit} size={"lg"} {...GRADIENT_BUTTON_STYLE}>Login</Button>
           </Stack>
 
           <Stack pt={6}>

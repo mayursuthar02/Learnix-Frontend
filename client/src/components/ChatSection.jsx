@@ -49,6 +49,7 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
   // Fetch Messages
   useEffect(()=> {
     const getMessages = async() => {
+      setBotResponseLoading(true);
       try {
         const response = await fetch(`/api/messages/getMessages/${conversationId}`);
         const data = await response.json();
@@ -59,6 +60,8 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
         setMessages(data.messages);
       } catch (error) {
         showToast("Error", error, "error");
+      } finally {
+        setBotResponseLoading(false);
       }
     }
 
@@ -104,7 +107,6 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
         showToast("Error", data.error, "error");
         return;
       }
-      console.log(data);
       navigate(`/chats/conversation/${data.newMessage?.conversationId}`)
       setIsScholaraActive(false);
       setMessages((prev) => [...prev, data.newMessage]);
@@ -129,7 +131,7 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
         showToast("Error", data.error, "error");
         return;
       }
-      console.log(data)
+      navigate(`/chats/conversation/${data.newMessage?.conversationId}`)
       setMessages((prev) => [...prev, data.newMessage]);
       setIsScholaraActive(true);
     } catch (error) {

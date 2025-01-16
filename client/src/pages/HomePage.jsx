@@ -9,12 +9,15 @@ import homePagePhoto from '../assets/homepagephoto.jpg';
 import { RiBookShelfFill } from "react-icons/ri";
 import { PiChatsBold } from "react-icons/pi";
 import { SiSemanticscholar } from "react-icons/si";
-import { TiArrowForward } from "react-icons/ti";
+import { MdLogout } from "react-icons/md";
 // State
 import { useRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
 import { useState } from "react";
 import useShowToast from "../hooks/useShowToast";
+// Styles
+import { BUTTON_STYLE, TOOLTIP_STYLE } from '../styles/globleStyles'
+
 
 const HomePage = () => {
   const [user, setUser] = useRecoilState(userAtom);
@@ -43,6 +46,8 @@ const HomePage = () => {
           setLoading(false);
       }
     }
+
+
   return (
     <Box minHeight={"100vh"} position={"absolute"} bg={"#131313"} zIndex={1}>
       <Box zIndex={"2"} w={"100vw"}>
@@ -67,10 +72,10 @@ const HomePage = () => {
               fontWeight={"600"}
               fontSize={"30px"}
             >
-              Scholara
+              Learnix
             </Text>
           </Flex>
-          <Flex alignItems={'center'} gap={2}>
+          <Flex alignItems={'center'} gap={2} bg={'#1e1f20'} borderRadius={'full'}>
             {!user && (
               <Button
                 borderRadius={"full"}
@@ -85,13 +90,13 @@ const HomePage = () => {
               </Button>
             )}
             {user && (
-              <Tooltip label={user?.fullName} bg="#222" color="#fff">
+              <Tooltip label={user?.fullName} {...TOOLTIP_STYLE}>
                 <Avatar src={user?.profilePic}/>
               </Tooltip>
             )}
             {user && (
-              <Tooltip hasArrow label={"Logout"} bg="#222" color="#fff">
-                <IconButton borderRadius={'full'} size={'lg'} fontSize={"25px"} bg={'#222'} _hover={{bg: '#333'}} transition={'background .3s ease'} color="#fff"  icon={<TiArrowForward/>} onClick={handleLogout} isLoading={loading}/>
+              <Tooltip hasArrow label={"Logout"} {...TOOLTIP_STYLE}>
+                <IconButton size={'lg'} {...BUTTON_STYLE} fontSize={'20px'}  icon={<MdLogout/>} onClick={handleLogout} isLoading={loading}/>
               </Tooltip>
             )}
           </Flex>
@@ -130,7 +135,7 @@ const HomePage = () => {
         </Grid>
 
         <Box mx={20} px={20} border={'1x solid #fff'} mt={'100px'} mb={20}>
-          <Flex justifyContent={'center'} color={'#fff'} fontSize={'30px'} fontWeight={'500'}>Why Choose Scholara?</Flex>
+          <Flex justifyContent={'center'} color={'#fff'} fontSize={'30px'} fontWeight={'500'}>Why Choose Learnix?</Flex>
 
           <Grid gridTemplateColumns={'1fr 1fr 1fr'} gap={10} mt={10} color={'#fff'}>
             <Box border={'2px solid #222'} borderRadius={'3xl'} py={5} px={7}>

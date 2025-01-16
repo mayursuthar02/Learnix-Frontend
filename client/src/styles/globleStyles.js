@@ -27,7 +27,8 @@ export const BUTTON_STYLE = {
 // INPUTS
 export const INPUT_STYLE = {
     borderColor : "#222", 
-    _hover : {borderColor: "#444"}
+    _hover : {borderColor: "#444"},
+    fontWeight : "400"
 }
 
 

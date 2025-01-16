@@ -87,7 +87,7 @@ const ChatList = ({botResponseLoading, setBotResponseLoading, messages, setMessa
         behavior: "smooth",
       });
     }
-  }, [messages]);
+  }, [messages, botResponseLoading]);
 
   return (
     <Box w={"60vw"} minH={"500px"} maxH={"78vh"} className="chatList_Section" ref={chatContainerRef} position={'relative'}>

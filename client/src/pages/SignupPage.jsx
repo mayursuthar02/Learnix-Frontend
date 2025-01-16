@@ -1,28 +1,30 @@
 import { useState } from 'react'
 import {Box, Button, Flex, FormControl, FormLabel, Heading, Input, InputGroup, InputRightElement, Stack, Text, Link, Image, RadioGroup, Radio} from '@chakra-ui/react';
-import { Link as RouterLink, useNavigate} from 'react-router-dom';
 
+// Icons and Logo
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import AiLogo from '../assets/logoai.png'
 
+// Functions
+import { Link as RouterLink, useNavigate} from 'react-router-dom';
 import useShowToast from '../hooks/useShowToast';
-import {useRecoilState} from 'recoil';
-import userAtom from '../atoms/userAtom';
 
+// Styles
+import {GRADIENT_BUTTON_STYLE, INPUT_STYLE} from '../styles/globleStyles'
 
 const SignupPage = () => {
+  // Functions
   const showToast = useShowToast(); //For toast
   const navigate = useNavigate();
-  // const [_, setUser] = useRecoilState(userAtom);
-  
+  // State
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [profileType, setProfileType] = useState("");
 
+  // Validation Function
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email format regex
     return emailRegex.test(email);
@@ -83,18 +85,18 @@ const SignupPage = () => {
         
           <FormControl id="fullname" isRequired mb={4}>
             <FormLabel fontWeight={'400'}>FullName</FormLabel>
-            <Input borderColor={'#222'} _hover={{borderColor: "#444"}} fontWeight={'400'} type="text" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="FullName"/>
+            <Input {...INPUT_STYLE} type="text" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="FullName"/>
           </FormControl>
 
           <FormControl id="email" isRequired mb={4}>
             <FormLabel fontWeight={'400'}>Email</FormLabel>
-            <Input borderColor={'#222'} _hover={{borderColor: "#444"}} fontWeight={'400'} type="text" value={email} onChange={e => setEmail(e.target.value)} placeholder="example@gmail.com"/>
+            <Input {...INPUT_STYLE} type="text" value={email} onChange={e => setEmail(e.target.value)} placeholder="example@gmail.com"/>
           </FormControl>
 
           <FormControl id="password" isRequired mb={4}>
             <FormLabel fontWeight={'400'}>Password</FormLabel>
             <InputGroup>
-              <Input borderColor={'#222'}  _hover={{borderColor: "#444"}} fontWeight={'400'} type={showPassword ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)} placeholder="******"/>
+              <Input {...INPUT_STYLE} type={showPassword ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)} placeholder="******"/>
               <InputRightElement h={"full"}>
                 <Button
                   _hover={{bg: "#222"}}
@@ -121,22 +123,7 @@ const SignupPage = () => {
           </FormControl>
                   
           <Stack spacing={10} pt={2}>
-              <Button
-                isLoading={isLoading}
-                fontWeight={'500'}
-                size="lg"
-                bg="linear-gradient(90deg, #4796E3, #6658ff, #ff5546)"
-                color="white"
-                borderRadius="full"
-                transition="background-position 0.3s ease-in-out"
-                bgSize="200% 200%"
-                bgPos="0% 0%"
-                _hover={{ bgPos: "100% 0%" }}
-                _active={{ bgPos: "100% 0%", opacity: 0.9}}
-                onClick={handleSubmit}
-              >
-                Sign Up
-              </Button>
+              <Button isLoading={isLoading} onClick={handleSubmit} size={"lg"} {...GRADIENT_BUTTON_STYLE}>Sign Up</Button>
           </Stack>
 
           <Stack pt={6}>
