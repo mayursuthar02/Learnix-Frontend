@@ -15,23 +15,26 @@ import {useRecoilState} from 'recoil';
 import userAtom from '../atoms/userAtom'
 import useShowToast from "../../../admin/src/hooks/useShowToast";
 import { useEffect, useState } from "react";
+import HandleUserLogout from "../helpers/HandleUserLogout";
 
 // Styles
 import { GRADIENT_BUTTON_STYLE, TOOLTIP_STYLE } from "../styles/globleStyles";
+import conversationAtom from "../atoms/conversationAtom";
 
 // MAIN FUNCTION
-const ChatSection = ({isNewConversation, setIsNewConversation}) => {
+const ChatSection = ({isNewConversation, setIsNewConversation, isDisableHelloButton}) => {
   const languages = ["Hello!","नमस्ते!"];
   // State
   const [user, setUser] = useRecoilState(userAtom);
+  const [_, setConversations] = useRecoilState(conversationAtom);
   const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [botResponseLoading, setBotResponseLoading] = useState(false);
   const [userReplyLoading, setUserReplyLoading] = useState(false);
   const [isScholaraActive, setIsScholaraActive] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   
   // Use Function
+  const { handleUserLogoutFunc, loading } = HandleUserLogout();
   const showToast = useShowToast();
   const navigate = useNavigate();
   const {conversationId} = useParams();
@@ -49,12 +52,14 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
   // Fetch Messages
   useEffect(()=> {
     const getMessages = async() => {
+      setMessages([]);
       setBotResponseLoading(true);
       try {
         const response = await fetch(`/api/messages/getMessages/${conversationId}`);
         const data = await response.json();
-        if (data.error) {
+        if (data.error || data.error === "No messages found for this conversationId." || data.error === "conversationId is not found!") {
           showToast("Error", data.error, "error");
+          navigate("/chats");
           return;
         }
         setMessages(data.messages);
@@ -70,28 +75,6 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
     }
   },[conversationId]);
 
-
-  // User LogOut
-  const handleLogout = async() => {
-    setLoading(true);
-    try {
-      const response = await fetch('/api/auth/logout');
-      const data = await response.json();
-      if (data.error) {
-        showToast("Error", data.error, "error");
-        return;
-      }
-      showToast("Success", data.message, "success");
-      setUser(null);
-      localStorage.removeItem("learnixUserDetails");
-      navigate("/login");
-    } catch (error) {
-        console.log(error);
-        showToast("Error", error, "error");
-    } finally {
-        setLoading(false);
-    }
-  }
   
   // Start Conversation
   const startConversation = async() => {
@@ -110,8 +93,20 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
       navigate(`/chats/conversation/${data.newMessage?.conversationId}`)
       setIsScholaraActive(false);
       setMessages((prev) => [...prev, data.newMessage]);
+      setConversations((prev) =>
+        prev.map((conversation) => {
+          if (conversation._id === data.newMessage.conversationId) {
+            return {
+              ...conversation,
+              title: data?.newMessage?.botResponse?.message,
+            };
+          }
+          return conversation;
+        })
+      );
     } catch (error) {
       console.log(error);
+      showToast("Error", "Something went wrong.", "error");
     } finally {
       setBotResponseLoading(false);
     }
@@ -128,15 +123,28 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
       });
       const data = await response.json();
       if (data.error) {
-        showToast("Error", data.error, "error");
+        showToast("Error", "Something went wrong.", "error");
         return;
       }
-      navigate(`/chats/conversation/${data.newMessage?.conversationId}`)
+      if (!conversationId) {
+        navigate(`/chats/conversation/${data.newMessage?.conversationId}`)
+      }
       setMessages((prev) => [...prev, data.newMessage]);
       setIsScholaraActive(true);
+      setConversations((prev) =>
+        prev.map((conversation) => {
+          if (conversation._id === data.newMessage.conversationId) {
+            return {
+              ...conversation,
+              title: prompt,
+            };
+          }
+          return conversation;
+        })
+      );
     } catch (error) {
       console.log(error);
-      showToast("Error", error, "error");
+      showToast("Error", "Something went wrong.", "error");
     } finally {
       setBotResponseLoading(false);
     }
@@ -162,7 +170,7 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
             </Tooltip>
             {user && (
               <Tooltip hasArrow label={"Logout"} {...TOOLTIP_STYLE}>
-                <IconButton borderRadius={'full'} size={'lg'} fontSize={"25px"} bg={'#222'} _hover={{bg: '#222'}} transition={'background .3s ease'} color="#fff" pl={.5}  icon={<MdLogout fontSize={'22px'}/>} onClick={handleLogout} isLoading={loading}/>
+                <IconButton borderRadius={'full'} size={'lg'} fontSize={"25px"} bg={'#222'} _hover={{bg: '#222'}} transition={'background .3s ease'} color="#fff" pl={.5}  icon={<MdLogout fontSize={'22px'}/>} onClick={handleUserLogoutFunc} isLoading={loading}/>
               </Tooltip>
             )}
           </Flex>
@@ -185,7 +193,7 @@ const ChatSection = ({isNewConversation, setIsNewConversation}) => {
         
           <Text textAlign={'center'} color={'#7f7f7f'} fontSize={'16px'} mt={1} fontWeight={'300'} w={'500px'}>Get instant access to subject materials, homework help, and expert answers to your academic questions.</Text>
           <Tooltip label="Start your conversation!" {...TOOLTIP_STYLE}>
-            <Button onClick={() => {startConversation(); setIsNewConversation(!isNewConversation)}} display={'flex'} alignItems={'center'} mt={10} gap={1} {...GRADIENT_BUTTON_STYLE}>
+            <Button isDisabled={isDisableHelloButton} onClick={() => {startConversation(); setIsNewConversation(!isNewConversation)}} display={'flex'} alignItems={'center'} mt={10} gap={1} {...GRADIENT_BUTTON_STYLE}>
               <PiHandWavingBold/>
               <Text fontWeight={'500'}>Hello!</Text>
             </Button>

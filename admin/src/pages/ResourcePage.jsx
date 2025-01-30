@@ -4,6 +4,7 @@ import { Flex, IconButton, Input, Link, Spinner, TableContainer, Tooltip, useDis
 import UploadAndUpdateResource from "../components/UploadAndUpdateResource";
 import UploadAndUpdateExamDetails from "../components/UploadAndUpdateExamDetails";
 import UploadAndUpdateTimeTable from "../components/UploadAndUpdateTimeTable";
+import DataLoadingSpinner from '../components/DataLoadingSpinner';
 // Icons
 import { GrResources } from "react-icons/gr";
 import { FaPlus } from "react-icons/fa6";
@@ -17,14 +18,47 @@ import { MdDelete } from "react-icons/md";
 import { MdOutlineEditNote } from "react-icons/md";
 import { MdOutlineViewTimeline } from "react-icons/md";
 import { FiPaperclip } from "react-icons/fi";
+import { MdMenuBook } from "react-icons/md";
+import { LuNotebookText } from "react-icons/lu";
+import { TbTableFilled } from "react-icons/tb";
+import { CgNotes } from "react-icons/cg";
 // Hooks
 import useShowToast from "../hooks/useShowToast";
 import {format} from 'date-fns';
 import UploadAndUpdatePreviousPaper from "../components/UploadAndUpdatePreviousPaper";
+// Styles
+import { BUTTON_ICON_STYLE, GRADIENT_BUTTON_STYLE, TOOLTIPS_STYLE } from "../styles/globleStyles";
+import CustomHeading from "../components/Heading";
 
+
+// STYLES
+// -------------------------------------------------
+const LINK_STYLE = {
+  target : "_blank",
+  display : "flex",
+  alignItems : "center",
+  gap : "1",
+  color : "#4b90ff",
+  _hover : {opacity: 0.9}
+}
+const HEADING_STYLE = {
+  fontSize : "20px",
+  px : "5",
+  mb : "5",
+  mt : "5"
+}
+const TABS_STYLE = {
+  display : "flex",
+  alignItems : "center",
+  gap : "1",
+  color : "#1f1f1f",
+  fontWeight : "500"
+}
+
+// Main Functions
 const ResourcePage = () => {
   // Header Cell
-  const materialHeaderCell = [
+  const HeaderCell = [
     { id: "srno", cell: "Sr. No." },
     { id: "-", cell: <GrResources fontSize={"19px"} /> },
     { id: "title", cell: "Title" },
@@ -32,28 +66,6 @@ const ResourcePage = () => {
     { id: "semester", cell: "Semester" },
     { id: "resourcelink", cell: "Resource Link" },
     { id: "note", cell: "Note" },
-    { id: "uploaddate", cell: "Upload Date" },
-    { id: "action", cell: "Action" },
-  ];
-  const examDetailsHeaderCell = [
-    { id: "srno", cell: "Sr. No." },
-    { id: "-", cell: <GrResources fontSize={"19px"} /> },
-    { id: "title", cell: "Title" },
-    { id: "examType", cell: "ExamType" },
-    { id: "semester", cell: "Semester" },
-    { id: "resourcelink", cell: "Resource Link" },
-    { id: "description", cell: "Description" },
-    { id: "uploaddate", cell: "Upload Date" },
-    { id: "action", cell: "Action" },
-  ]; //same Heading for Previous Exam Paper Table Section
-  const timeTableHeaderCell = [
-    { id: "srno", cell: "Sr. No." },
-    { id: "-", cell: <GrResources fontSize={"19px"} /> },
-    { id: "title", cell: "Title" },
-    { id: "division", cell: "Division" },
-    { id: "semester", cell: "Semester" },
-    { id: "resourcelink", cell: "Resource Link" },
-    { id: "description", cell: "Description" },
     { id: "uploaddate", cell: "Upload Date" },
     { id: "action", cell: "Action" },
   ];
@@ -74,9 +86,10 @@ const ResourcePage = () => {
   const [examDetailsResourceIdForUpdate, setExamDetailsResourceIdForUpdate] = useState(null);
   const [timeTableResourceIdForUpdate, setTimeTableResourceIdForUpdate] = useState(null);
   const [previousPaperResourceIdForUpdate, setPreviousPaperResourceIdForUpdate] = useState(null);
+
   const [isDeleteResource, setIsDeleteResource] = useState(null);
   const [endpointDataMode, setEndpointDataMode] = useState("/api/resources/getResources");  
-  
+  const [DataMode, setDataMode] = useState("materials");
 
   // Get All Data(Resource, ExamDetails, TimeTable, PreviousExamPapaer)
   const getResources = async () => {
@@ -128,80 +141,33 @@ const ResourcePage = () => {
     }
   };
 
+  // Modified Resource Title
+  const modifiedResourceTitle = (title) => {
+    return title.length > 15 ? title.slice(0, 15) + "..." : title;
+  }
+
   return (
     <>
       <Box display="flex" alignItems="center" justifyContent="space-between" mx={2} mb={'30px'} mt={3}>
         <Input htmlSize={50} width="400px" placeholder="Search..." borderRadius={"50px"} />
 
         <Flex alignItems={'center'} gap={2}>
-          <Button
-            bg="linear-gradient(90deg, #4796E3, #6658ff, #ff5546)"
-            color="white"
-            borderRadius="full"
-            transition="background-position 0.3s ease-in-out"
-            bgSize="200% 200%"
-            bgPos="0% 0%"
-            _hover={{ bgPos: "100% 0%" }}
-            _active={{ bgPos: "100% 0%", opacity: 0.9 }}
-            onClick={()=> {onOpenPreviousPaperModel(); setModelMode("upload"); setPreviousPaperResourceIdForUpdate(null)}}
-            display={"flex"}
-            alignItems={"center"}
-            gap={1}
-          >
+          <Button {...GRADIENT_BUTTON_STYLE} onClick={()=> {onOpenPreviousPaperModel(); setModelMode("upload"); setPreviousPaperResourceIdForUpdate(null)}}>
             <FiPaperclip fontSize={"15px"} />
             Previous Paper
           </Button>
 
-          <Button
-            bg="linear-gradient(90deg, #4796E3, #6658ff, #ff5546)"
-            color="white"
-            borderRadius="full"
-            transition="background-position 0.3s ease-in-out"
-            bgSize="200% 200%"
-            bgPos="0% 0%"
-            _hover={{ bgPos: "100% 0%" }}
-            _active={{ bgPos: "100% 0%", opacity: 0.9 }}
-            onClick={()=> {onOpenTimeTableModel(); setModelMode("upload"); setTimeTableResourceIdForUpdate(null)}}
-            display={"flex"}
-            alignItems={"center"}
-            gap={1}
-          >
+          <Button {...GRADIENT_BUTTON_STYLE} onClick={()=> {onOpenTimeTableModel(); setModelMode("upload"); setTimeTableResourceIdForUpdate(null)}}>
             <MdOutlineViewTimeline fontSize={"18px"} />
             Time Table
           </Button>
 
-          <Button
-            bg="linear-gradient(90deg, #4796E3, #6658ff, #ff5546)"
-            color="white"
-            borderRadius="full"
-            transition="background-position 0.3s ease-in-out"
-            bgSize="200% 200%"
-            bgPos="0% 0%"
-            _hover={{ bgPos: "100% 0%" }}
-            _active={{ bgPos: "100% 0%", opacity: 0.9 }}
-            onClick={()=> {onOpenExamDetailsModel(); setModelMode("upload"); setExamDetailsResourceIdForUpdate(null)}}
-            display={"flex"}
-            alignItems={"center"}
-            gap={1}
-          >
+          <Button {...GRADIENT_BUTTON_STYLE} onClick={()=> {onOpenExamDetailsModel(); setModelMode("upload"); setExamDetailsResourceIdForUpdate(null)}}>
             <MdOutlineEditNote fontSize={"20px"} />
             Exam Details
           </Button>
 
-          <Button
-            bg="linear-gradient(90deg, #4796E3, #6658ff, #ff5546)"
-            color="white"
-            borderRadius="full"
-            transition="background-position 0.3s ease-in-out"
-            bgSize="200% 200%"
-            bgPos="0% 0%"
-            _hover={{ bgPos: "100% 0%" }}
-            _active={{ bgPos: "100% 0%", opacity: 0.9 }}
-            onClick={()=> {onOpenMaterialModel(); setModelMode("upload"); setResourceIdForUpdate(null)}}
-            display={"flex"}
-            alignItems={"center"}
-            gap={1}
-          >
+          <Button {...GRADIENT_BUTTON_STYLE} onClick={()=> {onOpenMaterialModel(); setModelMode("upload"); setResourceIdForUpdate(null)}}>
             <FaPlus fontSize={"15px"} />
             Add Material
           </Button>
@@ -211,183 +177,60 @@ const ResourcePage = () => {
       {/* Tab Section For Materials, Exam Details, Time Table and Exam Paper */}
       <Tabs position='relative' variant='unstyled'>
         <TabList px={5}>
-          <Tab fontWeight={'500'} onClick={() => setEndpointDataMode("/api/resources/getResources")}>Materials</Tab>
-          <Tab fontWeight={'500'} onClick={() => setEndpointDataMode("/api/examDetails/getExamDetailsResources")}>Exam Details</Tab>
-          <Tab fontWeight={'500'} onClick={() => setEndpointDataMode("/api/timeTables/getTimeTableResources")}>Time Tables</Tab>
-          <Tab fontWeight={'500'} onClick={() => setEndpointDataMode("/api/previousPapers/getPreviousPaperResources")}>Exam Papers</Tab>
+          <Tab {...TABS_STYLE} onClick={() => {setEndpointDataMode("/api/resources/getResources"); setDataMode("materials")}}>
+            <MdMenuBook />
+            Materials
+          </Tab>
+          <Tab {...TABS_STYLE} onClick={() => {setEndpointDataMode("/api/examDetails/getExamDetailsResources"); setDataMode("examDetails")}}>
+            <LuNotebookText />
+            Exam Details
+          </Tab>
+          <Tab {...TABS_STYLE} onClick={() => {setEndpointDataMode("/api/timeTables/getTimeTableResources"); setDataMode("timeTables")}}>
+            <TbTableFilled />
+            Time Tables
+          </Tab>
+          <Tab {...TABS_STYLE} onClick={() => {setEndpointDataMode("/api/previousPapers/getPreviousPaperResources"); setDataMode("previousPapers")}}>
+            <CgNotes />
+            Exam Papers
+          </Tab>
         </TabList>
 
         <TabIndicator mt='-1.5px' height='3px' bg="linear-gradient(90deg, #4796E3, #6658ff)" borderRadius='10px'/>
         
         <TabPanels>
-          <TabPanel>
-            <>
-              <Heading fontSize={"20px"} px={5} mb={5} mt={5}>Materials</Heading>
-              <TableContainer >
-                <Table>
-                  <Thead>
-                    <Tr>
-                      {materialHeaderCell.map((cell) => (
-                        <Th color={"#1f1f1f"} key={cell.id}>{cell.cell}</Th>
-                      ))}
-                    </Tr>
-                  </Thead>
-                      {!loading && 
-                    <Tbody>
-                    {resources.length > 0 ? (
-                      resources.map((resource, index) => (
-                        <Tr color={"#444746"} key={resource._id}>
-                          <Td>{index+1}</Td>
-                          <Td>
-                            {resource.resourceLink.split("/")[7] === "images" ? (
-                              <FaImage />
-                            ) : resource.resourceLink.split("/")[7] === "resources" ? (
-                              <BsFileEarmarkPdfFill />
-                            ) : (
-                              <FaLink />
-                            )}
-                          </Td>
-                          <Td >{resource.title}</Td>
-                          <Td >{resource.subject}</Td>
-                          <Td >{resource.semester}</Td>
-                          <Td>
-                            <Tooltip label={resource.resourceLink} bg={'#1f1f1f'} p={2} borderRadius={'md'}>
-                              <Link href={resource.resourceLink} target="_blank" display={'flex'} alignItems={'center'} gap={1} color={"#4b90ff"} _hover={{opacity: 0.9}}><RiLinkM/>Link</Link>
-                            </Tooltip>
-                          </Td>
-                          {/* <Td>{resource.resourceType === "application" ? "PDF" : resource.resourceType}</Td> */}
-                          <Td>
-                            <Tooltip label={resource.note ? <pre dangerouslySetInnerHTML={{__html: resource.note}} /> : "-"} bg={'#1f1f1f'} p={2} borderRadius={'md'}>
-                              <Box cursor={'pointer'} _hover={{color: "#ff5546"}} transition={"color .2s ease"}><IoAlertCircleSharp fontSize={'18px'}/></Box>
-                            </Tooltip>
-                          </Td>
-                          <Td>{format(resource.createdAt, "yyyy-MM-dd")}</Td>
-                          <Td>
-                              <Flex alignItems={'center'} justifyContent={'center'} gap={1}>
-                                <Tooltip label="Edit">
-                                  <IconButton 
-                                  aria-label='Edit' 
-                                  borderRadius={'full'} 
-                                  icon={<TbEdit fontSize={'18px'} color="#1f1f1f"/>}
-                                  onClick={() => {onOpenMaterialModel(); setModelMode("update"); setResourceIdForUpdate(resource._id)}}
-                                  />
-                                </Tooltip>
-                                <Tooltip label="Delete">
-                                  <IconButton 
-                                  aria-label='Edit' 
-                                  borderRadius={'full'} 
-                                  icon={<MdDelete fontSize={'18px'} color="#1f1f1f"/>}
-                                  onClick={() => handleDelete(resource._id, "resources")}
-                                  isLoading={resource._id === isDeleteResource}
-                                  />
-                                </Tooltip>
-                              </Flex>
-                          </Td>
-                        </Tr>
-                      ))
-                    ) : (
-                      <Tr>
-                        <Td colSpan={9} fontSize={"18px"} color={"#1f1f1f"}>
-                          <Flex justifyContent={"center"}>Materials Not Found</Flex>
-                        </Td>
-                      </Tr>
-                    )}
-                  </Tbody>}
-                </Table>
-              </TableContainer>
-              {loading && <Flex justifyContent={'center'} mt={'100px'}><Spinner color="#1f1f1f"/></Flex>}
-            </>
-          </TabPanel>
 
-          <TabPanel>
+        {[1,2,3,4].map((keyId) => (
+          <TabPanel key={keyId}>
             <>
-              <Heading fontSize={"20px"} px={5} mb={5} mt={5}>Exam Details</Heading>
-              <TableContainer >
-                <Table>
-                  <Thead>
-                    <Tr>
-                      {examDetailsHeaderCell.map((cell) => (
-                        <Th color={"#1f1f1f"} key={cell.id}>{cell.cell}</Th>
-                      ))}
-                    </Tr>
-                  </Thead>
-                      {!loading && 
-                    <Tbody>
-                    {resources.length > 0 ? (
-                      resources.map((resource, index) => (
-                        <Tr color={"#444746"} key={resource._id}>
-                          <Td>{index+1}</Td>
-                          <Td>
-                            {resource.resourceLink.split("/")[7] === "images" ? (
-                              <FaImage />
-                            ) : resource.resourceLink.split("/")[7] === "resources" ? (
-                              <BsFileEarmarkPdfFill />
-                            ) : (
-                              <FaLink />
-                            )}
-                          </Td>
-                          <Td >{resource?.title}</Td>
-                          <Td >{resource?.examType}</Td>
-                          <Td >{resource?.semester}</Td>
-                          <Td>
-                            <Tooltip label={resource.resourceLink} bg={'#1f1f1f'} p={2} borderRadius={'md'}>
-                              <Link href={resource.resourceLink} target="_blank" display={'flex'} alignItems={'center'} gap={1} color={"#4b90ff"} _hover={{opacity: 0.9}}><RiLinkM/>Link</Link>
-                            </Tooltip>
-                          </Td>
-                          {/* <Td>{resource.resourceType === "application" ? "PDF" : resource.resourceType}</Td> */}
-                          <Td>
-                            <Tooltip label={resource.description ? <pre dangerouslySetInnerHTML={{__html: resource.description}} /> : "-"} bg={'#1f1f1f'} p={2} borderRadius={'md'}>
-                              <Box cursor={'pointer'} _hover={{color: "#ff5546"}} transition={"color .2s ease"}><IoAlertCircleSharp fontSize={'18px'}/></Box>
-                            </Tooltip>
-                          </Td>
-                          <Td>{format(resource.createdAt, "yyyy-MM-dd")}</Td>
-                          <Td>
-                              <Flex alignItems={'center'} justifyContent={'center'} gap={1}>
-                                <Tooltip label="Edit">
-                                  <IconButton 
-                                  aria-label='Edit' 
-                                  borderRadius={'full'} 
-                                  icon={<TbEdit fontSize={'18px'} color="#1f1f1f"/>}
-                                  onClick={() => {onOpenExamDetailsModel(); setModelMode("update"); setExamDetailsResourceIdForUpdate(resource._id)}}
-                                  />
-                                </Tooltip>
-                                <Tooltip label="Delete">
-                                  <IconButton 
-                                  aria-label='Edit' 
-                                  borderRadius={'full'} 
-                                  icon={<MdDelete fontSize={'18px'} color="#1f1f1f"/>}
-                                  onClick={() => handleDelete(resource._id, "examDetails")}
-                                  isLoading={resource._id === isDeleteResource}
-                                  />
-                                </Tooltip>
-                              </Flex>
-                          </Td>
-                        </Tr>
-                      ))
-                    ) : (
-                      <Tr>
-                        <Td colSpan={9} fontSize={"18px"} color={"#1f1f1f"}>
-                          <Flex justifyContent={"center"}>Exam Details Resources Not Found</Flex>
-                        </Td>
-                      </Tr>
-                    )}
-                  </Tbody>}
-                </Table>
-              </TableContainer>
-              {loading && <Flex justifyContent={'center'} mt={'100px'}><Spinner color="#1f1f1f"/></Flex>}
-            </>
-          </TabPanel>
+            <CustomHeading title={
+              DataMode === "materials" ? "Materials" : 
+              DataMode === "examDetails" ? "Exam Details" : 
+              DataMode === "timeTables" ? "Time Tables" : "Exam Papers"
+              }/>
 
-          <TabPanel>
-            <>
-              <Heading fontSize={"20px"} px={5} mb={5} mt={5}>Time Tables</Heading>
-              <TableContainer >
+              <TableContainer mt={3}>
                 <Table>
                   <Thead>
                     <Tr>
-                      {timeTableHeaderCell.map((cell) => (
-                        <Th color={"#1f1f1f"} key={cell.id}>{cell.cell}</Th>
-                      ))}
+                      {HeaderCell.map((cell, i) => {
+                        if (i == 3) {
+                          if (DataMode === "materials") {
+                            return <Th color={"#1f1f1f"} key={"subject"}>Subject</Th>
+                          } else if (DataMode === "examDetails" || DataMode === "previousPapers") {
+                            return <Th color={"#1f1f1f"} key={"examType"}>Exam Type</Th>
+                          } else {
+                            return <Th color={"#1f1f1f"} key={"division"}>Division</Th>
+                          }
+                        } else if (i == 6) {
+                          if (DataMode === "examDetails" || DataMode === "previousPapers" || DataMode === "timeTables") {
+                            return <Th color={"#1f1f1f"} key={"description"}>Description</Th>
+                          } else {
+                            return <Th color={"#1f1f1f"} key={"note"}>Note</Th>
+                          }
+                        } else {
+                          return <Th color={"#1f1f1f"} key={cell.id}>{cell.cell}</Th>
+                        }
+                      })}
                     </Tr>
                   </Thead>
                       {!loading && 
@@ -398,44 +241,71 @@ const ResourcePage = () => {
                           <Td>{index+1}</Td>
                           <Td>
                             {resource.resourceLink.split("/")[7] === "images" ? (
-                              <FaImage />
+                              <FaImage {...BUTTON_ICON_STYLE}/>
                             ) : resource.resourceLink.split("/")[7] === "resources" ? (
-                              <BsFileEarmarkPdfFill />
+                              <BsFileEarmarkPdfFill {...BUTTON_ICON_STYLE}/>
                             ) : (
-                              <FaLink />
+                              <FaLink {...BUTTON_ICON_STYLE}/>
                             )}
                           </Td>
-                          <Td textTransform={'capitalize'}>{resource?.title}</Td>
-                          <Td textTransform={'capitalize'}>{resource?.division}</Td>
+                          <Td textTransform={'capitalize'}>{modifiedResourceTitle(resource?.title)}</Td>
+
+                          {DataMode === "materials" ? (
+                            <Td textTransform={'capitalize'}>{resource?.subject}</Td>
+                            ) : DataMode === "examDetails" || DataMode === "previousPapers" ? (
+                              <Td textTransform={'capitalize'}>{resource?.examType}</Td>
+                            ) :  (
+                              <Td textTransform={'capitalize'}>{resource?.division}</Td>
+                            )}
+
                           <Td textTransform={'capitalize'}>{resource?.semester}</Td>
                           <Td>
-                            <Tooltip label={resource.resourceLink} bg={'#1f1f1f'} p={2} borderRadius={'md'}>
-                              <Link href={resource.resourceLink} target="_blank" display={'flex'} alignItems={'center'} gap={1} color={"#4b90ff"} _hover={{opacity: 0.9}}><RiLinkM/>Link</Link>
+                            <Tooltip label={resource.resourceLink} {...TOOLTIPS_STYLE} px={2} py={1}>
+                              <Link href={resource.resourceLink} {...LINK_STYLE}><RiLinkM/>Link</Link>
                             </Tooltip>
                           </Td>
-                          {/* <Td>{resource.resourceType === "application" ? "PDF" : resource.resourceType}</Td> */}
                           <Td>
-                            <Tooltip label={resource.description ? <pre dangerouslySetInnerHTML={{__html: resource.description}} /> : "-"} bg={'#1f1f1f'} p={2} borderRadius={'md'}>
+                            <Tooltip label={resource.description ? <pre dangerouslySetInnerHTML={{__html: resource.description}} /> : "-"} {...TOOLTIPS_STYLE} px={2} py={1}>
                               <Box cursor={'pointer'} _hover={{color: "#ff5546"}} transition={"color .2s ease"}><IoAlertCircleSharp fontSize={'18px'}/></Box>
                             </Tooltip>
                           </Td>
                           <Td>{format(resource.createdAt, "yyyy-MM-dd")}</Td>
                           <Td>
                               <Flex alignItems={'center'} justifyContent={'center'} gap={1}>
-                                <Tooltip label="Edit">
+                                <Tooltip label="Edit" {...TOOLTIPS_STYLE}>
                                   <IconButton 
                                   aria-label='Edit' 
                                   borderRadius={'full'} 
-                                  icon={<TbEdit fontSize={'18px'} color="#1f1f1f"/>}
-                                  onClick={() => {onOpenTimeTableModel(); setModelMode("update"); setTimeTableResourceIdForUpdate(resource._id)}}
+                                  icon={<TbEdit {...BUTTON_ICON_STYLE}/>}
+                                  onClick={() => {
+                                    if (DataMode === "materials") {
+                                      onOpenMaterialModel(); setModelMode("update"); setResourceIdForUpdate(resource._id)
+                                    } else if (DataMode === "examDetails") {
+                                      onOpenExamDetailsModel(); setModelMode("update"); setExamDetailsResourceIdForUpdate(resource._id)
+                                    } else if (DataMode === "timeTables") {
+                                      onOpenTimeTableModel(); setModelMode("update"); setTimeTableResourceIdForUpdate(resource._id)
+                                    } else {
+                                      onOpenPreviousPaperModel(); setModelMode("update"); setPreviousPaperResourceIdForUpdate(resource._id)
+                                    }
+                                  }}
                                   />
                                 </Tooltip>
-                                <Tooltip label="Delete">
+                                <Tooltip label="Delete" {...TOOLTIPS_STYLE}>
                                   <IconButton 
                                   aria-label='Edit' 
                                   borderRadius={'full'} 
-                                  icon={<MdDelete fontSize={'18px'} color="#1f1f1f"/>}
-                                  onClick={() => handleDelete(resource._id, "timeTables")}
+                                  icon={<MdDelete {...BUTTON_ICON_STYLE}/>}
+                                  onClick={() => {
+                                    if (DataMode === "materials") {
+                                      handleDelete(resource._id, "resources");
+                                    } else if (DataMode === "examDetails") {
+                                      handleDelete(resource._id, "examDetails");
+                                    } else if (DataMode === "timeTables") {
+                                      handleDelete(resource._id, "timeTables");
+                                    } else {
+                                      handleDelete(resource._id, "previousPapers");
+                                    }
+                                  }}
                                   isLoading={resource._id === isDeleteResource}
                                   />
                                 </Tooltip>
@@ -445,96 +315,23 @@ const ResourcePage = () => {
                       ))
                     ) : (
                       <Tr>
-                        <Td colSpan={9} fontSize={"18px"} color={"#1f1f1f"}>
-                          <Flex justifyContent={"center"}>Time Table Resources Not Found</Flex>
+                        <Td colSpan={9} {...BUTTON_ICON_STYLE}>
+                          <Flex justifyContent={"center"}>
+                            {DataMode === "materials" ? "Materials" :
+                            DataMode === "examDetails" ? "Exam details" :
+                            DataMode === "timeTables" ? "Time Table" :
+                            "Previous Paper" } 
+                            Not Found</Flex>
                         </Td>
                       </Tr>
                     )}
                   </Tbody>}
                 </Table>
               </TableContainer>
-              {loading && <Flex justifyContent={'center'} mt={'100px'}><Spinner color="#1f1f1f"/></Flex>}
+              {loading && <DataLoadingSpinner/>}
             </>
-          </TabPanel>
-
-          <TabPanel>
-            <>
-              <Heading fontSize={"20px"} px={5} mb={5} mt={5}>Previous Exam Papers</Heading>
-              <TableContainer >
-                <Table>
-                  <Thead>
-                    <Tr>
-                      {examDetailsHeaderCell.map((cell) => (
-                        <Th color={"#1f1f1f"} key={cell.id}>{cell.cell}</Th>
-                      ))}
-                    </Tr>
-                  </Thead>
-                      {!loading && 
-                    <Tbody>
-                    {resources.length > 0 ? (
-                      resources.map((resource, index) => (
-                        <Tr color={"#444746"} key={resource._id}>
-                          <Td>{index+1}</Td>
-                          <Td>
-                            {resource.resourceLink.split("/")[7] === "images" ? (
-                              <FaImage />
-                            ) : resource.resourceLink.split("/")[7] === "resources" ? (
-                              <BsFileEarmarkPdfFill />
-                            ) : (
-                              <FaLink />
-                            )}
-                          </Td>
-                          <Td textTransform={'capitalize'}>{resource?.title}</Td>
-                          <Td textTransform={'capitalize'}>{resource?.examType}</Td>
-                          <Td textTransform={'capitalize'}>{resource?.semester}</Td>
-                          <Td>
-                            <Tooltip label={resource.resourceLink} bg={'#1f1f1f'} p={2} borderRadius={'md'}>
-                              <Link href={resource.resourceLink} target="_blank" display={'flex'} alignItems={'center'} gap={1} color={"#4b90ff"} _hover={{opacity: 0.9}}><RiLinkM/>Link</Link>
-                            </Tooltip>
-                          </Td>
-                          {/* <Td>{resource.resourceType === "application" ? "PDF" : resource.resourceType}</Td> */}
-                          <Td>
-                            <Tooltip label={resource.description ? <pre dangerouslySetInnerHTML={{__html: resource.description}} /> : "-"} bg={'#1f1f1f'} p={2} borderRadius={'md'}>
-                              <Box cursor={'pointer'} _hover={{color: "#ff5546"}} transition={"color .2s ease"}><IoAlertCircleSharp fontSize={'18px'}/></Box>
-                            </Tooltip>
-                          </Td>
-                          <Td>{format(resource.createdAt, "yyyy-MM-dd")}</Td>
-                          <Td>
-                              <Flex alignItems={'center'} justifyContent={'center'} gap={1}>
-                                <Tooltip label="Edit">
-                                  <IconButton 
-                                  aria-label='Edit' 
-                                  borderRadius={'full'} 
-                                  icon={<TbEdit fontSize={'18px'} color="#1f1f1f"/>}
-                                  onClick={() => {onOpenPreviousPaperModel(); setModelMode("update"); setPreviousPaperResourceIdForUpdate(resource._id)}}
-                                  />
-                                </Tooltip>
-                                <Tooltip label="Delete">
-                                  <IconButton 
-                                  aria-label='Edit' 
-                                  borderRadius={'full'} 
-                                  icon={<MdDelete fontSize={'18px'} color="#1f1f1f"/>}
-                                  onClick={() => handleDelete(resource._id, "previousPapers")}
-                                  isLoading={resource._id === isDeleteResource}
-                                  />
-                                </Tooltip>
-                              </Flex>
-                          </Td>
-                        </Tr>
-                      ))
-                    ) : (
-                      <Tr>
-                        <Td colSpan={9} fontSize={"18px"} color={"#1f1f1f"}>
-                          <Flex justifyContent={"center"}>Previous Paper Resources Not Found</Flex>
-                        </Td>
-                      </Tr>
-                    )}
-                  </Tbody>}
-                </Table>
-              </TableContainer>
-              {loading && <Flex justifyContent={'center'} mt={'100px'}><Spinner color="#1f1f1f"/></Flex>}
-            </>
-          </TabPanel>
+          </TabPanel>  
+        ))}
 
         </TabPanels>
       </Tabs>
@@ -552,3 +349,5 @@ const ResourcePage = () => {
 };
 
 export default ResourcePage;
+
+

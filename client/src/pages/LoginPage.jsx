@@ -70,7 +70,7 @@ const LoginPage = () => {
               </Heading>
             </Flex>
             <Text fontSize={"17px"} fontWeight={'400'}>
-            Access smarter learning – login to Scholara AI today! 🤖
+            Access smarter learning – login to Learnix AI today! 🤖
             </Text>
           </Stack>
         

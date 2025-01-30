@@ -25,9 +25,8 @@ const MENUITEMS_STYLES = {
 
 
 // MAIN FUNCTION
-const Conversation = ({ conversation, handleDeleteConversation }) => {
+const Conversation = ({ conversation, handleDeleteConversation, setIsDisableHelloButton }) => {
   // Functions
-  const showToast = useShowToast();
   const {conversationId } = useParams();
 
   // ModifiedText
@@ -48,7 +47,7 @@ const Conversation = ({ conversation, handleDeleteConversation }) => {
       transition={"color 0.3s ease, background 0.3s ease"}
       cursor={"pointer"}
       >
-        <Flex as={RouterLink} to={`/chats/conversation/${conversation._id}`} gap={2} alignItems={"center"} height={'100%'} w={'100%'}>
+        <Flex as={RouterLink} to={`/chats/conversation/${conversation._id}`} onClick={() => setIsDisableHelloButton(true)} gap={2} alignItems={"center"} height={'100%'} w={'100%'}>
           <FiMessageSquare />
           <Text fontSize={"15px"} fontWeight={"400"}>{modifiedText}</Text>
         </Flex>

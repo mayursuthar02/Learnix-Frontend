@@ -1,10 +1,10 @@
 .header-logo-text {
-  background: -webkit-linear-gradient(35deg, #4796e3, #6658ff, #ff5546);
+  background: -webkit-linear-gradient(60deg, #4796e3, #336dff, #371e98);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 .link-color {
-  background: -webkit-linear-gradient(35deg, #4796e3, #6658ff, #ff5546);
+  background: -webkit-linear-gradient(35deg, #4796e3, #336dff, #371e98);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -16,4 +16,26 @@
 @keyframes LogoAnime {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.icon-gradient {
+  background: linear-gradient(35deg, #4796e3, #336dff, #371e98);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* Loading */
+
+.logo-rotate-anime {
+  animation: rotate 10s infinite ease-in-out;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

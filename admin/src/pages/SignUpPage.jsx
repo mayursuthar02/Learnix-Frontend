@@ -5,21 +5,24 @@ import { Link as RouterLink, useNavigate} from 'react-router-dom';
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import AiLogo from '../assets/logoai.png'
 import useShowToast from '../hooks/useShowToast';
+import { GRADIENT_BUTTON_STYLE } from '../styles/globleStyles';
 
 
 
 const SignUpPage = () => {
+  // Function
   const showToast = useShowToast(); //For toast
   const navigate = useNavigate();
-  
+  // State
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [profileType, setProfileType] = useState("");
 
+  // Email Validation
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email format regex
     return emailRegex.test(email);
@@ -116,19 +119,7 @@ const SignUpPage = () => {
           </FormControl>
 
           <Stack spacing={10} pt={2}>
-              <Button
-                isLoading={isLoading}
-                size="lg"
-                bg="linear-gradient(90deg, #4796E3, #6658ff, #ff5546)"
-                color="white"
-                borderRadius="full"
-                transition="background-position 0.3s ease-in-out"
-                bgSize="200% 200%"
-                bgPos="0% 0%"
-                _hover={{ bgPos: "100% 0%" }}
-                _active={{ bgPos: "100% 0%", opacity: 0.9}}
-                onClick={handleSubmit}
-              >
+              <Button {...GRADIENT_BUTTON_STYLE} size={"lg"} isLoading={isLoading} onClick={handleSubmit}>
                 Sign Up
               </Button>
           </Stack>

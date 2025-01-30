@@ -19,6 +19,8 @@ import { MdDelete } from "react-icons/md";
 import useShowToast from "../hooks/useShowToast";
 import { useEffect, useState } from "react";
 import AddAndEditUpdate from "../components/AddAndEditUpdate";
+import { GRADIENT_BUTTON_STYLE, TOOLTIPS_STYLE } from "../styles/globleStyles";
+import CustomHeading from "../components/Heading";
 
 const UpdatesPage = () => {
   // Functions
@@ -83,39 +85,29 @@ const UpdatesPage = () => {
     <>
       <Flex alignItems="center" justifyContent="end" mx={2} mb={"30px"} mt={3}>
         <Button
-          bg="linear-gradient(90deg, #4796E3, #6658ff, #ff5546)"
-          color="white"
-          borderRadius="full"
-          transition="background-position 0.3s ease-in-out"
-          bgSize="200% 200%"
-          bgPos="0% 0%"
-          _hover={{ bgPos: "100% 0%" }}
-          _active={{ bgPos: "100% 0%", opacity: 0.9 }}
+          {...GRADIENT_BUTTON_STYLE}
           onClick={() => {
             onOpen();
             setModelMode("add");
           }}
-          display={"flex"}
-          alignItems={"center"}
-          gap={1}
         >
           <FaPlus fontSize={"15px"} />
           Add Update
         </Button>
       </Flex>
 
-      <Heading fontSize={"20px"} px={5} mb={5}>Updates</Heading>
+      <CustomHeading title={"Updates"}/>
 
       {!loading &&
         (updates.length > 0 ? (
-          <Grid templateColumns={"1fr 1fr"} px={5} gap={5}>
+          <Grid templateColumns={"1fr 1fr"} px={5} gap={5} mt={5}>
             {updates.map((update) => (
               <Box key={update._id} border={"1px solid #ddd"} p={5} borderRadius={"10px"}>
                 <Flex alignItems={"center"} justifyContent={"space-between"} borderBottom={"1px solid #ddd"} pb={2} mb={2}>
                   <Text fontSize={"20px"} fontWeight={"500"} color={"#1f1f1f"}>{update.title}</Text>
 
                   <Flex alignItems={"center"} justifyContent={"center"} gap={2}>
-                    <Tooltip label="Edit">
+                    <Tooltip label="Edit" {...TOOLTIPS_STYLE}>
                       <IconButton aria-label="Edit" borderRadius={"full"} icon={<TbEdit fontSize={"18px"} color="#1f1f1f" />}
                         onClick={() => {
                           onOpen();
@@ -124,7 +116,7 @@ const UpdatesPage = () => {
                         }}
                       />
                     </Tooltip>
-                    <Tooltip label="Delete">
+                    <Tooltip label="Delete" {...TOOLTIPS_STYLE}>
                       <IconButton aria-label="Edit" borderRadius={"full"} icon={<MdDelete fontSize={"18px"} color="#1f1f1f" />} onClick={() => handleDelete(update._id)} isLoading={update._id === isDeleteUpdate}/>
                     </Tooltip>
                   </Flex>
@@ -132,16 +124,14 @@ const UpdatesPage = () => {
 
                 <Text fontSize={"18px"} fontWeight={"400"} color={"#444746"}>{update.description}</Text>
 
-                <Tooltip label="See details" bg={"#1f1f1f"}>
+                {/* <Tooltip label="See details" {...TOOLTIPS_STYLE}>
                   <Link color={"#4796E3"} fontSize={"15px"}>see details</Link>
-                </Tooltip>
+                </Tooltip> */}
               </Box>
             ))}
           </Grid>
         ) : (
-          <Flex fontSize={"18px"} color={"#1f1f1f"} justifyContent={"center"}>
-            Updates Not Found
-          </Flex>
+          <Flex fontSize={"18px"} color={"#1f1f1f"} justifyContent={"center"}>Updates Not Found</Flex>
         ))}
 
       {loading && (

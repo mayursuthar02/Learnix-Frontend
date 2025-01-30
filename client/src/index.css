@@ -4,9 +4,13 @@
     box-sizing: border-box;
     font-family: "Outfit", sans-serif;
     /* color: #131727; */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+*::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, and Opera */
 }
 
 .bg-video {
     filter: grayscale(1);
-    /* mix-blend-mode: luminosity; */
 }

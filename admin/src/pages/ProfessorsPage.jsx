@@ -24,6 +24,9 @@ import {
   // Icons
   import { TbEdit } from "react-icons/tb";
   import { MdDelete } from "react-icons/md";
+import { BUTTON_ICON_STYLE, TOOLTIPS_STYLE } from "../styles/globleStyles";
+import DataLoadingSpinner from "../components/DataLoadingSpinner";
+import CustomHeading from "../components/Heading";
   
   const ProfessorsPage = () => {
     const headerCell = [
@@ -124,15 +127,7 @@ import {
   
     return (
       <>
-        <Heading
-          color={"#333"}
-          fontSize={"25px"}
-          fontWeight={"600"}
-          px={"15px"}
-          mt={5}
-        >
-          All Professors
-        </Heading>
+        <CustomHeading title={"Professors"}/>
   
         <TableContainer mt={5}>
           <Table variant="simple">
@@ -168,7 +163,7 @@ import {
                       <Select 
                       value={user.role} 
                       onChange={(e) => updateUserRole(e.target.value, user._id)}
-                      isDisabled={isLoading === user._id || isDeletingUserLoading !== null || user?.role === "superAdmin"}
+                      isDisabled={isLoading === user._id || isDeletingUserLoading !== null || admin?.role === "admin"}
                       >
                         {user?.role === "superAdmin" && <option >SuperAdmin</option>}
                         {user?.role !== "superAdmin" &&(
@@ -185,19 +180,19 @@ import {
                     </Td>
                     {admin?.role === "superAdmin" && <Td>
                       <Flex alignItems={'center'} justifyContent={'center'} gap={1}>
-                        <Tooltip label="Edit">
+                        <Tooltip label="Edit" {...TOOLTIPS_STYLE}>
                           <IconButton 
                           aria-label='Edit' 
                           borderRadius={'full'} 
                           onClick={() => {onOpen(); setUserIdForUpdate(user._id);}}
-                          icon={<TbEdit fontSize={'18px'} color="#1f1f1f"/>}
+                          icon={<TbEdit {...BUTTON_ICON_STYLE}/>}
                           />
                         </Tooltip>
-                        <Tooltip label="Delete">
+                        <Tooltip label="Delete" {...TOOLTIPS_STYLE}>
                           <IconButton 
                           aria-label='Edit' 
                           borderRadius={'full'} 
-                          icon={<MdDelete fontSize={'18px'} color="#1f1f1f"/>}
+                          icon={<MdDelete {...BUTTON_ICON_STYLE}/>}
                           onClick={() => deleteUser(user._id)}
                           isLoading={isDeletingUserLoading === user._id}
                           />
@@ -208,7 +203,7 @@ import {
                 ))
               ) : (
                 <Tr>
-                  <Td colSpan={8} fontSize={"18px"} color={"#1f1f1f"}>
+                  <Td colSpan={8} {...BUTTON_ICON_STYLE}>
                     <Flex justifyContent={"center"}>Users Not Found</Flex>
                   </Td>
                 </Tr>
@@ -216,7 +211,7 @@ import {
             </Tbody>}
           </Table>
         </TableContainer>
-        {dataLoading && <Flex justifyContent={'center'} mt={'100px'}><Spinner color="#1f1f1f"/></Flex>}
+        {dataLoading && <DataLoadingSpinner/>}
 
         <UpdateUserDetails isOpen={isOpen} onClose={onClose} userIdForUpdate={userIdForUpdate} getAllUsers={getAllUsers} profileType={"professor"}/>
       </>

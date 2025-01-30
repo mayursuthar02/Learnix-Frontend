@@ -8,6 +8,7 @@ import AiLogo from '../assets/logoai.png'
 import useShowToast from '../hooks/useShowToast';
 import {useRecoilState} from 'recoil';
 import userAtom from '../atoms/userAtom';
+import { GRADIENT_BUTTON_STYLE } from '../styles/globleStyles';
 
 
 const LoginPage = () => {
@@ -92,19 +93,7 @@ const LoginPage = () => {
           </FormControl>
 
           <Stack spacing={10} pt={2}>
-              <Button
-                isLoading={isLoading}
-                size="lg"
-                bg="linear-gradient(90deg, #4796E3, #6658ff, #ff5546)"
-                color="white"
-                borderRadius="full"
-                transition="background-position 0.3s ease-in-out"
-                bgSize="200% 200%"
-                bgPos="0% 0%"
-                _hover={{ bgPos: "100% 0%" }}
-                _active={{ bgPos: "100% 0%", opacity: 0.9}}
-                onClick={handleSubmit}
-              >
+              <Button {...GRADIENT_BUTTON_STYLE} isLoading={isLoading} size="lg" onClick={handleSubmit}>
                 Login
               </Button>
           </Stack>

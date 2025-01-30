@@ -9,12 +9,14 @@ import AiResponse from "./AiResponse";
 import LoadingAnime from "./LoadingAnime";
 
 // Icons
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 // State and Toast
 import useShowToast from '../hooks/useShowToast';
-import {useRecoilValue} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
 import userAtom from "../atoms/userAtom";
+import conversationAtom from "../atoms/conversationAtom";
+import { useParams } from "react-router-dom";
 
 
 // STYLE
@@ -23,10 +25,14 @@ const AVATAR_STYLES = { objectFit : "cover", w : "40px", h : "40px" }
 
 // Main Function
 const ChatList = ({botResponseLoading, setBotResponseLoading, messages, setMessages, conversationId, isScholaraActive, userReplyLoading, setUserReplyLoading}) => {
+  // State
+  const [responseLoadingDisableButton, setResponseLoadingDisableButton] = useState(false);
+  const [_, setConversations] = useRecoilState(conversationAtom);
   // Functions
   const user = useRecoilValue(userAtom);
   const showToast = useShowToast();
   const chatContainerRef = useRef(null);
+  
   
   // Bot Response
   const botResponse = useCallback(
@@ -44,6 +50,17 @@ const ChatList = ({botResponseLoading, setBotResponseLoading, messages, setMessa
         }
         console.log(data);
         setMessages((prev) => [...prev, data.newMessage]);
+        setConversations((prev) =>
+          prev.map((conversation) => {
+            if (conversation._id === data.newMessage.conversationId) {
+              return {
+                ...conversation,
+                title: data?.newMessage?.botResponse?.message,
+              };
+            }
+            return conversation;
+          })
+        );
       } catch (error) {
         console.log(error);
       } finally {
@@ -56,6 +73,7 @@ const ChatList = ({botResponseLoading, setBotResponseLoading, messages, setMessa
   // User Reply
   const handleUserReply = useCallback(
     async (reply, apiRoute) => {
+      setResponseLoadingDisableButton(true);
       setUserReplyLoading(true);
       try {
         const response = await fetch(`/api/messages/userPrompt`, {
@@ -74,6 +92,7 @@ const ChatList = ({botResponseLoading, setBotResponseLoading, messages, setMessa
         console.log(error);
       } finally {
         setUserReplyLoading(false);
+        setResponseLoadingDisableButton(false);
       }
     },
     [conversationId, botResponse] // Dependencies
@@ -103,7 +122,7 @@ const ChatList = ({botResponseLoading, setBotResponseLoading, messages, setMessa
             {message?.sender === "user" ? (
               <UserMessage message={message}/>
               ) : message?.sender === "learnix" ? (
-                <BotMessage isScholaraActive={isScholaraActive} message={message} handleUserReply={handleUserReply}/>
+                <BotMessage isScholaraActive={isScholaraActive} message={message} handleUserReply={handleUserReply} responseLoadingDisableButton={responseLoadingDisableButton}/>
             ) : (
               <AiResponse message={message} />
             )}

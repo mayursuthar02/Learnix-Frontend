@@ -18,24 +18,85 @@ import {
     MenuButton,
     MenuList,
     MenuItem,
-  } from "@chakra-ui/react";
-  import {ChevronDownIcon} from '@chakra-ui/icons';
-import { useState } from "react";
+} from "@chakra-ui/react";
+
+// Icons
+import {ChevronDownIcon} from '@chakra-ui/icons';
+
+// Function
+import { useEffect, useState } from "react";
+import useShowToast from "../hooks/useShowToast";
 
 // STYLES
 import { BUTTON_STYLE, GRADIENT_BUTTON_STYLE } from "../styles/globleStyles";
 
+
+// MAIN FUNCTIONS
 const AskAQuestion = ({ isOpen, onClose }) => {
-    const options = [
-        { id: 1, name: "John Doe", avatar: "https://via.placeholder.com/150" },
-        { id: 2, name: "Jane Smith", avatar: "https://via.placeholder.com/150" },
-        { id: 3, name: "Alice Johnson", avatar: "https://via.placeholder.com/150" },
-        { id: 4, name: "Bob Brown", avatar: "https://via.placeholder.com/150" },
-        { id: 5, name: "Charlie Green", avatar: "https://via.placeholder.com/150" },
-      ];
-    const [selectedOption, setSelectedOption] = useState({name: "Select"});
+  // State
+  const [selectedOption, setSelectedOption] = useState({fullName: "Select Professor"});
+  const [professorsList, setProfessorsList] = useState([]);
+  const [professorId, setProfessorId] = useState(null);
+  const [question, setQuestion] = useState("");
+  const [isProfessorsLoading, setIsProfessorsLoading] = useState(false);
+  const [isSubmiting, setIsSubmiting] = useState(false);
+  // Function
+  const showToast = useShowToast();  
     
+  // Fetch Professors
+  useEffect(()=> {
+      const getAdminProfessors = async () => {
+        setIsProfessorsLoading(true);
+        try {
+          const response = await fetch('/api/users/getAdminProfessors');
+          const data = await response.json();
+          if (data.error) {
+            console.log(data.error);
+            return;
+          }
+          setProfessorsList(data.adminProfessors);
+        } catch (error) {
+          console.log(error);
+        } finally {
+          setIsProfessorsLoading(false);
+        }
+      }
+
+      getAdminProfessors();
+  },[]);
     
+  const handleSubmit = async () => {
+    if (!question) {
+      showToast("Error", "Question is required!", "error");
+      return;
+    }
+    if (!professorId) {
+      showToast("Error", "ProfessorId is required!", "error");
+      return;
+    }
+    
+    setIsSubmiting(true);
+    try {
+      const response = await fetch("/api/questions/ask-a-question", {
+        method: "POST",
+        headers: {"Content-Type" : "application/json"},
+        body: JSON.stringify({professorId, question})
+      })
+      const data = await response.json();
+      if (data.error) {
+        showToast("Error", data.error, "error");
+        return;
+      }
+      onClose();
+      setQuestion("");
+      setProfessorId("");
+    } catch (error) {
+      showToast("Error", "Something went wrong", "error");
+      console.log(error);
+    } finally {
+      setIsSubmiting(false);
+    }
+  }
   return (
     <Box>
       <Modal
@@ -56,34 +117,24 @@ const AskAQuestion = ({ isOpen, onClose }) => {
           <FormControl id="fullName" isRequired mb={4}>
             <FormLabel fontWeight={'400'}>Select Professor</FormLabel>
             <Menu>
-                <MenuButton as={Button} bg="#131313" rightIcon={<ChevronDownIcon />} color="white" _active={{bg: "#131313"}}  _hover={{borderColor: "#444" }} border={'1px solid'} w={'full'} borderColor={'#222'} py={2}>
-                    <Flex align="center" gap={4}>
-                        {selectedOption.avatar && <Avatar src={selectedOption.avatar} size="sm" />}
-                        <Text>{selectedOption.name}</Text>
+                <MenuButton as={Button} bg="#131313" rightIcon={<ChevronDownIcon />} color="white" _active={{bg: "#131313"}}  _hover={{borderColor: "#444" }} border={'1px solid'} w={'full'} borderColor={'#222'} h={"50px"}>
+                    <Flex align="center" gap={3}>
+                        {selectedOption?.profilePic && <Avatar src={selectedOption?.profilePic} size="sm" />}
+                        <Text fontSize={"16px"} fontWeight={"400"}>{selectedOption?.fullName}</Text>
                     </Flex>
                 </MenuButton>
                 <MenuList bg="#131313" borderColor="#222" maxH={'190px'} overflow={'scroll'}>
-                    {/* <MenuItem
-                        w={'462px'}
-                        bg="#131313"
-                        _hover={{ bg: "#222" }}
-                        onClick={() => setSelectedOption("Select")}
-                    >
-                        <Flex align="center" gap={4}>
-                        <Text color="white">Select</Text>
-                        </Flex>
-                    </MenuItem> */}
-                    {options.map((option) => (
+                    {professorsList.map((option) => (
                     <MenuItem
                         w={'462px'}
                         key={option.id}
                         bg="#131313"
                         _hover={{ bg: "#222" }}
-                        onClick={() => setSelectedOption(option)}
+                        onClick={() => {setSelectedOption(option); setProfessorId(option._id)}}
                     >
                         <Flex align="center" gap={4}>
-                        <Avatar src={option.avatar} size="sm" />
-                        <Text color="white">{option.name}</Text>
+                        <Avatar src={option.profilePic} size="sm" />
+                        <Text color="white">{option.fullName}</Text>
                         </Flex>
                     </MenuItem>
                     ))}
@@ -93,20 +144,13 @@ const AskAQuestion = ({ isOpen, onClose }) => {
 
           <FormControl id="email" isRequired mb={4}>
             <FormLabel fontWeight={'400'}>Question</FormLabel>
-            <Input borderColor={'#222'} _hover={{borderColor: "#444"}} type="text" placeholder="Write your question..."/>
+            <Input borderColor={'#222'} _hover={{borderColor: "#444"}} type="text" value={question} onChange={(e) => setQuestion(e.target.value)} placeholder="Write your question..."/>
           </FormControl>
 
           </ModalBody>
 
           <ModalFooter gap={2}>
-            <Button
-              // isLoading={isLoading}
-            //   size="lg"
-              {...GRADIENT_BUTTON_STYLE}
-              // onClick={handleSubmit}
-            >
-              Send
-            </Button>
+            <Button isLoading={isSubmiting} {...GRADIENT_BUTTON_STYLE} onClick={handleSubmit}>Send</Button>
             <Button {...BUTTON_STYLE} onClick={onClose}>Cancel</Button>
           </ModalFooter>
         </ModalContent>

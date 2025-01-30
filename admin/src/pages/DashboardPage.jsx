@@ -9,27 +9,32 @@ import { PiStudent } from "react-icons/pi";
 import { MdOutlineQuestionMark } from "react-icons/md";
 import { RiSettings3Line } from "react-icons/ri";
 import { LuUserPen } from "react-icons/lu";
+import { HiCalendarDateRange } from "react-icons/hi2";
 // Pages and Components
 import Header from "../components/Header";
 
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
-import { ChevronDownIcon } from "@chakra-ui/icons";
 import UpdateProfile from "../components/UpdateProfile";
+import { TOOLTIPS_STYLE } from "../styles/globleStyles";
 
 const DashboardPage = () => {
   // Dashboard Menu
-  const dashBoardLink = [
-    { title: "Students", link: "/dashboard/students", icon: <PiStudent /> },
-    { title: "Professors", link: "/dashboard/professors", icon: <PiUsersThreeBold /> },
-    { title: "Resources", link: "/dashboard/resource", icon: <GrResources /> },
-    { title: "FAQs", link: "/dashboard/faqs", icon: <LuMessagesSquare /> },
-    { title: "Questions", link: "/dashboard/questions", icon: <MdOutlineQuestionMark /> },
-    { title: "Updates", link: "/dashboard/updates", icon: <MdOutlineEditNotifications /> },
+  const baseLinks  = [
+    { title: "Students", link: "/dashboard/students", icon: <PiStudent fontSize={'20px'}/> },
+    { title: "Professors", link: "/dashboard/professors", icon: <PiUsersThreeBold fontSize={'20px'}/> },
+    { title: "Resources", link: "/dashboard/resource", icon: <GrResources fontSize={'20px'}/> },
+    { title: "Questions", link: "/dashboard/questions", icon: <LuMessagesSquare fontSize={'20px'}/> },
+    { title: "Updates", link: "/dashboard/updates", icon: <MdOutlineEditNotifications fontSize={'20px'}/> },
+    { title: "Events", link: "/dashboard/events", icon: <HiCalendarDateRange fontSize={'20px'}/> },
   ];
-  const user = useRecoilValue(userAtom);
   // Function
+  const user = useRecoilValue(userAtom);
   const { isOpen, onOpen, onClose} = useDisclosure();
+
+  const dashBoardLink = user?.role === "superAdmin" 
+  ? [...baseLinks, { title: "FAQs", link: "/dashboard/faqs", icon: <MdOutlineQuestionMark fontSize={"20px"} /> }] 
+  : baseLinks;
 
 
   return (
@@ -51,10 +56,9 @@ const DashboardPage = () => {
           <Flex flexDir={'column'} justifyContent={'space-between'} height={'78vh'} pb={4}>
             <Flex flexDir={"column"} gap={1}>
               {dashBoardLink.map((el, i) => (
-                <Tooltip label={el.title} key={i} placement='top'>
+                <Tooltip label={el.title} key={i} placement='right' {...TOOLTIPS_STYLE}>
                   <NavLink
                     to={el.link}
-                    // _hover={{bgColor: 'blue.50', color:"blue.500"}}
                     px={4}
                     py={4}
                     borderRadius={"md"}
@@ -82,18 +86,18 @@ const DashboardPage = () => {
             </Flex>
 
             <Menu>
-              <Tooltip label={"Settings"}placement='top'>
-                <MenuButton as={Button} fontWeight={'400'} fontSize={'15px'} px={5} py={3} borderRadius={"full"} bg={"transparent"} color={"#444746"} _hover={{bg: "#dfe3e7", color: "#1f1f1f"}} _active={{bg: "#dfe3e7", color: "#1f1f1f"}} transition={"background .3s ease, color .3s ease"}>
-                  <Flex alignItems={"center"} gap={3} fontSize={"19px"}>
-                    <RiSettings3Line/>
+              <Tooltip label={"Settings"}placement='right' {...TOOLTIPS_STYLE}>
+                <MenuButton as={Button} fontWeight={'400'} fontSize={'15px'} height={'45px'} px={5} borderRadius={"full"} bg={"transparent"} color={"#444746"} _hover={{bg: "#dfe3e7", color: "#1f1f1f"}} _active={{bg: "#dfe3e7", color: "#1f1f1f"}} transition={"background .3s ease, color .3s ease"}>
+                  <Flex alignItems={"center"} gap={3} fontSize={"19px"} >
+                    <RiSettings3Line fontSize={'20px'}/>
                     <Text>Settings</Text>
                   </Flex>
                 </MenuButton>
               </Tooltip>
               <MenuList marginLeft={'40px'} borderRadius={'50px'} px={1} py={1}>
-                <Tooltip label={"Update Profile"} placement='top'>
+                <Tooltip label={"Update Profile"} placement='right' {...TOOLTIPS_STYLE}>
                   <MenuItem borderRadius={'full'} py={2} display={'flex'} alignItems={'center'} gap={2} px={4} onClick={onOpen}>
-                    <LuUserPen fontSize={'18px'}/> 
+                    <LuUserPen fontSize={'20px'}/> 
                     Update Profile
                   </MenuItem>
                 </Tooltip>

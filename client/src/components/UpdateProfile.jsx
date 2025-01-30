@@ -58,6 +58,7 @@ export default function UpdateProfile({ isOpen, onClose }) {
           showToast("Error", data.error, "error");
           return;
         }
+        localStorage.setItem('learnixUserDetails', JSON.stringify(data.user));
         setUser(data.user);
         onClose();
       } catch (error) {

@@ -14,6 +14,9 @@ const ProfessorsPage = lazy(() => import("../pages/ProfessorsPage"));
 const ResourcePage = lazy(() => import("../pages/ResourcePage"));
 const FAQsPage = lazy(() => import("../pages/FAQsPage"));
 const UpdatesPage = lazy(() => import("../pages/UpdatesPage"));
+const QuestionsPage = lazy(() => import("../pages/QuestionsPage"));
+const EventPage = lazy(() => import("../pages/EventPage"));
+const PageNotFound = lazy(() => import("../pages/PageNotFound"));
 
 
 
@@ -32,9 +35,14 @@ const Router = () => {
           <Route path="professors" element={user ? <ProfessorsPage /> : <Navigate to={'/'}/>} />
           <Route path="resource" element={user ? <ResourcePage /> : <Navigate to={'/'}/>} />
           <Route path="faqs" element={user ? <FAQsPage /> : <Navigate to={'/'}/>} />
+          <Route path="questions" element={user ? <QuestionsPage /> : <Navigate to={'/'}/>} />
           <Route path="updates" element={user ? <UpdatesPage /> : <Navigate to={'/'}/>} />
+          <Route path="events" element={user ? <EventPage /> : <Navigate to={'/'}/>} />
         </Route>
+        
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
+
     </Suspense>
   );
 };

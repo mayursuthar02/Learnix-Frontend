@@ -1,10 +1,10 @@
 .header-logo-text {
-  background: -webkit-linear-gradient(35deg, #4796e3, #6658ff, #ff5546);
+  background: -webkit-linear-gradient(60deg, #4796e3, #336dff, #492cbe);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 .link-color {
-  background: -webkit-linear-gradient(35deg, #4796e3, #6658ff, #ff5546);
+  background: -webkit-linear-gradient(35deg, #4796e3, #336dff, #492cbe);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -69,31 +69,9 @@ code {
   margin: 15px 0;
 }
 
-.glowingEffect {
-  /* max-width: 250px; */
-  /* padding: 2px; */
-  position: relative;
-  z-index:1;
-  /* background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);  */
-  /* margin-right:25px; */
-  /* filter: brightness(120%); */
-}
-
-.glowingEffect::before {
-  z-index:0;
-  position: absolute;
-  content:"";
-  width:50vw;
-  height:50px;
-  left:10px;
-  top:0;
-  border-radius: 50px;
-  background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%); 
-  filter: blur(10px);
-}
-
-
+/* ------------------------------------------------ */
 /* From Uiverse.io by tiagoadag1203 */ 
+/* ------------------------------------------------ */
 .input {
   box-shadow: none;
   transition: all .3s ease-in-out;
@@ -104,23 +82,83 @@ code {
   transition: all .3s ease-in-out;
 }
 
+.voiceButtonGlowingAnimation {
+  box-shadow: none;
+  transition: all .3s ease-in-out;
+}
+
+.voiceButtonGlowingAnimation.active {
+  animation: rotateShadow 5s infinite linear;
+  transition: all .3s ease-in-out;
+}
+
 @keyframes rotateShadow {
   0% {
-    box-shadow: -2px -2px 8px 1px #64b1fe, 2px 2px 8px 1px #502fd5;
+    box-shadow: -2px -2px 8px 1px #4796e3, 2px 2px 8px 1px #336dff;
   }
   25% {
-    box-shadow: -2px 2px 8px 1px #d52f3d, 2px -2px 8px 1px #64b1fe;
+    box-shadow: -2px 2px 8px 1px #371e98, 2px -2px 8px 1px #4796e3;
   }
   50% {
-    box-shadow: 2px 2px 8px 1px #502fd5, -2px -2px 8px 1px #d52f3d;
+    box-shadow: 2px 2px 8px 1px #336dff, -2px -2px 8px 1px #371e98;
   }
   75% {
-    box-shadow: 2px -2px 8px 1px #64b1fe, -2px 2px 8px 1px #502fd5;
+    box-shadow: 2px -2px 8px 1px #4796e3, -2px 2px 8px 1px #336dff;
   }
   100% {
-    box-shadow: -2px -2px 8px 1px #d52f3d, 2px 2px 8px 1px #64b1fe;
+    box-shadow: -2px -2px 8px 1px #371e98, 2px 2px 8px 1px #4796e3;
   }
 }
+
+/* ----------------------------------- */
+/* Response Loading */
+/* ----------------------------------- */
+.box {
+  background: #131313;
+  /* padding: 16px 24px; */
+  height: 40px;
+  position: relative;
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.01);
+
+  &::after {
+    position: absolute;
+    content: "";
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    /* z-index: -1; */
+    height: 100%;
+    width: 100%;
+    border-radius: 100%;
+    transform: scale(0.9) translateZ(0);
+    filter: blur(15px);
+    background: linear-gradient(
+      to left,
+      #57f9ff,
+      #42abe4,
+      #2d58c4,
+      #2f0b9c,
+      #0f0876,
+      #2f0b9c,
+      #2d58c4,
+      #42abe4,
+      #57f9ff
+    );
+    background-size: 200% 200%;
+    animation: animateGlow 1.25s linear infinite;
+  }
+}
+
+@keyframes animateGlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
 
 
 

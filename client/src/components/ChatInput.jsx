@@ -141,10 +141,8 @@ const ChatInput = ({conversationId, startConversation, isScholaraActive,setUserR
                             value={prompt}
                             onChange={handleTextareaChange}
                             onKeyDown={handleKeyDown}
-                            placeholder="Ask Scholara..."
                             resize="none"   // Prevent resizing
                             rows={1}        // Control visible rows
-                            maxLength={200} // Optional: Set a max length for the input
                             minHeight="40px" // Set a fixed minimum height
                             height="auto"   // Allow auto height based on content
                             overflow="hidden" // Prevent vertical scrolling
@@ -167,7 +165,7 @@ const ChatInput = ({conversationId, startConversation, isScholaraActive,setUserR
                     </Tooltip>
                     
                     <Tooltip label={"Activate Scholara"} {...TOOLTIP_STYLE}>
-                        <IconButton onClick={()=> {activateScholara("hello!")}} {...GRADIENT_BUTTON_STYLE} isDisabled={botResponseLoading} icon={<BsStars color="#fff" fontSize={'20px'} />}/>
+                        <IconButton onClick={()=> {activateScholara("Hello!")}} {...GRADIENT_BUTTON_STYLE} isDisabled={botResponseLoading} icon={<BsStars color="#fff" fontSize={'20px'} />}/>
                     </Tooltip>
                 </Flex>
             </form>

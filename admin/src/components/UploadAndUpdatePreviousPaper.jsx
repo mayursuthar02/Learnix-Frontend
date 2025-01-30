@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
   // Function
 import useShowToast from "../hooks/useShowToast";
 import { useEffect } from "react";
+import { GRADIENT_BUTTON_STYLE } from "../styles/globleStyles";
   
 
   const UploadAndUpdatePreviousPaper = ({ isOpen, onClose, modelMode, resourceIdForUpdate, getResources }) => {
@@ -231,23 +232,14 @@ import { useEffect } from "react";
               </FormControl>
             </ModalBody>
   
-            <ModalFooter>
+            <ModalFooter gap={3}>
               <Button
-                mr={3}
-                bg="linear-gradient(90deg, #4796E3, #6658ff, #ff5546)"
-                color="white"
-                borderRadius="full"
-                transition="background-position 0.3s ease-in-out"
-                bgSize="200% 200%"
-                bgPos="0% 0%"
-                _hover={{ bgPos: "100% 0%" }}
-                _active={{ bgPos: "100% 0%", opacity: 0.9 }}
+                {...GRADIENT_BUTTON_STYLE}
                 onClick={() => {
                     handleResourceAction();
                 }}
                 isLoading={isLoading.submit || isLoading.resource}
                 loadingText={isLoading.resource && "Fetching"}
-                textTransform={'capitalize'}
               >
                 {modelMode}
               </Button>

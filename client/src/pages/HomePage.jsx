@@ -13,39 +13,15 @@ import { MdLogout } from "react-icons/md";
 // State
 import { useRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
-import { useState } from "react";
-import useShowToast from "../hooks/useShowToast";
+import HandleUserLogout from "../helpers/HandleUserLogout";
 // Styles
 import { BUTTON_STYLE, TOOLTIP_STYLE } from '../styles/globleStyles'
 
 
 const HomePage = () => {
   const [user, setUser] = useRecoilState(userAtom);
-  const [loading, setLoading] = useState(false);
-  const showToast = useShowToast();
-  const navigate = useNavigate();
-
-    // LogOut
-    const handleLogout = async() => {
-      setLoading(true);
-      try {
-        const response = await fetch('/api/auth/logout');
-        const data = await response.json();
-        if (data.error) {
-          showToast("Error", data.error, "error");
-          return;
-        }
-        showToast("Success", data.message, "success");
-        setUser(null);
-        localStorage.removeItem("scholaraUserDetails");
-        navigate("/login");
-      } catch (error) {
-          console.log(error);
-          showToast("Error", error, "error");
-      } finally {
-          setLoading(false);
-      }
-    }
+  // Function
+  const { handleUserLogoutFunc, loading } = HandleUserLogout();
 
 
   return (
@@ -96,7 +72,7 @@ const HomePage = () => {
             )}
             {user && (
               <Tooltip hasArrow label={"Logout"} {...TOOLTIP_STYLE}>
-                <IconButton size={'lg'} {...BUTTON_STYLE} fontSize={'20px'}  icon={<MdLogout/>} onClick={handleLogout} isLoading={loading}/>
+                <IconButton size={'lg'} {...BUTTON_STYLE} fontSize={'20px'}  icon={<MdLogout/>} onClick={handleUserLogoutFunc} isLoading={loading}/>
               </Tooltip>
             )}
           </Flex>

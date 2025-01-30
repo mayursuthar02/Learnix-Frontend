@@ -8,6 +8,8 @@ import { TbEdit } from "react-icons/tb";
 import { MdDelete } from "react-icons/md";
 // Functions
 import useShowToast from "../hooks/useShowToast";
+import { GRADIENT_BUTTON_STYLE, TOOLTIPS_STYLE } from "../styles/globleStyles";
+import CustomHeading from "../components/Heading";
 
 
 const FAQsPage = () => {
@@ -73,43 +75,32 @@ const FAQsPage = () => {
   return (
     <>
       <Flex justify={"end"} mx={4} mt={2}>
-        <Button
-          bg="linear-gradient(90deg, #4796E3, #6658ff, #ff5546)"
-          color="white"
-          borderRadius="full"
-          transition="background-position 0.3s ease-in-out"
-          bgSize="200% 200%"
-          bgPos="0% 0%"
-          _hover={{ bgPos: "100% 0%" }}
-          _active={{ bgPos: "100% 0%", opacity: 0.9 }}
+        <Button {...GRADIENT_BUTTON_STYLE}
           onClick={() => {
             onOpen();
             setModelMode("add");
           }}
-          display={"flex"}
-          alignItems={"center"}
-          gap={1}
         >
           <FaPlus fontSize={"15px"} />
           Add FAQ
         </Button>
       </Flex>
 
-      <Heading fontSize={"20px"} px={5} mb={5}>FAQs</Heading>
+      <CustomHeading title={"FAQs"}/>
       
       {!loading && (
         FAQs.length > 0 ? (
-          <Accordion allowMultiple mt={7} px={8}>
-            <Grid templateColumns="repeat(1, 1fr)" gap={5}>
+          <Accordion allowMultiple border={'none'} mt={5} mx={"50px"} color={"#fff"} fontWeight={"400"} overflow={"hidden"} borderRadius={"20px"}>
+            <Grid templateColumns="repeat(1, 1fr)" gap={1}>
               {FAQs.map(FAQ => (
-                <AccordionItem borderRadius={'10px'} key={FAQ._id}>
+                <AccordionItem borderRadius={"5px"} overflow={'hidden'} border={'none'} key={FAQ._id}>
                 <h2>
-                  <AccordionButton border={'2px solid #eee'} borderRadius={'10px'} py={3} _hover={{bg: "#edf2f7"}}>
-                    <Box as="span" flex="1" textAlign="left" fontWeight={'600'} textTransform={'capitalize'}>
+                  <AccordionButton border={'none'} bg={"#f0f4f9"} _hover={{bg: "#f0f4f9"}} py={4} px={"30px"} fontSize={"17px"}>
+                    <Box as="span" flex="1" textAlign="left" fontWeight={'500'} color={"#111"}>
                       {FAQ.title}
                     </Box>
                     <Flex alignItems={"center"} justifyContent={"center"} gap={2} mr={2}>
-                      <Tooltip label="Edit">
+                      <Tooltip label="Edit" {...TOOLTIPS_STYLE}>
                         <IconButton aria-label="Edit" borderRadius={"full"} icon={<TbEdit fontSize={"18px"} color="#1f1f1f" />}
                           onClick={() => {
                             onOpen();
@@ -118,18 +109,18 @@ const FAQsPage = () => {
                           }}
                         />
                       </Tooltip>
-                      <Tooltip label="Delete">
+                      <Tooltip label="Delete" {...TOOLTIPS_STYLE}>
                         <IconButton aria-label="Edit" borderRadius={"full"} icon={<MdDelete fontSize={"18px"} color="#1f1f1f" />} 
                         onClick={() => handleDelete(FAQ._id)} 
                         isLoading={FAQ._id === isDeleteFAQ}
                         />
                       </Tooltip>
                     </Flex>
-                    <AccordionIcon />
+                    <AccordionIcon color={"#111"}/>
                   </AccordionButton>
                 </h2>
                 
-                <AccordionPanel pb={4} border={'2px solid #eee'} borderRadius={'10px'} mt={2} textTransform={'capitalize'}>
+                <AccordionPanel py={4} px={"30px"} border={'none'} bg={"#f0f4f9"} fontSize={"17px"} fontWeight={"400"} color={"#111"}>
                   {FAQ.description}
                 </AccordionPanel>
                 </AccordionItem>

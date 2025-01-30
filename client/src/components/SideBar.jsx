@@ -16,14 +16,21 @@ import { IoMdSettings } from "react-icons/io";
 import { MdQuestionMark } from "react-icons/md";
 import { LuMessageSquareMore } from "react-icons/lu";
 import { LuUserPen } from "react-icons/lu";
+import { HiCalendarDateRange } from "react-icons/hi2";
+import { FaQ } from "react-icons/fa6";
+import { LuMessagesSquare } from "react-icons/lu";
 
 // Functions
 import { useRecoilValue } from "recoil";
 import FetchAllUpdates from "../helpers/FetchAllUpdates";
+import FetchAllEvents from "../helpers/FetchAllEvents";
 import updatesAtom from "../atoms/updatesAtom";
+import eventsAtom from "../atoms/eventsAtom";
 
 // styles
 import { TOOLTIP_STYLE } from "../styles/globleStyles";
+import EventsDrawer from "./EventsDrawer";
+import ReplyDrawer from "./ReplyDrawer";
 
 
 // CSS STYLES
@@ -41,19 +48,57 @@ const MENU_ITEM_STYLES = {
   gap : "2", 
   px : "4"
 }
+const TAB_BUTTON_STYLE = {
+  alignItems : "center",
+  gap : "2",
+  justifyContent : "start",
+  px : "4",
+  py : "2.5",
+  borderRadius : "50px",
+  cursor : "pointer",
+  bg : "",
+  _hover : { bg: "#242424" },
+  transition : "background .3s ease",
+  _active : { bg: "#242424" }
+}
+const TAB_BUTTON_BADGE_STYLE = {
+  alignItems : "center",
+  justifyContent : "center",
+  fontSize : "12px",
+  fontWeight : "600",
+  borderRadius : "full",
+  w : "5",
+  h : "5",
+  color : "#4796e3",
+  background : "#222"
+}
 const ICON_STYLE = { color : "#fff", fontSize : "20px" }
 const TEXT_STYLE = {color : "#fff", fontSize : "17px", fontWeight : "400"}
-
+const BUTTON_STYLE = {
+  display : "flex",
+  alignItems : "center",
+  gap : "1",
+  borderRadius : "50px",
+  bg : "#242424",
+  _hover : { bg: "#292929"},
+  _active : { bg: "#242424"},
+  color : "#fff",
+  fontWeight : "400",
+}
 
 // MAIN FUNCTION
 // -------------------------------------------------------------
-const SideBar = ({isNewConversation}) => {
+const SideBar = ({isNewConversation, setIsDisableHelloButton}) => {
   // Functions
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isOpenEventDrawer, onOpen: onOpenEventDrawer, onClose: onCloseEventDrawer } = useDisclosure();
+  const { isOpen: isOpenViewReplyDrawer, onOpen: onOpenViewReplyDrawer, onClose: onCloseViewReplyDrawer } = useDisclosure();
   const { isOpen: isOpenAskAQuestion, onOpen: onOpenAskAQuestion, onClose: onCloseAskAQuestion } = useDisclosure();
   const { isOpen: isOpenUpdateProfileModel, onOpen: onOpenUpdateProfileModel, onClose: onCloseUpdateProfileModel } = useDisclosure();
   const fetchAllUpdatesFunc = FetchAllUpdates();
+  const fetchAllEventsFunc = FetchAllEvents();
   const updates = useRecoilValue(updatesAtom);
+  const event = useRecoilValue(eventsAtom);
   
   // Fetch All Updates
   useEffect(() => {
@@ -81,34 +126,39 @@ const SideBar = ({isNewConversation}) => {
       </Flex>
 
       {/* New conversation button */}
-      <Button
-        mt={6}
-        display={"flex"}
-        alignItems={"center"}
-        gap={1}
-        mb={7}
-        borderRadius={"50px"}
-        bg={"#242424"}
-        _hover={{ bg: "#292929" }}
-        _active={{ bg: "#242424" }}
-      >
+      <Button mt={6} mb={7} {...BUTTON_STYLE} as={RouterLink} to={'/chats'} w={"170px"}>
         <FaPlus color="#fff" fontSize={"15px"} />
-        <Text as={RouterLink} to={'/chats'} color={"#fff"} fontSize={"15px"} fontWeight={"400"}>
+        <Text color={"#fff"} onClick={()=> setIsDisableHelloButton(false)} fontSize={"15px"} fontWeight={"400"}>
           New Conversation
         </Text>
       </Button>
 
       <Flex flexDir={'column'} justifyContent={'space-between'} h={'79vh'}>
         {/* Conversation History Tabs Section */}
-        <ConversationHistoryTabs isNewConversation={isNewConversation}/>
+        <ConversationHistoryTabs isNewConversation={isNewConversation} setIsDisableHelloButton={setIsDisableHelloButton}/>
 
         {/* More Option */}
         <Flex justifyContent={'end'} flexDir={'column'} mt={2} gap={1}>
+          <Tooltip label={"Groups"} {...TOOLTIP_STYLE} placement="right">
+            <Flex {...TAB_BUTTON_STYLE}>
+              <LuMessagesSquare {...ICON_STYLE} />
+              <Text {...TEXT_STYLE}>Chats</Text>
+            </Flex>
+          </Tooltip>
+
           <Tooltip label={"Updates"} {...TOOLTIP_STYLE} placement="right">
-            <Flex onClick={onOpen} alignItems={"center"} gap={2} justifyContent={'start'} px={4} py={2.5} borderRadius={"50px"} cursor={'pointer'} bg={""} _hover={{ bg: "#242424" }} transition={"background .3s ease"} _active={{ bg: "#242424" }}>
+            <Flex onClick={onOpen} {...TAB_BUTTON_STYLE}>
               <BiSolidNotification {...ICON_STYLE} />
               <Text {...TEXT_STYLE}>Updates</Text>
-              <Flex ml={'190px'} alignItems={'center'} justifyContent={'center'} fontSize={'12px'} fontWeight={'600'} borderRadius={'full'} w={5} h={5} color={'#f1bcb9'} background={"#333"}>{updates.length}</Flex>
+              <Flex ml={'190px'} {...TAB_BUTTON_BADGE_STYLE}>{updates.length}</Flex>
+            </Flex>
+          </Tooltip>
+          
+          <Tooltip label={"Events"} {...TOOLTIP_STYLE} placement="right">
+            <Flex onClick={onOpenEventDrawer} {...TAB_BUTTON_STYLE}>
+              <HiCalendarDateRange {...ICON_STYLE} />
+              <Text {...TEXT_STYLE}>Events</Text>
+              <Flex ml={'203px'} {...TAB_BUTTON_BADGE_STYLE}>{event.length}</Flex>
             </Flex>
           </Tooltip>
 
@@ -121,18 +171,22 @@ const SideBar = ({isNewConversation}) => {
                 </Flex>
               </MenuButton>
             </Tooltip>
-            <MenuList marginLeft={"10px"} zIndex={3} borderRadius={'10px'} px={1} pt={2} pb={1} bg={"#222"} color={'#fff'} border={'none'}>
+            <MenuList marginLeft={"10px"} zIndex={3} borderRadius={'10px'} w={'250px'} px={1} pt={2} pb={1} bg={"#222"} color={'#fff'} border={'none'}>
+                <MenuItem {...MENU_ITEM_STYLES} onClick={onOpenUpdateProfileModel}>
+                  <LuUserPen {...ICON_STYLE} />
+                  Update Profile
+                </MenuItem>
                 <MenuItem {...MENU_ITEM_STYLES} onClick={onOpenAskAQuestion}>
                   <MdQuestionMark {...ICON_STYLE}/>
                   Ask a Question
                 </MenuItem>
-                <MenuItem {...MENU_ITEM_STYLES}>
+                <MenuItem {...MENU_ITEM_STYLES} onClick={onOpenViewReplyDrawer}>
                   <LuMessageSquareMore {...ICON_STYLE} />
                   View Replies
                 </MenuItem>
-                <MenuItem {...MENU_ITEM_STYLES} onClick={onOpenUpdateProfileModel}>
-                  <LuUserPen {...ICON_STYLE} />
-                  Update Profile
+                <MenuItem as={RouterLink} to={"/faqs"} {...MENU_ITEM_STYLES}>
+                  <FaQ {...ICON_STYLE} />
+                  FAQs
                 </MenuItem>
             </MenuList>
           </Menu>
@@ -142,8 +196,14 @@ const SideBar = ({isNewConversation}) => {
       {/* Updates Drawer */}
       <UpdatesDrawer isOpen={isOpen} onClose={onClose}/>
 
+      {/* Events Drawer */}
+      <EventsDrawer isOpen={isOpenEventDrawer} onClose={onCloseEventDrawer}/>
+
       {/* Ask A Question */}
       <AskAQuestion isOpen={isOpenAskAQuestion} onClose={onCloseAskAQuestion}/>
+
+      {/* View Reply */}
+      <ReplyDrawer isOpen={isOpenViewReplyDrawer} onClose={onCloseViewReplyDrawer}/>
 
       {/* Update Profile */}
       <UpdateProfile isOpen={isOpenUpdateProfileModel} onClose={onCloseUpdateProfileModel}/>

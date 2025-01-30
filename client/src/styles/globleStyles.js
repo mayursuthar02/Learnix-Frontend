@@ -4,7 +4,7 @@
 
 // BUTTONS
 export const GRADIENT_BUTTON_STYLE = {
-    bg : "linear-gradient(90deg, #4796E3, #6658ff, #ff5546)",
+    bg : "linear-gradient(60deg, #4796e3, #336dff, #492cbe)",
     color : "white",
     borderRadius : "full",
     transition : "background-position 0.3s ease-in-out",
