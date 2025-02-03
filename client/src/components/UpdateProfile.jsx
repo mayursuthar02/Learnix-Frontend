@@ -16,6 +16,8 @@ import {
   ModalFooter,
   Box,
   Tooltip,
+  Flex,
+  Grid,
 } from "@chakra-ui/react";
 
 // Icons
@@ -38,6 +40,8 @@ export default function UpdateProfile({ isOpen, onClose }) {
     const [user, setUser] = useRecoilState(userAtom);
     const [fullName, setFullName] = useState(user?.fullName);
     const [email, setEmail] = useState(user?.email);
+    const [phoneNumber, setPhoneNumber] = useState(user?.phoneNumber);
+    const [studentRollNumber, setStudentRollNumber] = useState(user?.studentRollNumber);
     const [isLoading, setIsLoading] = useState(false);
     // Functions
     const fileRef = useRef();
@@ -50,8 +54,8 @@ export default function UpdateProfile({ isOpen, onClose }) {
       try {
         const response = await fetch('/api/users/updateUserProfile', {
           method: "PUT",
-          headers: {"Content-Type" : "application/json"},
-          body: JSON.stringify({fullName, email, profilePic: imgUrl})
+          headers: {"Content-Type" : "application/json"}, 
+          body: JSON.stringify({fullName, email, profilePic: imgUrl, phoneNumber, studentRollNumber})
         });
         const data = await response.json();
         if (data.error) {
@@ -118,6 +122,27 @@ export default function UpdateProfile({ isOpen, onClose }) {
             <Input type="text" value={email} onChange={(e) => setEmail(e.target.value)} {...INPUT_STYLE} placeholder="email@example.com"/>
           </FormControl>
 
+          <Grid templateColumns={"1fr 1fr"} gap={5}>
+            <FormControl id="phoneNumber" isRequired mb={4} position={"relative"}>
+              <FormLabel fontWeight={'400'}>Phone No.</FormLabel>
+              <Input {...INPUT_STYLE} type="text" value={phoneNumber} 
+                onChange={e => {
+                  const value = e.target.value;
+                  if (/^\d{0,10}$/.test(value)) {  // Allow only numbers up to 10 digits
+                    setPhoneNumber(value);
+                  }}} 
+                  pl={"40px"}
+              placeholder="xxxxx xxxxx"/>
+              <Flex alignItems={"center"} justifyContent={"center"} position={"absolute"} left={"2px"} top={"34px"} borderRadius={"4px"} w={"35px"} height={"35px"}>+91</Flex>
+            </FormControl>
+
+            {user?.profileType === "student" && 
+            <FormControl id="studentRollNo" mb={4}>
+              <FormLabel fontWeight={'400'}>Student Roll No.</FormLabel>
+              <Input {...INPUT_STYLE} type="number" value={studentRollNumber} onChange={e => setStudentRollNumber(e.target.value)} placeholder="Ex. 2461062"/>
+            </FormControl>}
+          </Grid>
+          
           </ModalBody>
 
           <ModalFooter gap={2}>

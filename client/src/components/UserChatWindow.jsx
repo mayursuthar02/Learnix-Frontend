@@ -1,5 +1,7 @@
 import { Avatar, Box, Divider, Flex, FormControl, IconButton, Input, Text, Tooltip } from "@chakra-ui/react"
-import { BUTTON_STYLE, TOOLTIP_STYLE } from "../styles/globleStyles"
+
+// Components
+import EmojiPicker from 'emoji-picker-react';
 
 // Icons
 import { SlOptionsVertical } from "react-icons/sl";
@@ -11,6 +13,8 @@ import { MdOutlineEmojiEmotions } from "react-icons/md";
 import { useRef, useState } from "react";
 import useShowToast from "../hooks/useShowToast";
 
+// Styles
+import { BUTTON_STYLE, TOOLTIP_STYLE } from "../styles/globleStyles"
 
 const mockData = [
     {sender: "user", text: "Hello"},
@@ -32,6 +36,7 @@ const UserChatWindow = () => {
     // State
     const [file, setFile] = useState("");
     const [inputText, setInputText] = useState("");
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
     // Use Function
     const showToast = useShowToast();
@@ -119,11 +124,22 @@ const UserChatWindow = () => {
                         <IconButton borderRadius={'full'} {...BUTTON_STYLE} _active={{opacity: 0.7}} icon={<ImAttachment color="#fff" fontSize={'20px'} />}/>
                       </Tooltip>
                     </Box>
-                                            
-                    <Tooltip label={"Emoji"} {...TOOLTIP_STYLE}>
-                        <IconButton borderRadius={'full'} {...BUTTON_STYLE} _active={{opacity: 0.7}} icon={<MdOutlineEmojiEmotions color="#fff" fontSize={'20px'} />}/>
-                    </Tooltip>
-                  
+
+                    <Box position={"relative"}>       
+                      {showEmojiPicker && <Box position={"absolute"} bottom={"50px"} zIndex={3} bg="#191919" borderRadius="10px" boxShadow="0px 4px 10px rgba(0, 0, 0, 0.5)">
+                        <EmojiPicker 
+                        theme="dark" 
+                        emojiStyle="apple" 
+                        searchDisabled={true}
+                        skinTonesDisabled={true}
+                        height={"400px"} width={"400px"}
+                        onEmojiClick={(emoji) => setInputText((prevText) => prevText + emoji.emoji)}/> 
+                      </Box> }    
+                      <Tooltip label={"Emoji"} {...TOOLTIP_STYLE}>
+                          <IconButton borderRadius={'full'} {...BUTTON_STYLE} _active={{opacity: 0.7}} icon={<MdOutlineEmojiEmotions color="#fff" fontSize={'20px'} onClick={() => setShowEmojiPicker(!showEmojiPicker)}/>}/>
+                      </Tooltip>
+                    </Box>  
+
                     <FormControl>
                         <Input 
                             type="text"

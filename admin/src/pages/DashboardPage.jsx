@@ -10,6 +10,8 @@ import { MdOutlineQuestionMark } from "react-icons/md";
 import { RiSettings3Line } from "react-icons/ri";
 import { LuUserPen } from "react-icons/lu";
 import { HiCalendarDateRange } from "react-icons/hi2";
+import { TbMessageQuestion } from "react-icons/tb";
+import { MdOutlineVideoChat } from "react-icons/md";
 // Pages and Components
 import Header from "../components/Header";
 
@@ -24,7 +26,9 @@ const DashboardPage = () => {
     { title: "Students", link: "/dashboard/students", icon: <PiStudent fontSize={'20px'}/> },
     { title: "Professors", link: "/dashboard/professors", icon: <PiUsersThreeBold fontSize={'20px'}/> },
     { title: "Resources", link: "/dashboard/resource", icon: <GrResources fontSize={'20px'}/> },
-    { title: "Questions", link: "/dashboard/questions", icon: <LuMessagesSquare fontSize={'20px'}/> },
+    { title: "Chats", link: "/u/chats", icon: <LuMessagesSquare fontSize={'20px'}/> },
+    { title: "LNX Meet", link: "/u/chats", icon: <MdOutlineVideoChat fontSize={'20px'}/> },
+    { title: "Questions", link: "/dashboard/questions", icon: <TbMessageQuestion fontSize={'20px'}/> },
     { title: "Updates", link: "/dashboard/updates", icon: <MdOutlineEditNotifications fontSize={'20px'}/> },
     { title: "Events", link: "/dashboard/events", icon: <HiCalendarDateRange fontSize={'20px'}/> },
   ];

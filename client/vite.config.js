@@ -11,7 +11,8 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       }
-    }
+    },
+    port: 5050
   },
   build: {
     envPrefix: 'VITE_'

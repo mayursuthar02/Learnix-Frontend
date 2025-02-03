@@ -14,7 +14,7 @@ import conversationAtom from "../atoms/conversationAtom.js";
 import { useRecoilState } from "recoil";
 
 
-const ConversationHistoryTabs = ({isNewConversation, setIsDisableHelloButton}) => {
+const ConversationHistoryTabs = ({ setIsDisableHelloButton}) => {
   // States
   const [conversations, setConversations] = useRecoilState(conversationAtom);
   // Functions
@@ -33,13 +33,14 @@ const ConversationHistoryTabs = ({isNewConversation, setIsDisableHelloButton}) =
           return;
         }
         setConversations(data.conversations);
+        console.log(data.conversations)
       } catch (error) {
         showToast("Error", error, "error");
       }
     }
 
     getConversations();
-  },[showToast, isNewConversation]);
+  },[showToast]);
 
   
   // Delete Conversation

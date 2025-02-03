@@ -17,6 +17,7 @@ const UpdatesPage = lazy(() => import("../pages/UpdatesPage"));
 const QuestionsPage = lazy(() => import("../pages/QuestionsPage"));
 const EventPage = lazy(() => import("../pages/EventPage"));
 const PageNotFound = lazy(() => import("../pages/PageNotFound"));
+const ChatPage = lazy(() => import("../pages/ChatPage"));
 
 
 
@@ -28,6 +29,7 @@ const Router = () => {
       <Routes>
         <Route path="/" element={!user ? <LoginPage /> : <Navigate to={'/dashboard/resource'}/>}/>
         <Route path="/signup" element={!user ? <SignUpPage /> : <Navigate to={'/dashboard/resource'}/>} />
+        <Route path="/u/chats" element={user ? <ChatPage /> : <Navigate to={'/'}/>} />
 
         <Route path="/dashboard/*" element={<DashboardPage />}>
           <Route index element={<Navigate to="resource" replace />} />

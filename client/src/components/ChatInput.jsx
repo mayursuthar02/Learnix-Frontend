@@ -1,5 +1,5 @@
-import { Box, Input, Flex, FormControl, IconButton, Textarea, Tooltip } from "@chakra-ui/react"
-import { useRef, useState } from "react";
+import { Box, Input, Flex, FormControl, IconButton, Textarea, Tooltip, Text } from "@chakra-ui/react"
+import { useEffect, useRef, useState } from "react";
 
 // Icons
 import { BiSolidSend } from "react-icons/bi";
@@ -10,9 +10,13 @@ import { ImAttachment } from "react-icons/im";
 
 // Functions
 import useShowToast from "../hooks/useShowToast";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Styles
 import {TOOLTIP_STYLE, GRADIENT_BUTTON_STYLE, BUTTON_STYLE} from '../styles/globleStyles';
+
+// Data
+import { placeholderTexts } from "../data/textsForAnimation";
 
 
 // MAIN FUNCTION
@@ -23,11 +27,20 @@ const ChatInput = ({conversationId, startConversation, isScholaraActive,setUserR
     const [isListening, setIsListening] = useState(false); // Speech recognition state
     const [interimText, setInterimText] = useState(""); // Temporary text from speech recognition
     const [file, setFile] = useState("");
+    const [currentIndex, setCurrentIndex] = useState(0);
 
     // Use Function
     const showToast = useShowToast();
     const fileRef = useRef();
      
+
+    // Loop through the Text Animation Effect
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % placeholderTexts.length);
+      }, 3000); // Change text every 2 seconds
+      return () => clearInterval(interval); // Cleanup interval on component unmount
+    }, []);
   
     const handleTextareaChange = (event) => {
         setPrompt(event.target.value);
@@ -125,7 +138,7 @@ const ChatInput = ({conversationId, startConversation, isScholaraActive,setUserR
 
     
     return (
-        <Box mb={5}>
+        <Box mb={5} pos={"relative"}>
             <form onSubmit={(e) => e.preventDefault()}>
                 <Flex alignItems={'end'} border={'1px solid #333'} gap={1} borderRadius={'30px'} p={1} w={'50vw'} transition={'width .5s ease-in-out'} minH={'50px'} className={isListening ? "input active" : "input"}>
                     <Box>
@@ -135,7 +148,7 @@ const ChatInput = ({conversationId, startConversation, isScholaraActive,setUserR
                       </Tooltip>
                     </Box>
                   
-                    <FormControl>
+                    <FormControl zIndex={3}>
                         <Textarea 
                             isDisabled={!isScholaraActive}
                             value={prompt}
@@ -169,6 +182,17 @@ const ChatInput = ({conversationId, startConversation, isScholaraActive,setUserR
                     </Tooltip>
                 </Flex>
             </form>
+
+            {/* Animation Text  */}
+            {!prompt && <Box pos={"absolute"} top={"13px"} left={"65px"} zIndex={1}>
+              <AnimatePresence mode="wait">
+                <motion.div key={currentIndex} initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} transition={{ duration: 0.5 }}>
+                  <Text textAlign={'left'} fontSize={"15px"} fontWeight={"500"} color={"#555"} maxW={"520px"} overflow={"hidden"}>
+                    {placeholderTexts[currentIndex]}
+                  </Text>
+                </motion.div>
+              </AnimatePresence>
+            </Box>}
         </Box>
     )
 }

@@ -20,10 +20,10 @@ import HandleUserLogout from "../helpers/HandleUserLogout";
 // Styles
 import { GRADIENT_BUTTON_STYLE, TOOLTIP_STYLE } from "../styles/globleStyles";
 import conversationAtom from "../atoms/conversationAtom";
+import { languages } from "../data/textsForAnimation";
 
 // MAIN FUNCTION
-const ChatSection = ({isNewConversation, setIsNewConversation, isDisableHelloButton}) => {
-  const languages = ["Hello!","नमस्ते!"];
+const ChatSection = ({isDisableHelloButton}) => {
   // State
   const [user, setUser] = useRecoilState(userAtom);
   const [_, setConversations] = useRecoilState(conversationAtom);
@@ -92,18 +92,9 @@ const ChatSection = ({isNewConversation, setIsNewConversation, isDisableHelloBut
       }
       navigate(`/chats/conversation/${data.newMessage?.conversationId}`)
       setIsScholaraActive(false);
+      setConversations((prev) => [data.conversation, ...prev]);
+      console.log(data)
       setMessages((prev) => [...prev, data.newMessage]);
-      setConversations((prev) =>
-        prev.map((conversation) => {
-          if (conversation._id === data.newMessage.conversationId) {
-            return {
-              ...conversation,
-              title: data?.newMessage?.botResponse?.message,
-            };
-          }
-          return conversation;
-        })
-      );
     } catch (error) {
       console.log(error);
       showToast("Error", "Something went wrong.", "error");
@@ -193,7 +184,7 @@ const ChatSection = ({isNewConversation, setIsNewConversation, isDisableHelloBut
         
           <Text textAlign={'center'} color={'#7f7f7f'} fontSize={'16px'} mt={1} fontWeight={'300'} w={'500px'}>Get instant access to subject materials, homework help, and expert answers to your academic questions.</Text>
           <Tooltip label="Start your conversation!" {...TOOLTIP_STYLE}>
-            <Button isDisabled={isDisableHelloButton} onClick={() => {startConversation(); setIsNewConversation(!isNewConversation)}} display={'flex'} alignItems={'center'} mt={10} gap={1} {...GRADIENT_BUTTON_STYLE}>
+            <Button isDisabled={isDisableHelloButton} onClick={() => {startConversation()}} display={'flex'} alignItems={'center'} mt={10} gap={1} {...GRADIENT_BUTTON_STYLE}>
               <PiHandWavingBold/>
               <Text fontWeight={'500'}>Hello!</Text>
             </Button>

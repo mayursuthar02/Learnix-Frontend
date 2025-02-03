@@ -88,7 +88,7 @@ const BUTTON_STYLE = {
 
 // MAIN FUNCTION
 // -------------------------------------------------------------
-const SideBar = ({isNewConversation, setIsDisableHelloButton}) => {
+const SideBar = ({setIsDisableHelloButton}) => {
   // Functions
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: isOpenEventDrawer, onOpen: onOpenEventDrawer, onClose: onCloseEventDrawer } = useDisclosure();
@@ -135,7 +135,7 @@ const SideBar = ({isNewConversation, setIsDisableHelloButton}) => {
 
       <Flex flexDir={'column'} justifyContent={'space-between'} h={'79vh'}>
         {/* Conversation History Tabs Section */}
-        <ConversationHistoryTabs isNewConversation={isNewConversation} setIsDisableHelloButton={setIsDisableHelloButton}/>
+        <ConversationHistoryTabs setIsDisableHelloButton={setIsDisableHelloButton}/>
 
         {/* More Option */}
         <Flex justifyContent={'end'} flexDir={'column'} mt={2} gap={1}>
