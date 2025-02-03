@@ -36,6 +36,8 @@ const UsersPage = () => {
     { id: "profilePic", cell: "Profile" },
     { id: "username", cell: "Username" },
     { id: "email", cell: "Email" },
+    { id: "phoneNo", cell: "Phone No." },
+    { id: "rollNo", cell: "Roll No." },
     { id: "role", cell: "Role" },
     { id: "date", cell: "Date" },
     { id: "actions", cell: "Actions" },
@@ -126,6 +128,8 @@ const UsersPage = () => {
                   </Td>
                   <Td color={"#444746"} textTransform={"capitalize"}>{user.fullName}</Td>
                   <Td color={"#444746"}>{user.email}</Td>
+                  <Td color={"#444746"}>+91 {user.phoneNumber}</Td>
+                  <Td color={"#444746"}>{user.studentRollNumber}</Td>
                   <Td color={"#444746"} w={"250px"} position={'relative'} textTransform={"capitalize"}>
                     {user.role}
                   </Td>
