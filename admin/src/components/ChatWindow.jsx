@@ -79,7 +79,7 @@ const ChatWindow = () => {
                     <Box position={"relative"}>       
                       {showEmojiPicker && <Box position={"absolute"} bottom={"50px"} zIndex={3} bg="#191919" borderRadius="10px" boxShadow="0px 4px 10px rgba(0, 0, 0, 0.5)">
                         <EmojiPicker 
-                        theme="dark" 
+                        theme="light" 
                         emojiStyle="apple" 
                         searchDisabled={true}
                         skinTonesDisabled={true}
