@@ -13,7 +13,9 @@ import { MdArrowDownward } from "react-icons/md";
 import FetchAllUserConversations from "../helpers/FetchAllUserConversations";
 import { useEffect, useState } from "react";
 import userConversationAtom from "../atoms/userConversationAtom";
+import selectedUserConversationAtom from "../atoms/selectedUserConversationAtom";
 import { useRecoilState } from "recoil";
+import { format } from "date-fns";
 
 // STYLES
 const BUTTON_STYLE = {
@@ -34,6 +36,7 @@ const MyChats = () => {
     // State
     const [loading, setLoading] = useState(true);
     const [userConversations, setUserConversations] = useRecoilState(userConversationAtom);
+    const [selectedUserConversation, setSelectedUserConversation] = useRecoilState(selectedUserConversationAtom);
     // Functions
     const { isOpen, onOpen, onClose } = useDisclosure();
     const fetchAllUserConversationsFunc = FetchAllUserConversations();
@@ -79,23 +82,23 @@ const MyChats = () => {
             <Box maxH={"70vh"} overflowY={"scroll"}> 
                 {userConversations.length > 0 ? (
                     !loading && userConversations.map((conversation,i) => (
-                        <Flex key={conversation._id} _hover={{bg: "#dde3eb"}} transition={"background .3s ease"} cursor={"pointer"} py={3} px={3} borderRadius={"10px"} alignItems={"center"} justifyContent={"space-between"} gap={3} mb={1}>
-                        <Box w={"45px"} height={"45px"} position={"relative"}>
-                            <Avatar src={conversation.groupConversationIcon} w={"100%"} h={"100%"} objectFit={"cover"}/>
-                            <Box w={"16px"} height={"16px"} bg={"#4796e3"} border={"3px solid #f0f4f9"} borderRadius={"full"} position={"absolute"} top={0} right={-1}></Box>
-                        </Box>
-                        <Flex justifyContent={"center"} flexDirection={"column"} w={"180px"}>
-                            <Text color={"#1f1f1f"} fontSize={"17px"}>{conversation.conversationName}</Text>
-                            <Flex color={"#555b64"} fontSize={"13px"} gap={1} alignItems={"center"}>
-                                <Text className="header-logo-text">@mayur</Text>
-                                How are you ?...
+                        <Flex key={conversation._id} bg={selectedUserConversation._id === conversation._id ? "#dde3eb" : "transparent"} _hover={{bg: "#dde3eb"}} transition={"background .3s ease"} cursor={"pointer"} py={3} px={3} borderRadius={"10px"} alignItems={"center"} justifyContent={"space-between"} gap={3} mb={1} onClick={() => setSelectedUserConversation(conversation)}>
+                            <Box w={"45px"} height={"45px"} position={"relative"}>
+                                <Avatar src={conversation.groupConversationIcon} w={"100%"} h={"100%"} objectFit={"cover"}/>
+                                <Box w={"16px"} height={"16px"} bg={"#4796e3"} border={"3px solid #f0f4f9"} borderRadius={"full"} position={"absolute"} top={0} right={-1}></Box>
+                            </Box>
+                            <Flex justifyContent={"center"} flexDirection={"column"} w={"180px"}>
+                                <Text color={"#1f1f1f"} fontSize={"17px"}>{conversation.conversationName}</Text>
+                                <Flex color={"#555b64"} fontSize={"13px"} gap={1} alignItems={"center"}>
+                                    <Text className="header-logo-text" textTransform={"lowercase"}>@{conversation?.latestMessage?.sender?.fullName.split(" ")[0] || "-"}</Text>
+                                    {conversation?.latestMessage?.content?.length > 16 ? conversation?.latestMessage?.content.slice(0, 16) + "..." : conversation?.latestMessage?.content}
+                                </Flex>
+                            </Flex>
+                            <Flex alignItems={"end"} justifyContent={"center"} flexDirection={"column"} gap={1}>
+                                <Flex align={'center'} justifyContent={'center'} fontSize={"12px"} w={5} h={5} color={"#4796e3"} bg={"#dddeee"} borderRadius={"full"}>{i}</Flex>
+                                <Text color={"#999"} fontSize={"13px"} textTransform={"lowercase"}>{format(new Date(conversation.updatedAt), "h:mm a")}</Text>
                             </Flex>
                         </Flex>
-                        <Flex alignItems={"end"} justifyContent={"center"} flexDirection={"column"} gap={1}>
-                            <Flex align={'center'} justifyContent={'center'} fontSize={"12px"} w={5} h={5} color={"#4796e3"} bg={"#dddeee"} borderRadius={"full"}>{i}</Flex>
-                            <Text color={"#999"} fontSize={"13px"}>4 min ago</Text>
-                        </Flex>
-                    </Flex>
                     ))
                 ) : (
                     <Text color={"#888"} textAlign={"center"} mt={5} fontSize={"17px"}>Chats Not Found</Text>

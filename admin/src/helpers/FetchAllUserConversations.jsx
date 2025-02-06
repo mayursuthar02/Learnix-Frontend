@@ -21,7 +21,7 @@ const FetchAllUserConversations = () => {
             return;
           }
           setUserConversations(data.userConversations);
-          // console.log(data);
+          console.log(data);
         } catch (error) {
           console.log(error);
           showToast("Error", error, "error");
