@@ -41,10 +41,10 @@ const LoginPage = () => {
         showToast('Error', data.error, "error");
         return;
       }
-      localStorage.setItem('learnixAdminUser', JSON.stringify(data.userData));
-      setUser(data.userData);
+      localStorage.setItem('learnixAdminUser', JSON.stringify(data.data));
+      setUser(data.data);
       showToast('Success', data.message, "success");
-      console.log(data.userData);
+      console.log(data.data);
       navigate('/dashboard/');
     } catch (error) {
       console.log(error);

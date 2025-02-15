@@ -45,10 +45,10 @@ const LoginPage = () => {
         showToast('Error', data.error, "error");
         return;
       }
-      localStorage.setItem('learnixUserDetails', JSON.stringify(data.userData));
-      setUser(data.userData);
+      localStorage.setItem('learnixUserDetails', JSON.stringify(data.data));
+      setUser(data.data);
       showToast('Success', data.message, "success");
-      console.log(data.userData);
+      console.log(data.data);
       navigate('/chats');
     } catch (error) {
       console.log(error);

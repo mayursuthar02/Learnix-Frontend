@@ -139,8 +139,8 @@ const SideBar = ({setIsDisableHelloButton}) => {
 
         {/* More Option */}
         <Flex justifyContent={'end'} flexDir={'column'} mt={2} gap={1}>
-          <Tooltip label={"Groups"} {...TOOLTIP_STYLE} placement="right">
-            <Flex {...TAB_BUTTON_STYLE}>
+          <Tooltip label={"Chats"} {...TOOLTIP_STYLE} placement="right">
+            <Flex as={RouterLink} to={"/u/chats"} {...TAB_BUTTON_STYLE}>
               <LuMessagesSquare {...ICON_STYLE} />
               <Text {...TEXT_STYLE}>Chats</Text>
             </Flex>

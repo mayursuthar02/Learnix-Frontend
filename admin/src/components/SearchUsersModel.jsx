@@ -16,6 +16,8 @@ import usePriviewImg from "../hooks/usePriviewImg";
 
 // Styles
 import { GRADIENT_BUTTON_STYLE, TOOLTIPS_STYLE } from "../styles/globleStyles";
+import { useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom";
 
 // STYLES
 const INPUT_ICON_STYLES = {
@@ -51,7 +53,7 @@ const useDebounce = (callback, delay) => {
   };
 
 // Main Function
-const SearchUsersModel = ({isOpen, onClose}) => {
+const SearchUsersModel = ({isOpen, onClose, fetchData}) => {
     const [groupName, setGroupName] = useState("");
     const [searchValue, setSearchValue] = useState('');
     const [searchResults, setSearchResults] = useState([]);
@@ -62,6 +64,7 @@ const SearchUsersModel = ({isOpen, onClose}) => {
     const fileRef = useRef();
     const {handleImageChange, imgUrl, setImgUrl} = usePriviewImg();
     const showToast = useShowToast();
+    const user = useRecoilValue(userAtom);
     
 
     // Handle Search
@@ -74,7 +77,12 @@ const SearchUsersModel = ({isOpen, onClose}) => {
         setLoading(true);
     
         try {
-            const res = await fetch(`/api/users/searchUsers/${value}`);
+            const res = await fetch(`/api/users/searchUsers/${value}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${user.token}`
+                },
+            });
             const data = await res.json();
             if (data.error) {
               showToast("Error", data.error, "error");
@@ -116,7 +124,10 @@ const SearchUsersModel = ({isOpen, onClose}) => {
             const members = selectedMembers.map(member => member._id);
             const response = await fetch("/api/userChats/createGroupConversation", {
                 method: "POST",
-                headers: {"Content-Type" : "application/json"},
+                headers: {
+                    "Content-Type" : "application/json",
+                    "Authorization": `Bearer ${user.token}`
+                },
                 body: JSON.stringify({ members, name: groupName, groupConversationIcon: imgUrl })
             });
             const data = await response.json();
@@ -125,11 +136,12 @@ const SearchUsersModel = ({isOpen, onClose}) => {
                 return;
             }
             console.log(data);
+            onClose();
+            fetchData();
             setGroupName("");
             setSelectedMembers([]);
             setSearchResults([]);
             setImgUrl("");
-            onclose();
         } catch (error) {
             console.log(error);
             showToast("Error", "Something went wrong.", "error");

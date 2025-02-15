@@ -11,7 +11,8 @@ import { useNavigate, useParams } from "react-router-dom";
 
 // Function
 import conversationAtom from "../atoms/conversationAtom.js";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom.js";
 
 
 const ConversationHistoryTabs = ({ setIsDisableHelloButton}) => {
@@ -21,12 +22,16 @@ const ConversationHistoryTabs = ({ setIsDisableHelloButton}) => {
   const {conversationId } = useParams();
   const showToast = useShowToast();
   const navigate = useNavigate();
+  const user = useRecoilValue(userAtom);
   
   // Get All user Conversation history
   useEffect(()=> {
     const getConversations = async() => {
       try {
-        const response = await fetch("/api/conversations/getConversations");
+        const response = await fetch("/api/conversations/getConversations", {
+          method: "GET",
+          headers: { "Authorization": `Bearer ${user.token}` }
+        });
         const data = await response.json();
         if (data.error) {
           showToast("Error", data.error, "error");
@@ -47,7 +52,8 @@ const ConversationHistoryTabs = ({ setIsDisableHelloButton}) => {
   const handleDeleteConversation = async(conversation_Id) => {
     try {
       const response = await fetch(`/api/conversations/deleteConversation/${conversation_Id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${user.token}` }
       });
       const data = await response.json();
       if (data.error) {

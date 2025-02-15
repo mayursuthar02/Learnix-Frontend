@@ -18,6 +18,8 @@ import {
   import useShowToast from "../hooks/useShowToast";
   // Styles
   import { GRADIENT_BUTTON_STYLE } from "../styles/globleStyles";
+import { useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom";
   
   const AddAndEditFAQ = ({ isOpen, onClose, modelMode, FAQIdForEdit, getFAQs}) => {
     // State Management
@@ -26,6 +28,7 @@ import {
     const [description, setDescription] = useState("");
     // Functions
     const showToast = useShowToast();
+    const user = useRecoilValue(userAtom);
   
     // Fetch FAQ Data if Editing
     useEffect(() => {
@@ -37,7 +40,12 @@ import {
           setIsLoading((prev) => ({ ...prev, fetch: true }));
           try {
             const response = await fetch(
-              `/api/FAQs/getSingleFAQ/${FAQIdForEdit}`
+              `/api/FAQs/getSingleFAQ/${FAQIdForEdit}`, {
+                method: "GET",
+                headers: {
+                  "Authorization": `Bearer ${user.token}`
+                },
+              }
             );
             const data = await response.json();
   
@@ -78,7 +86,10 @@ import {
   
         const response = await fetch(endpoint, {
           method,
-          headers: { "Content-Type": "application/json" },
+          headers: { 
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${user.token}`
+           },
           body: JSON.stringify(updateData),
         });
   

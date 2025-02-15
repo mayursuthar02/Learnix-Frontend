@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { Box, Flex, IconButton, Text, Tooltip } from "@chakra-ui/react"; // Divider for the hr tag
 import { motion } from "framer-motion";
 // Text Format
@@ -18,72 +18,48 @@ import { MdOutlineTranslate } from "react-icons/md";
 // Function
 import useShowToast from '../hooks/useShowToast.js';
 import { BUTTON_STYLE, TOOLTIP_STYLE } from "../styles/globleStyles.js";
+import { useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom.js";
 
 
 // Create a motion component for the Box
 const MotionBox = motion(Box);
 const MotionIconButton = motion(IconButton);
 
-// const translateText = async (text, targetLanguage) => {
-//   const url = 'https://api.apilayer.com/language_translate/translate';
-//   const apiKey = '2ZoSMTqkQMdKVMLTOGpW8E0ZriQRzScN'; // Replace with your API Layer key
-
-//   const response = await fetch(url, {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'apikey': apiKey,
-//     },
-//     body: JSON.stringify({
-//       text: text,
-//       target: targetLanguage,
-//       source: 'auto', // Auto-detect language
-//     }),
-//   });
-
-//   if (!response.ok) {
-//     throw new Error(`Error: ${response.statusText}`);
-//   }
-
-//   const data = await response.json();
-//   return data.translated_text;
-// };
-
-
 const AiResponse = ({ message }) => {
   // State
-  const [responseType, setResponseType] = useState("");
   const [isLoading, setIsLoading] = useState("");
   const [isCopied, setIsCopied] = useState(<TbCopy/>);
   const [translatedText, setTranslatedText] = useState("");
   // Function
   const showToast = useShowToast();
+  const user = useRecoilValue(userAtom);
   const containerRef = useRef(null);
   const [speaking, setSpeaking] = useState(false);
   const [audioLoading, setAudioLoading] = useState(false);
-  
+    
 
   useEffect(() => {
     // Apply highlight only after the DOM updates
     const codeBlocks = containerRef.current?.querySelectorAll("pre code");
-    codeBlocks?.forEach((block) => hljs.highlightElement(block));
+    codeBlocks?.forEach((block) => {
+      if (!block.classList.contains('hljs')) {
+        hljs.highlightElement(block);
+      }
+    });
   }, [message]);
+
 
   // Copy Code
   const handleCopy = (code) => {
-    setIsCopied(<GrFormCheckmark fontSize={"22px"}/>);
+    setIsCopied(<GrFormCheckmark fontSize={"22px"} />);
     navigator.clipboard.writeText(code).then(
-      () => {
-        showToast("success", "Code copied to clipboard!", "success");
-      },
-      (err) => {
-        console.error("Failed to copy code: ", err);
-      }
+      () => showToast("success", "Code copied to clipboard!", "success"),
+      (err) => console.error("Failed to copy code: ", err)
     );
-    setTimeout(() => {
-      setIsCopied(<TbCopy/>);
-    }, 1500);
+    setTimeout(() => setIsCopied(<TbCopy />), 1500);
   };
+
 
   // Handle response Good or Bad type
   const userLikeDislikeResponse = async(goodOrBad) => {
@@ -91,7 +67,10 @@ const AiResponse = ({ message }) => {
     try {
       const response = await fetch(`/api/messages/userLikeDislikeResponse/${message._id}`, {
         method: "POST",
-        headers: {"Content-Type":"application/json"},
+        headers: {
+          "Content-Type":"application/json",
+          "Authorization": `Bearer ${user.token}`
+        },
         body: JSON.stringify({responseType: goodOrBad})
       })
       const data = await response.json();
@@ -108,13 +87,6 @@ const AiResponse = ({ message }) => {
     }
   }
 
-  // Handle language translation toggle
-  // const handleTranslation = async () => {
-  //   const translated = await translateText(message.aiResponse, 'hi');
-  //   // setTranslatedText(translated);
-  //   console.log(translated);
-  // };
-
 
   // Function to read out the AI response
   const handleReadResponse = async () => {
@@ -125,62 +97,59 @@ const AiResponse = ({ message }) => {
   
     setSpeaking(true);
     setAudioLoading(true);
+  
     try {
-      // Function to split long text into chunks and play audio
-      const generateSpeech = async (text) => {
-        const chunkSize = 1000;  // Adjust chunk size based on the API limits
-        let audioChunks = [];
+      const text = message.aiResponse;
+      const chunkSize = 1000; // Adjust chunk size based on API limits
+      const chunks = [];
   
-        // Split the text into chunks
-        const chunks = [];
-        for (let i = 0; i < text.length; i += chunkSize) {
-          chunks.push(text.slice(i, i + chunkSize));
-        }
+      // Split the text into chunks
+      for (let i = 0; i < text.length; i += chunkSize) {
+        chunks.push(text.slice(i, i + chunkSize));
+      }
   
-        // Fetch audio for each chunk
+      // Function to play audio chunks sequentially
+      const playAudioChunks = async (chunks) => {
         for (const chunk of chunks) {
           const response = await fetch('/api/chats/textToSpeech', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            'Authorization': `Bearer sk_e1ddad2c577ca5ecf2ee3caccd7fec78bfa7c6f30ab15d2c`,
-            body: JSON.stringify({ text: chunk })
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${user.token}`,
+            },
+            body: JSON.stringify({ text: chunk }),
           });
   
           if (!response.ok) {
-            console.error("Failed to fetch speech:", response.statusText);
-            showToast("Error", "The text is too long for speech synthesis. Please try with a shorter script.", "error");
-            return;
+            throw new Error(`Failed to fetch speech: ${response.statusText}`);
           }
+          setAudioLoading(false);
   
           const audioBlob = await response.blob();
           const audioUrl = URL.createObjectURL(audioBlob);
-          audioChunks.push(audioUrl);
+  
+          // Create an audio element and play it
+          const audio = new Audio(audioUrl);
+          await new Promise((resolve, reject) => {
+            audio.onended = resolve;
+            audio.onerror = reject;
+            audio.play();
+          });
         }
-  
-        // Combine and play the generated chunks
-        const audio = new Audio();
-        audio.src = audioChunks.join(',');  // Joining the chunks as URLs
-        audio.play();
-  
-        // Reset speaking state when audio ends
-        audio.onended = () => setSpeaking(false);
       };
   
-      // Use the AI response text
-      const text = message?.aiResponse;
-      await generateSpeech(text);
+      // Play all chunks sequentially
+      await playAudioChunks(chunks);
   
     } catch (error) {
       console.error("Error with the speech request:", error);
-      setSpeaking(false);
-      alert("Failed to read the AI response.");
+      showToast("Error", "Failed to read the AI response.", "error");
     } finally {
-      // setSpeaking(false);
+      setSpeaking(false);
       setAudioLoading(false);
     }
   };
   
-
 
   const cancel = () => {
     setSpeaking(false);
@@ -210,14 +179,7 @@ const AiResponse = ({ message }) => {
           code: ({ inline, className, children, ...props }) => {
             if (inline) {
               return (
-                <Box
-                  as="span"
-                  px={2}
-                  py={1}
-                  borderRadius="md"
-                  fontSize="sm"
-                  {...props}
-                >
+                <Box as="span" px={2} py={1} borderRadius="md" fontSize="sm" {...props}>
                   {children}
                 </Box>
               );
@@ -324,4 +286,6 @@ const AiResponse = ({ message }) => {
   );
 };
 
-export default AiResponse;
+AiResponse.displayName = "AiResponse";
+
+export default memo(AiResponse);

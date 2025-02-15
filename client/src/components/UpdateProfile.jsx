@@ -54,7 +54,10 @@ export default function UpdateProfile({ isOpen, onClose }) {
       try {
         const response = await fetch('/api/users/updateUserProfile', {
           method: "PUT",
-          headers: {"Content-Type" : "application/json"}, 
+          headers: {
+            "Content-Type" : "application/json",
+            "Authorization": `Bearer ${user.token}`
+          }, 
           body: JSON.stringify({fullName, email, profilePic: imgUrl, phoneNumber, studentRollNumber})
         });
         const data = await response.json();
@@ -117,10 +120,10 @@ export default function UpdateProfile({ isOpen, onClose }) {
             <Input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} {...INPUT_STYLE} placeholder="FullName"/>
           </FormControl>
 
-          <FormControl id="email" isRequired mb={4} isDisabled={true}>
+          {/* <FormControl id="email" isRequired mb={4} isDisabled={true}>
             <FormLabel>Email</FormLabel>
             <Input type="text" value={email} onChange={(e) => setEmail(e.target.value)} {...INPUT_STYLE} placeholder="email@example.com"/>
-          </FormControl>
+          </FormControl> */}
 
           <Grid templateColumns={"1fr 1fr"} gap={5}>
             <FormControl id="phoneNumber" isRequired mb={4} position={"relative"}>

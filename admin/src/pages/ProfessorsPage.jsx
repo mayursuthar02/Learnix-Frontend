@@ -52,7 +52,12 @@ import CustomHeading from "../components/Heading";
     const getAllUsers = async () => {
       setDataLoading(true);
       try {
-        const response = await fetch("/api/users/getAllProfessors");
+        const response = await fetch("/api/users/getAllProfessors", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${admin.token}`
+          },
+        });
         const data = await response.json();
         if (data.error) {
           showToast("Error", data.message, "error");
@@ -78,7 +83,10 @@ import CustomHeading from "../components/Heading";
       try {
         const response = await fetch(`/api/users/update-role/${userId}`, {
           method: "PUT",
-          headers: {"Content-Type":"application/json"},
+          headers: {
+            "Content-Type":"application/json",
+            "Authorization": `Bearer ${admin.token}`
+          },
           body: JSON.stringify({role: userRole})
         })
         const data = await response.json();
@@ -109,6 +117,9 @@ import CustomHeading from "../components/Heading";
       try {
         const response = await fetch(`/api/users/delete-user/${userId}`, {
           method: "DELETE",
+          headers: {
+            "Authorization": `Bearer ${admin.token}`
+          },
         })
         const data = await response.json();
         if (data.error) {

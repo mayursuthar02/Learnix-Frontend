@@ -10,11 +10,14 @@ import { MdDelete } from "react-icons/md";
 import useShowToast from "../hooks/useShowToast";
 import { GRADIENT_BUTTON_STYLE, TOOLTIPS_STYLE } from "../styles/globleStyles";
 import CustomHeading from "../components/Heading";
+import { useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom";
 
 
 const FAQsPage = () => {
   // Functions
   const showToast = useShowToast();
+  const user = useRecoilValue(userAtom);
   const { isOpen, onOpen, onClose } = useDisclosure();
   // State
   const [FAQs, setFAQs] = useState([]);
@@ -27,7 +30,12 @@ const FAQsPage = () => {
     const getFAQs = async () => {
       setLoading(true);
       try {
-        const response = await fetch("/api/FAQs/getRequestingUserFAQs");
+        const response = await fetch("/api/FAQs/getRequestingUserFAQs", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${user.token}`
+          },
+        });
         const data = await response.json();
         if (data.error) {
           showToast("Error", data.error, "error");
@@ -56,6 +64,9 @@ const FAQsPage = () => {
     try {
       const response = await fetch(`/api/FAQs/deleteFAQ/${FAQId}`, {
         method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${user.token}`
+        },
       });
       const data = await response.json();
       if (data.error) {

@@ -29,6 +29,8 @@ import useShowToast from "../hooks/useShowToast";
 
 // STYLES
 import { BUTTON_STYLE, GRADIENT_BUTTON_STYLE } from "../styles/globleStyles";
+import { useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom";
 
 
 // MAIN FUNCTIONS
@@ -42,13 +44,19 @@ const AskAQuestion = ({ isOpen, onClose }) => {
   const [isSubmiting, setIsSubmiting] = useState(false);
   // Function
   const showToast = useShowToast();  
+  const user = useRecoilValue(userAtom);
     
   // Fetch Professors
   useEffect(()=> {
       const getAdminProfessors = async () => {
         setIsProfessorsLoading(true);
         try {
-          const response = await fetch('/api/users/getAdminProfessors');
+          const response = await fetch('/api/users/getAdminProfessors', {
+            method: "GET",
+            headers: {
+              "Authorization": `Bearer ${user.token}`
+            },
+          });
           const data = await response.json();
           if (data.error) {
             console.log(data.error);
@@ -79,7 +87,10 @@ const AskAQuestion = ({ isOpen, onClose }) => {
     try {
       const response = await fetch("/api/questions/ask-a-question", {
         method: "POST",
-        headers: {"Content-Type" : "application/json"},
+        headers: {
+          "Content-Type" : "application/json",
+          "Authorization": `Bearer ${user.token}`
+        },
         body: JSON.stringify({professorId, question})
       })
       const data = await response.json();

@@ -13,21 +13,14 @@ const HandleUserLogout = () => {
   const handleUserLogoutFunc = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/auth/userLogout');
-      const data = await response.json();
-      if (data.error) {
-        showToast("Error", data.error, "error");
-        return;
-      }
-      showToast("Success", data.message, "success");
-      setUser(null);
       localStorage.removeItem("learnixUserDetails");
-      navigate("/login");
+      setUser(null);
+      navigate("/");
     } catch (error) {
-        console.log(error);
-        showToast("Error", error, "error");
+      console.error("Logout Error:", error);
+      showToast("Error", "Logout failed.", "error");
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   };
 

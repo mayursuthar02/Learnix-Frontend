@@ -16,6 +16,7 @@ import {
   ModalFooter,
   Box,
   Tooltip,
+  Flex,
 } from "@chakra-ui/react";
 // Icons
 import { MdEdit } from "react-icons/md";
@@ -32,6 +33,7 @@ export default function UpdateProfile({ isOpen, onClose }) {
     const [user, setUser] = useRecoilState(userAtom);
     const [fullName, setFullName] = useState(user?.fullName);
     const [email, setEmail] = useState(user?.email);
+    const [phoneNumber, setPhoneNumber] = useState(user?.phoneNumber);
     const [isLoading, setIsLoading] = useState(false);
     // Functions
     const fileRef = useRef();
@@ -45,8 +47,11 @@ export default function UpdateProfile({ isOpen, onClose }) {
         try {
           const response = await fetch('/api/users/updateAdminUserProfile', {
             method: "PUT",
-            headers: {"Content-Type" : "application/json"},
-            body: JSON.stringify({fullName, profilePic: imgUrl})
+            headers: {
+              "Content-Type" : "application/json",
+              "Authorization": `Bearer ${user.token}`
+            },
+            body: JSON.stringify({fullName, profilePic: imgUrl, phoneNumber})
           });
           const data = await response.json();
           if (data.error) {
@@ -106,9 +111,22 @@ export default function UpdateProfile({ isOpen, onClose }) {
             <Input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="FullName"/>
           </FormControl>
 
-          <FormControl id="email" isRequired mb={4} isDisabled={true}>
+          {/* <FormControl id="email" isRequired mb={4} isDisabled={true}>
             <FormLabel>Email</FormLabel>
             <Input type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="email@example.com"/>
+          </FormControl> */}
+
+          <FormControl id="phoneNumber" isRequired mb={4} position={"relative"}>
+              <FormLabel fontWeight={'400'}>Phone No.</FormLabel>
+              <Input type="text" value={phoneNumber} 
+                onChange={e => {
+                  const value = e.target.value;
+                  if (/^\d{0,10}$/.test(value)) {  // Allow only numbers up to 10 digits
+                    setPhoneNumber(value);
+                  }}} 
+                  pl={"40px"}
+              placeholder="xxxxx xxxxx"/>
+            <Flex alignItems={"center"} justifyContent={"center"} position={"absolute"} left={"2px"} top={"34px"} borderRadius={"4px"} w={"35px"} height={"35px"}>+91</Flex>
           </FormControl>
 
           </ModalBody>

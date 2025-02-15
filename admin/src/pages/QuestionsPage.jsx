@@ -12,6 +12,8 @@ import {formatDistanceToNow} from 'date-fns';
 // Styles
 import {GRADIENT_BUTTON_STYLE} from '../styles/globleStyles'
 import CustomHeading from "../components/Heading";
+import { useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom";
 
 
 // STYLES
@@ -28,11 +30,17 @@ const QuestionsPage = () => {
   const [isReplying, setIsReplying] = useState(null);
   // Functions
   const showToast = useShowToast();
+  const user = useRecoilValue(userAtom);
   
   const getProfessorQuestions = async () => {
     setIsQuestionsLoading(true);
     try {
-      const response = await fetch("/api/questions/getProfessorQuestions");
+      const response = await fetch("/api/questions/getProfessorQuestions", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${user.token}`
+        },
+      });
       const data = await response.json();
       if (data.error) {
         showToast("Error", data.error, "error");
@@ -71,7 +79,10 @@ const QuestionsPage = () => {
     try {
       const response = await fetch(`/api/questions/replyQuestion/${questionId}`, {
         method: "PUT",
-        headers: {"Content-Type" : "application/json"},
+        headers: {
+          "Content-Type" : "application/json",
+          "Authorization": `Bearer ${user.token}`
+        },
         body: JSON.stringify({reply})
       })
       const data = await response.json();
@@ -111,9 +122,9 @@ const QuestionsPage = () => {
                 <Box key={i} border={'1px solid #ededed'} borderRadius={'10px'} p={'20px'}>
                 <Flex alignItems={'start'} justifyContent={'space-between'}>
                   <Flex align={'center'} gap={3}>
-                    <Avatar src={question.studentId.profilePic} size={'md'}/>
+                    <Avatar src={question?.studentId?.profilePic} size={'md'}/>
                     <Box>
-                      <Text fontSize={'17px'} fontWeight={'600'} color={'#47484b'}>{question.studentId.fullName}</Text>
+                      <Text fontSize={'17px'} fontWeight={'600'} color={'#47484b'}>{question?.studentId?.fullName || "User deleted"}</Text>
                       <Text color={'#acaeb4'} fontSize={'15px'} fontWeight={'400'}>{formatDistanceToNow(new Date(question.createdAt))} ago</Text>
                     </Box>
                   </Flex>
@@ -142,9 +153,9 @@ const QuestionsPage = () => {
                 <Box key={i} border={'1px solid #ededed'} borderRadius={'10px'} p={'20px'}>
                 <Flex alignItems={'start'} justifyContent={'space-between'}>
                   <Flex align={'center'} gap={3}>
-                    <Avatar src={question.studentId.profilePic} size={'md'}/>
+                    <Avatar src={question?.studentId?.profilePic} size={'md'}/>
                     <Box>
-                      <Text fontSize={'17px'} fontWeight={'600'} color={'#47484b'}>{question.studentId.fullName}</Text>
+                      <Text fontSize={'17px'} fontWeight={'600'} color={'#47484b'}>{question?.studentId?.fullName || "User deleted"}</Text>
                       <Text color={'#acaeb4'} fontSize={'15px'} fontWeight={'400'}>{formatDistanceToNow(new Date(question.createdAt))} ago</Text>
                     </Box>
                   </Flex>

@@ -6,6 +6,8 @@ import { useRef, useState } from "react";
 import useShowToast from "../hooks/useShowToast";
 import { useEffect } from "react";
 import { GRADIENT_BUTTON_STYLE } from "../styles/globleStyles";
+import userAtom from "../atoms/userAtom";
+import { useRecoilValue } from "recoil";
   
 
   const UploadAndUpdateResource = ({ isOpen, onClose, modelMode, resourceIdForUpdate, getResources }) => {
@@ -33,6 +35,7 @@ import { GRADIENT_BUTTON_STYLE } from "../styles/globleStyles";
     // Function
     const fileRef = useRef(null);
     const showToast = useShowToast();
+    const user = useRecoilValue(userAtom);
 
     const handleInputChange = (field, value) => {
         setFormData((prev) => ({ ...prev, [field]: value }));
@@ -46,7 +49,12 @@ import { GRADIENT_BUTTON_STYLE } from "../styles/globleStyles";
               setIsLoading((prev) => ({ ...prev, resource: true }));
       
               try {
-                const response = await fetch(`/api/resources/getSingleResource/${resourceIdForUpdate}`);
+                const response = await fetch(`/api/resources/getSingleResource/${resourceIdForUpdate}`, {
+                  method: "GET",
+                  headers: {
+                    "Authorization": `Bearer ${user.token}`
+                  },
+                });
                 const data = await response.json();
       
                 if (data.error) {
@@ -89,6 +97,9 @@ import { GRADIENT_BUTTON_STYLE } from "../styles/globleStyles";
     
           const response = await fetch("/api/resources/upload", {
             method: "POST",
+            headers: {
+              "Authorization": `Bearer ${user.token}`
+            },
             body: uploadData,
           });
     
@@ -130,6 +141,9 @@ import { GRADIENT_BUTTON_STYLE } from "../styles/globleStyles";
     
           const response = await fetch(`/api/resources/update/${resourceIdForUpdate}`, {
             method: 'PUT',
+            headers: {
+              "Authorization": `Bearer ${user.token}`
+            },
             body: updateData
           });
           const data = await response.json();

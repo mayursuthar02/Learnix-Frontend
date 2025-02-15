@@ -17,6 +17,8 @@ import {
 import { useState, useEffect } from "react";
 import useShowToast from "../hooks/useShowToast";
 import { GRADIENT_BUTTON_STYLE } from "../styles/globleStyles";
+import { useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom";
 
 const AddAndEditUpdate = ({ isOpen, onClose, modelMode, updateIdForEdit, getUpdates}) => {
   // State Management
@@ -25,6 +27,7 @@ const AddAndEditUpdate = ({ isOpen, onClose, modelMode, updateIdForEdit, getUpda
   const [description, setDescription] = useState("");
   // Functions
   const showToast = useShowToast();
+  const user = useRecoilValue(userAtom);
 
   // Fetch Update Data if Editing
   useEffect(() => {
@@ -35,9 +38,12 @@ const AddAndEditUpdate = ({ isOpen, onClose, modelMode, updateIdForEdit, getUpda
       const fetchUpdate = async () => {
         setIsLoading((prev) => ({ ...prev, fetch: true }));
         try {
-          const response = await fetch(
-            `/api/updates/getSingleUpdate/${updateIdForEdit}`
-          );
+          const response = await fetch(`/api/updates/getSingleUpdate/${updateIdForEdit}`, {
+            method: "GET",
+            headers: {
+              "Authorization": `Bearer ${user.token}`
+            },
+          });
           const data = await response.json();
 
           if (data.error) {
@@ -77,7 +83,10 @@ const AddAndEditUpdate = ({ isOpen, onClose, modelMode, updateIdForEdit, getUpda
 
       const response = await fetch(endpoint, {
         method,
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${user.token}`
+        },
         body: JSON.stringify(updateData),
       });
 

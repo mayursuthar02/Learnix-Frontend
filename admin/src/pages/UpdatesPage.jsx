@@ -21,10 +21,13 @@ import { useEffect, useState } from "react";
 import AddAndEditUpdate from "../components/AddAndEditUpdate";
 import { GRADIENT_BUTTON_STYLE, TOOLTIPS_STYLE } from "../styles/globleStyles";
 import CustomHeading from "../components/Heading";
+import { useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom";
 
 const UpdatesPage = () => {
   // Functions
   const showToast = useShowToast();
+  const user = useRecoilValue(userAtom);
   const { isOpen, onOpen, onClose } = useDisclosure();
   // State
   const [updates, setUpdates] = useState([]);
@@ -37,7 +40,12 @@ const UpdatesPage = () => {
   const getUpdates = async () => {
     setLoading(true);
     try {
-      const response = await fetch("/api/updates/getRequestingUserUpdates");
+      const response = await fetch("/api/updates/getRequestingUserUpdates", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${user.token}`
+        },
+      });
       const data = await response.json();
       if (data.error) {
         showToast("Error", data.error, "error");
@@ -65,6 +73,7 @@ const UpdatesPage = () => {
     try {
       const response = await fetch(`/api/updates/deleteUpdate/${updateId}`, {
         method: "DELETE",
+        headers: { "Authorization": `Bearer ${user.token}` }
       });
       const data = await response.json();
       if (data.error) {

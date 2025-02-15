@@ -6,16 +6,18 @@ import App from "./App.jsx";
 import { RecoilRoot } from "recoil";
 import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter } from "react-router-dom";
-
+import { SocketProvider } from "./context/SocketContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RecoilRoot>
-      <ChakraProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </ChakraProvider>
-    </RecoilRoot>
+    <SocketProvider>
+      <RecoilRoot>
+        <ChakraProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </ChakraProvider>
+      </RecoilRoot>
+    </SocketProvider>
   </StrictMode>
 );

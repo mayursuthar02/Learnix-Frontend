@@ -29,6 +29,8 @@ import UploadAndUpdatePreviousPaper from "../components/UploadAndUpdatePreviousP
 // Styles
 import { BUTTON_ICON_STYLE, GRADIENT_BUTTON_STYLE, TOOLTIPS_STYLE } from "../styles/globleStyles";
 import CustomHeading from "../components/Heading";
+import { useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom";
 
 
 // STYLES
@@ -40,12 +42,6 @@ const LINK_STYLE = {
   gap : "1",
   color : "#4b90ff",
   _hover : {opacity: 0.9}
-}
-const HEADING_STYLE = {
-  fontSize : "20px",
-  px : "5",
-  mb : "5",
-  mt : "5"
 }
 const TABS_STYLE = {
   display : "flex",
@@ -73,6 +69,7 @@ const ResourcePage = () => {
 
   // Functions
   const showToast = useShowToast();
+  const user = useRecoilValue(userAtom);
   const { isOpen: isOpenMaterialModel, onOpen: onOpenMaterialModel, onClose: onCloseMaterialModel } = useDisclosure();
   const { isOpen: isOpenExamDetailsModel, onOpen: onOpenExamDetailsModel, onClose: onCloseExamDetailsModel } = useDisclosure();
   const { isOpen: isOpenTimeTableModel, onOpen: onOpenTimeTableModel, onClose: onCloseTimeTableModel } = useDisclosure();
@@ -95,7 +92,12 @@ const ResourcePage = () => {
   const getResources = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${endpointDataMode}`);
+      const response = await fetch(`${endpointDataMode}`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${user.token}`
+        },
+      });
       const data = await response.json();
       if (data.error) {
         showToast("Error", data.error, "error");
@@ -125,6 +127,9 @@ const ResourcePage = () => {
     try {
       const response = await fetch(`/api/${endpointRoute}/delete/${resourceId}`, {
         method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${user.token}`
+        },
       });
       const data = await response.json();
       if (data.error) {
@@ -149,7 +154,8 @@ const ResourcePage = () => {
   return (
     <>
       <Box display="flex" alignItems="center" justifyContent="space-between" mx={2} mb={'30px'} mt={3}>
-        <Input htmlSize={50} width="400px" placeholder="Search..." borderRadius={"50px"} />
+        {/* <Input htmlSize={50} width="400px" placeholder="Search..." borderRadius={"50px"} /> */}
+        <Box></Box>
 
         <Flex alignItems={'center'} gap={2}>
           <Button {...GRADIENT_BUTTON_STYLE} onClick={()=> {onOpenPreviousPaperModel(); setModelMode("upload"); setPreviousPaperResourceIdForUpdate(null)}}>

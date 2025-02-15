@@ -27,7 +27,7 @@ const DashboardPage = () => {
     { title: "Professors", link: "/dashboard/professors", icon: <PiUsersThreeBold fontSize={'20px'}/> },
     { title: "Resources", link: "/dashboard/resource", icon: <GrResources fontSize={'20px'}/> },
     { title: "Chats", link: "/u/chats", icon: <LuMessagesSquare fontSize={'20px'}/> },
-    { title: "LNX Meet", link: "/u/chats", icon: <MdOutlineVideoChat fontSize={'20px'}/> },
+    // { title: "LNX Meet", link: "/u/chats", icon: <MdOutlineVideoChat fontSize={'20px'}/> },
     { title: "Questions", link: "/dashboard/questions", icon: <TbMessageQuestion fontSize={'20px'}/> },
     { title: "Updates", link: "/dashboard/updates", icon: <MdOutlineEditNotifications fontSize={'20px'}/> },
     { title: "Events", link: "/dashboard/events", icon: <HiCalendarDateRange fontSize={'20px'}/> },
@@ -44,6 +44,7 @@ const DashboardPage = () => {
   return (
     <>
       <Flex minH={"100vh"} display={"grid"} gridTemplateColumns={".23fr 1fr"} width={"100%"}>
+        {/* Left side */}
         <Box py={5} px={3} background={"#f0f4f9"}>
           <Flex alignItems={"center"} h={"fit-content"} px={3} gap={3} mb={10}>
             <Avatar src={user?.profilePic} size={'md'}/>
@@ -110,7 +111,8 @@ const DashboardPage = () => {
           </Flex>
         </Box>
 
-        <Box py={5} px={5}>
+        {/* Right Side */}
+        <Box py={5} px={5} maxH={"100vh"} overflowY={"scroll"}>
           <Header />
           <Outlet />
         </Box>

@@ -11,7 +11,6 @@ const FetchAllUserConversations = () => {
     // State
     const [userConversations, setUserConversations] = useRecoilState(userConversationAtom);
     const user = useRecoilValue(userAtom);
-
     
     // Fetch
     const fetchAllUserConversationsFunc = async () => {
@@ -22,7 +21,7 @@ const FetchAllUserConversations = () => {
               "Content-Type":"application/json",
               "Authorization": `Bearer ${user.token}`
             },
-            body: JSON.stringify({userId: user?._id})
+            body: JSON.stringify({userId: user?._id}) 
           });
           const data = await res.json();
           if (data.error) {

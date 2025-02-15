@@ -1,11 +1,12 @@
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Avatar, Box, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Flex, Grid, Text, Divider, Badge, Spinner } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useDeferredValue, useEffect, useState } from "react";
 import FetchAllUpdates from '../helpers/FetchAllUpdates';
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import updatesAtom from "../atoms/updatesAtom";
 import { formatDistanceToNow } from 'date-fns'
 import { BiLock } from "react-icons/bi";
 import useShowToast from "../hooks/useShowToast";
+import userAtom from "../atoms/userAtom";
 
 // STYLES 
 // --------------------------------
@@ -38,11 +39,15 @@ const ReplyDrawer = ({ onClose, isOpen }) => {
     const [answeredQuestions, setAnsweredQuestions] = useState([]);
     // Functions
     const showToast = useShowToast();
+    const user = useRecoilValue(userAtom);
 
     const getUserReplies = async () => {
         setIsQuestionsLoading(true);
         try {
-          const response = await fetch("/api/questions/getUserReplies");
+          const response = await fetch("/api/questions/getUserReplies", {
+            method: "GET",
+            headers: { "Authorization": `Bearer ${user.token}` }
+          });
           const data = await response.json();
           if (data.error) {
             showToast("Error", data.error, "error");

@@ -54,7 +54,12 @@ const EventPage = () => {
   const fetchAllEventsFunc = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch("/api/events/getAllEventsAdmin");
+      const res = await fetch("/api/events/getAllEventsAdmin", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${user.token}`
+        },
+      });
       const data = await res.json();
       if (data.error) {
         showToast("Error", data.error, "error");
@@ -77,7 +82,12 @@ const EventPage = () => {
   const handleDelete = async (eventId) => {
     setIsDeleting(eventId);
     try {
-      const response = await fetch(`/api/events/delete/${eventId}`, { method: "DELETE" });
+      const response = await fetch(`/api/events/delete/${eventId}`, { 
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${user.token}`
+        },
+      });
       const data = await response.json();
   
       if (data.error) {

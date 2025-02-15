@@ -6,6 +6,8 @@ import { useRef, useState } from "react";
 import useShowToast from "../hooks/useShowToast";
 import { useEffect } from "react";
 import { GRADIENT_BUTTON_STYLE } from "../styles/globleStyles";
+import { useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom";
   
 
   const UploadAndUpdateExamDetails = ({ isOpen, onClose, modelMode, resourceIdForUpdate, getResources }) => {
@@ -42,6 +44,7 @@ import { GRADIENT_BUTTON_STYLE } from "../styles/globleStyles";
     // Function
     const fileRef = useRef(null);
     const showToast = useShowToast();
+    const user = useRecoilValue(userAtom);
 
     const handleInputChange = (field, value) => {
         setFormData((prev) => ({ ...prev, [field]: value }));
@@ -55,7 +58,12 @@ import { GRADIENT_BUTTON_STYLE } from "../styles/globleStyles";
               setIsLoading((prev) => ({ ...prev, resource: true }));
       
               try {
-                const response = await fetch(`/api/examDetails/getSingleExamDetailsResource/${resourceIdForUpdate}`);
+                const response = await fetch(`/api/examDetails/getSingleExamDetailsResource/${resourceIdForUpdate}`, {
+                  method: "GET",
+                  headers: {
+                    "Authorization": `Bearer ${user.token}`
+                  },
+                });
                 const data = await response.json();
       
                 if (data.error) {
@@ -102,6 +110,9 @@ import { GRADIENT_BUTTON_STYLE } from "../styles/globleStyles";
           const method = modelMode === "upload" ? "POST" : "PUT";
           const response = await fetch(endpoint, {
             method,
+            headers: {
+              "Authorization": `Bearer ${user.token}`
+            },
             body: resourceData,
           });
       

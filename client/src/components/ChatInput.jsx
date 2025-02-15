@@ -17,6 +17,8 @@ import {TOOLTIP_STYLE, GRADIENT_BUTTON_STYLE, BUTTON_STYLE} from '../styles/glob
 
 // Data
 import { placeholderTexts } from "../data/textsForAnimation";
+import { useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom";
 
 
 // MAIN FUNCTION
@@ -32,6 +34,7 @@ const ChatInput = ({conversationId, startConversation, isScholaraActive,setUserR
     // Use Function
     const showToast = useShowToast();
     const fileRef = useRef();
+    const user = useRecoilValue(userAtom);
      
 
     // Loop through the Text Animation Effect
@@ -57,7 +60,10 @@ const ChatInput = ({conversationId, startConversation, isScholaraActive,setUserR
       try {
         const response = await fetch(`/api/messages/userPrompt`, {
           method: "POST",
-          headers: {"Content-Type" : "application/json"},
+          headers: {
+            "Content-Type" : "application/json",
+            "Authorization": `Bearer ${user.token}`
+          },
           body: JSON.stringify({conversationId, prompt: prompt})
         });
         const data = await response.json();

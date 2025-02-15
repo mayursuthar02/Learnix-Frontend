@@ -26,7 +26,7 @@ const Router = () => {
         <Route path={"/faqs"} element={<FAQsPage/>}/>
         <Route path={"/chats"} element={user ? <ChatsPage/> : <Navigate to={'/login'}/>}/>
         <Route path={"/chats/conversation/:conversationId"} element={user ? <ChatsPage/> : <Navigate to={'/login'}/>}/>
-        <Route path={"/user/chats"} element={user ? <UserChatPage/> : <Navigate to={'/login'}/>}/>
+        <Route path={"/u/chats"} element={user ? <UserChatPage/> : <Navigate to={'/login'}/>}/>
         <Route path={"/login"} element={!user ? <LoginPage/> : <Navigate to={'/chats'}/>}/>
         <Route path={"/signup"} element={!user ? <SignupPage/> : <Navigate to={'/chats'}/>}/>
         <Route path={"/*"} element={<PageNotFound/>}/>

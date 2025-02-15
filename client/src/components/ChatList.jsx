@@ -41,7 +41,10 @@ const ChatList = ({botResponseLoading, setBotResponseLoading, messages, setMessa
       try {
         const response = await fetch(`/api/chats${apiRoute}`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { 
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${user.token}`
+          },
           body: JSON.stringify({ conversationId }),
         });
         const data = await response.json();
@@ -78,7 +81,10 @@ const ChatList = ({botResponseLoading, setBotResponseLoading, messages, setMessa
       try {
         const response = await fetch(`/api/messages/userPrompt`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { 
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${user.token}`
+          },
           body: JSON.stringify({ conversationId, prompt: reply }),
         });
         const data = await response.json();

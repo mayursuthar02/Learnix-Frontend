@@ -8,14 +8,15 @@ import SearchUsersModel from "../components/SearchUsersModel";
 import logoAi from "../assets/logoai.png";
 import { FaPlus } from "react-icons/fa6";
 import { MdArrowDownward } from "react-icons/md";
+import { RiAttachment2 } from "react-icons/ri";
+import { format } from "date-fns";
 
 // Functions
 import FetchAllUserConversations from "../helpers/FetchAllUserConversations";
 import { useEffect, useState } from "react";
 import userConversationAtom from "../atoms/userConversationAtom";
 import selectedUserConversationAtom from "../atoms/selectedUserConversationAtom";
-import { useRecoilState } from "recoil";
-import { format } from "date-fns";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 // STYLES
 const BUTTON_STYLE = {
@@ -40,16 +41,14 @@ const MyChats = () => {
     // Functions
     const { isOpen, onOpen, onClose } = useDisclosure();
     const fetchAllUserConversationsFunc = FetchAllUserConversations();
-    
 
     // Fetch All Chats
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            await fetchAllUserConversationsFunc(); 
-            setLoading(false);
-        };
-        
+    const fetchData = async () => {
+        setLoading(true);
+        await fetchAllUserConversationsFunc(); 
+        setLoading(false);
+    };
+    useEffect(() => {  
         fetchData();
     }, []); 
     
@@ -76,7 +75,7 @@ const MyChats = () => {
 
             <Flex align={"center"} gap={3} mb={3} mt={5}>
                 <Text color={'#1f1f1f'} fontSize={'16px'} fontWeight={'400'}>Group</Text>
-                <Flex align={'center'} justifyContent={'center'} fontSize={"12px"} w={5} h={5} color={"#4796e3"} bg={"#dddeee"} borderRadius={"full"}>4</Flex>
+                <Flex align={'center'} justifyContent={'center'} fontSize={"12px"} w={5} h={5} color={"#4796e3"} bg={"#dddeee"} borderRadius={"full"}>{userConversations.length}</Flex>
             </Flex>
 
             <Box maxH={"70vh"} overflowY={"scroll"}> 
@@ -92,10 +91,13 @@ const MyChats = () => {
                                 <Flex color={"#555b64"} fontSize={"13px"} gap={1} alignItems={"center"}>
                                     <Text className="header-logo-text" textTransform={"lowercase"}>@{conversation?.latestMessage?.sender?.fullName.split(" ")[0] || "-"}</Text>
                                     {conversation?.latestMessage?.content?.length > 16 ? conversation?.latestMessage?.content.slice(0, 16) + "..." : conversation?.latestMessage?.content}
+                                    {conversation?.latestMessage?.attachments && <Box><RiAttachment2 fontSize={"16px"}/></Box>}
                                 </Flex>
                             </Flex>
                             <Flex alignItems={"end"} justifyContent={"center"} flexDirection={"column"} gap={1}>
-                                <Flex align={'center'} justifyContent={'center'} fontSize={"12px"} w={5} h={5} color={"#4796e3"} bg={"#dddeee"} borderRadius={"full"}>{i}</Flex>
+                                {conversation.unreadCount > 0 && (
+                                <Flex align={'center'} justifyContent={'center'} fontSize={"12px"} w={5} h={5} color={"#4796e3"} bg={"#dddeee"} borderRadius={"full"}>{conversation.unreadCount.count}</Flex>
+                                )}
                                 <Text color={"#999"} fontSize={"13px"} textTransform={"lowercase"}>{format(new Date(conversation.updatedAt), "h:mm a")}</Text>
                             </Flex>
                         </Flex>
@@ -111,7 +113,7 @@ const MyChats = () => {
         </Box>
 
         {/* Search Model */}
-        <SearchUsersModel isOpen={isOpen} onClose={onClose}/>
+        <SearchUsersModel isOpen={isOpen} onClose={onClose} fetchData={fetchData}/>
     </>
   )
 }

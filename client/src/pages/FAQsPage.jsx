@@ -18,16 +18,9 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import logo from "../assets/logoai.png";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
-// Iamge and Videos
-// import BgVideo from "../assets/22908-331768732.mp4";
-import profilePic from "../assets/profile.jpg";
-import homePagePhoto from "../assets/homepagephoto.jpg";
+import { Link as RouterLink } from "react-router-dom";
 
 // Icons
-import { RiBookShelfFill } from "react-icons/ri";
-import { PiChatsBold } from "react-icons/pi";
-import { SiSemanticscholar } from "react-icons/si";
 import { MdLogout } from "react-icons/md";
 
 // State
@@ -52,7 +45,10 @@ const FAQsPage = () => {
     const getAllFAQs = async () => {
       setIsLoading(true);
         try {
-            const resposne = await fetch("/api/FAQs/getAllFAQs");
+            const resposne = await fetch("/api/FAQs/getAllFAQs", {
+              method: "GET",
+              headers: {"Authorization": `Bearer ${user.token}`}
+            });
             const data = await resposne.json();
             if (data.error) {
                 showToast("Error", data.error, "error");

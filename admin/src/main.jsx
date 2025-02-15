@@ -5,22 +5,25 @@ import App from "./App.jsx";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { BrowserRouter } from "react-router-dom";
 import { RecoilRoot } from "recoil";
+import { SocketProvider } from "./context/SocketContext.jsx";
 
 const config = {
   initialColorMode: "light",
-  useSystemColorMode: false
+  useSystemColorMode: false,
 };
 
 const theme = extendTheme({ config });
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RecoilRoot>
-      <ChakraProvider theme={theme}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </ChakraProvider>
-    </RecoilRoot>
+    <SocketProvider>
+      <RecoilRoot>
+        <ChakraProvider theme={theme}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </ChakraProvider>
+      </RecoilRoot>
+    </SocketProvider>
   </StrictMode>
 );

@@ -55,7 +55,10 @@ const ChatSection = ({isDisableHelloButton}) => {
       setMessages([]);
       setBotResponseLoading(true);
       try {
-        const response = await fetch(`/api/messages/getMessages/${conversationId}`);
+        const response = await fetch(`/api/messages/getMessages/${conversationId}`, {
+          method: "GET",
+          headers: { "Authorization": `Bearer ${user.token}` }
+        });
         const data = await response.json();
         if (data.error || data.error === "No messages found for this conversationId." || data.error === "conversationId is not found!") {
           showToast("Error", data.error, "error");
@@ -82,7 +85,10 @@ const ChatSection = ({isDisableHelloButton}) => {
     try {
       const response = await fetch('/api/chats/start', {
         method: "POST",
-        headers: {"Content-Type" : "application/json"},
+        headers: {
+          "Content-Type" : "application/json",
+          "Authorization": `Bearer ${user.token}`
+        },
         body: JSON.stringify({conversationId})
       });
       const data = await response.json();
@@ -109,7 +115,10 @@ const ChatSection = ({isDisableHelloButton}) => {
     try {
       const response = await fetch(`/api/chats/activateScholara`, {
         method: "POST",
-        headers: {"Content-Type" : "application/json"},
+        headers: {
+          "Content-Type" : "application/json",
+          "Authorization": `Bearer ${user.token}`
+        },
         body: JSON.stringify({prompt, conversationId})  
       });
       const data = await response.json();

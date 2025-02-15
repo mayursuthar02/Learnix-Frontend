@@ -50,10 +50,16 @@ const UsersPage = () => {
   const [dataLoading, setDataLoading] = useState(false);
   const [isDeletingUserLoading, setIsDeletingUserLoading] = useState(null);
   
+  // GET ALL STUDENTS
   const getAllUsers = async () => {
     setDataLoading(true);
     try {
-      const response = await fetch("/api/users/getAllStudents");
+      const response = await fetch("/api/users/getAllStudents", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${admin.token}`
+        },
+      });
       const data = await response.json();
       if (data.error) {
         showToast("Error", data.message, "error");
@@ -71,6 +77,7 @@ const UsersPage = () => {
     getAllUsers();
   }, []);
 
+  // DELETE STUDENTS
   const deleteUser = async(userId) => {
     if (!userId) {
       showToast("Error", "UserId is required", "error");
@@ -79,6 +86,9 @@ const UsersPage = () => {
     try {
       const response = await fetch(`/api/users/delete-user/${userId}`, {
         method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${admin.token}`
+        },
       })
       const data = await response.json();
       if (data.error) {

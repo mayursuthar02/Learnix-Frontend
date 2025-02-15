@@ -29,6 +29,8 @@ import { IoMdClose } from "react-icons/io";
 //   Styles
 import { GRADIENT_BUTTON_STYLE } from "../styles/globleStyles";
 import { useRef } from "react";
+import { useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom";
 
 
 // MAIN FUNCTION  
@@ -41,6 +43,7 @@ const AddAndEditEvent = ({ isOpen, onClose, modelMode, eventEditId, getData, set
     // Functions
     const showToast = useShowToast();
     const fileRef = useRef();
+    const user = useRecoilValue(userAtom);
     const { handleImageChange, imgUrl, setImgUrl } = usePriviewImg();
 
     // Format Date
@@ -61,7 +64,12 @@ const AddAndEditEvent = ({ isOpen, onClose, modelMode, eventEditId, getData, set
           setIsLoading((prev) => ({ ...prev, fetch: true }));
           try {
             const response = await fetch(
-              `/api/events/getSingleEvent/${eventEditId}`
+              `/api/events/getSingleEvent/${eventEditId}`, {
+                method: "GET",
+                headers: {
+                  "Authorization": `Bearer ${user.token}`
+                },
+              }
             );
             const data = await response.json();
             
@@ -101,7 +109,10 @@ const AddAndEditEvent = ({ isOpen, onClose, modelMode, eventEditId, getData, set
   
         const response = await fetch(endpoint, {
           method,
-          headers: { "Content-Type": "application/json" },
+          headers: { 
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${user.token}`
+          },
           body: JSON.stringify(updateData),
         });
   

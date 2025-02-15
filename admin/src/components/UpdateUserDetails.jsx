@@ -4,6 +4,8 @@ import { useRef, useState } from "react";
 import useShowToast from "../hooks/useShowToast";
 import { useEffect } from "react";
 import { GRADIENT_BUTTON_STYLE } from "../styles/globleStyles";
+import { useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom";
 
 
 const UpdateUserDetails = ({ isOpen, onClose, userIdForUpdate, getAllUsers, profileType }) => {
@@ -20,6 +22,7 @@ const UpdateUserDetails = ({ isOpen, onClose, userIdForUpdate, getAllUsers, prof
     ]
     // Function
     const showToast = useShowToast();
+    const user = useRecoilValue(userAtom);
 
     // Get Single Resource
     useEffect(() => {
@@ -28,7 +31,12 @@ const UpdateUserDetails = ({ isOpen, onClose, userIdForUpdate, getAllUsers, prof
                 setIsLoading((prev) => ({ ...prev, resource: true }));
 
                 try {
-                    const response = await fetch(`/api/users/fetchSingleUser/${userIdForUpdate}`);
+                    const response = await fetch(`/api/users/fetchSingleUser/${userIdForUpdate}`, {
+                        method: "GET",
+                        headers: {
+                          "Authorization": `Bearer ${user.token}`
+                        },
+                    });
                     const data = await response.json();
 
                     if (data.error) {
@@ -60,7 +68,10 @@ const UpdateUserDetails = ({ isOpen, onClose, userIdForUpdate, getAllUsers, prof
             console.log({fullName, email, role});
             const response = await fetch(`/api/users/updateUserDetails/${userIdForUpdate}`, {
                 method: "PUT",
-                headers: {"Content-Type":"application/json"},
+                headers: {
+                    "Content-Type":"application/json",
+                    "Authorization": `Bearer ${user.token}`
+                },
                 body: JSON.stringify({fullName, email, role}),
             });
 
