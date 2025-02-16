@@ -146,11 +146,11 @@ const SideBar = ({setIsDisableHelloButton}) => {
             </Flex>
           </Tooltip>
 
-          <Tooltip label={"Updates"} {...TOOLTIP_STYLE} placement="right">
+          <Tooltip label={"Notices"} {...TOOLTIP_STYLE} placement="right">
             <Flex onClick={onOpen} {...TAB_BUTTON_STYLE}>
               <BiSolidNotification {...ICON_STYLE} />
-              <Text {...TEXT_STYLE}>Updates</Text>
-              <Flex ml={'190px'} {...TAB_BUTTON_BADGE_STYLE}>{updates.length}</Flex>
+              <Text {...TEXT_STYLE}>Notices</Text>
+              <Flex ml={'197px'} {...TAB_BUTTON_BADGE_STYLE}>{updates.length}</Flex>
             </Flex>
           </Tooltip>
           

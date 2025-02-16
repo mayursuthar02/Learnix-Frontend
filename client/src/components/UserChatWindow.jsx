@@ -322,25 +322,25 @@ const UserChatWindow = () => {
                     <div style={{ display: "flex", alignItems: "flex-end" }} key={m._id}>
                       {/* Avatar for messages from other users */}
                       {(isSameSender(messages, m, i, user._id) || isLastMessage(messages, i, user._id)) && (
-                        <Tooltip label={m?.sender?.fullName} placement="top">
-                          <Avatar mr={2} w={"40px"} h={"40px"} cursor="pointer" name={m?.sender?.fullName} src={m?.sender?.profilePic}/>
+                        <Tooltip label={m?.sender?.fullName || "Unknow User"} placement="top" {...TOOLTIP_STYLE}>
+                          <Avatar mr={2} w={"40px"} h={"40px"} cursor="pointer" name={m?.sender?.fullName} src={m?.sender?.profilePic || ""}/>
                         </Tooltip>
                       )}
 
                       {/* Message Box */}
                       <Box
                       style={{
-                        marginLeft: isSameSenderMargin(messages, m, i, user._id), 
-                        marginTop: isSameUser(messages, m, i, user._id) ? 3 : 10,
-                        marginRight: m.sender._id === user._id ? 0 : "auto", maxWidth: "75%",
+                        marginLeft: isSameSenderMargin(messages, m, i, user?._id), 
+                        marginTop: isSameUser(messages, m, i, user?._id) ? 3 : 10,
+                        marginRight: m?.sender?._id === user?._id ? 0 : "auto", maxWidth: "75%",
                       }}
                       >
                         <Box
                           style={{
-                            background: `${m.sender._id === user._id ? "linear-gradient(60deg, #4796e3, #336dff, #492cbe)" : "#222"}`,
-                            color: `${m.sender._id === user._id ? "#fff" : "#fff"}`,
+                            background: `${m?.sender?._id === user?._id ? "linear-gradient(60deg, #4796e3, #336dff, #492cbe)" : "#222"}`,
+                            color: `${m?.sender?._id === user?._id ? "#fff" : "#fff"}`,
                             fontWeight: "300",
-                            borderRadius: m.sender._id === user._id ? "20px 20px 4px 20px" : "20px 20px 20px 4px",
+                            borderRadius: m?.sender?._id === user?._id ? "20px 20px 4px 20px" : "20px 20px 20px 4px",
                             padding: "8px 10px", wordWrap: "break-word", display: "flex", flexDirection: "column",
                           }}
                         >
@@ -367,14 +367,14 @@ const UserChatWindow = () => {
 
                             {/* Timestamp */}
                             <Text
-                              color={m.sender._id === user._id ? "#ddd" : "#777"} fontSize={"11px"} textTransform={"lowercase"}
-                              textAlign={m.sender._id === user._id ? "right" : "left"} mb={-2}>
+                              color={m?.sender?._id === user?._id ? "#ddd" : "#777"} fontSize={"11px"} textTransform={"lowercase"}
+                              textAlign={m?.sender?._id === user?._id ? "right" : "left"} mb={-2}>
                               {format(new Date(m.updatedAt), "h:mm a")}
                             </Text>
                           </Flex>
                           
                           {/* attachments (IMG) */}
-                          {m.attachments && <Box w={"250px"} h={"150px"} borderRadius={"13px"} overflow={"hidden"} bg={"#333"} my={2}>
+                          {m?.attachments && <Box w={"250px"} h={"150px"} borderRadius={"13px"} overflow={"hidden"} bg={"#333"} my={2}>
                             <Image w={"full"} height={"full"} src={m.attachments} objectFit={"cover"}/>
                           </Box>}
 

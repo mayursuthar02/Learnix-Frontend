@@ -36,8 +36,8 @@ const UpdatesDrawer = ({onClose, isOpen}) => {
                             <Grid templateColumns={'1fr'} w={'full'}>
                                 <Flex alignItems={'center'} justifyContent={'space-between'}>
                                   <Flex alignItems={'center'} gap={2}>
-                                      <Avatar src={update.userId?.profilePic} size={'sm'}/>   
-                                      <Text>{update.userId?.fullName}</Text>
+                                      <Avatar src={update.userId?.profilePic || ""} size={'sm'}/>   
+                                      <Text>{update.userId?.fullName || "Unknow User"}</Text>
                                   </Flex>
                                   <Text textAlign={'left'} fontSize={"15px"} color={"#777"}>{formatDistanceToNow(new Date(update.createdAt))} ago</Text>
                                 </Flex>

@@ -307,18 +307,18 @@ const ChatWindow = () => {
                   messages.map((m, i) => (
                     <div style={{ display: "flex", alignItems: "flex-end" }} key={m._id}>
                       {/* Avatar for messages from other users */}
-                      {(isSameSender(messages, m, i, user._id) || isLastMessage(messages, i, user._id)) && (
-                        <Tooltip label={m?.sender?.fullName} placement="top">
-                          <Avatar mr={2} w={"40px"} h={"40px"} cursor="pointer" name={m?.sender?.fullName} src={m?.sender?.profilePic}/>
+                      {(isSameSender(messages, m, i, user._id) || isLastMessage(messages, i, user?._id)) && (
+                        <Tooltip label={m?.sender?.fullName || "Unknow User"} placement="top">
+                          <Avatar mr={2} w={"40px"} h={"40px"} cursor="pointer" name={m?.sender?.fullName || "Unknow User"} src={m?.sender?.profilePic || ""}/>
                         </Tooltip>
                       )}
 
                       {/* Message Box */}
                       <Flex
                       style={{
-                        marginLeft: isSameSenderMargin(messages, m, i, user._id), 
-                        marginTop: isSameUser(messages, m, i, user._id) ? 3 : 10,
-                        marginRight: m.sender._id === user._id ? 0 : "auto", maxWidth: "75%",
+                        marginLeft: isSameSenderMargin(messages, m, i, user?._id), 
+                        marginTop: isSameUser(messages, m, i, user?._id) ? 3 : 10,
+                        marginRight: m?.sender?._id === user?._id ? 0 : "auto", maxWidth: "75%",
                       }}
                       alignItems={"center"}
                       onMouseEnter={() => setIsHovered(m._id)}
@@ -327,11 +327,11 @@ const ChatWindow = () => {
                       >                        
                         <Box
                           style={{
-                            background: `${m.sender._id === user._id ? "linear-gradient(60deg, #4796e3, #336dff, #492cbe)" : "#dddeee"}`,
-                            color: `${m.sender._id === user._id ? "#fff" : "#1f1f1f"}`,
+                            background: `${m?.sender?._id === user?._id ? "linear-gradient(60deg, #4796e3, #336dff, #492cbe)" : "#dddeee"}`,
+                            color: `${m?.sender?._id === user?._id ? "#fff" : "#1f1f1f"}`,
                              // Align to the right for the current user
                             
-                            borderRadius: m.sender._id === user._id ? "20px 20px 4px 20px" : "20px 20px 20px 4px",
+                            borderRadius: m?.sender?._id === user?._id ? "20px 20px 4px 20px" : "20px 20px 20px 4px",
                             padding: "8px 10px", wordWrap: "break-word", display: "flex", flexDirection: "column",
                           }}
                         >
@@ -358,8 +358,8 @@ const ChatWindow = () => {
 
                             {/* Timestamp */}
                             <Text
-                              color={m.sender._id === user._id ? "#ddd" : "#777"} fontSize={"11px"} textTransform={"lowercase"}
-                              textAlign={m.sender._id === user._id ? "right" : "left"} mb={-2}>
+                              color={m?.sender?._id === user?._id ? "#ddd" : "#777"} fontSize={"11px"} textTransform={"lowercase"}
+                              textAlign={m?.sender?._id === user?._id ? "right" : "left"} mb={-2}>
                               {format(new Date(m.updatedAt), "h:mm a")}
                             </Text>
                           </Flex>
@@ -412,12 +412,12 @@ const ChatWindow = () => {
                 </Box>}
 
                 {/* REPLY TO SECTION */}
-                {replyTo.message && <Flex alignItems={"center"} gap={1} pos={"absolute"} bottom={"90%"} left={"210px"} bg={"#dddeee"} borderRadius={"full"} px={3} py={2} overflow={"hidden"}>
+                {/* {replyTo.message && <Flex alignItems={"center"} gap={1} pos={"absolute"} bottom={"90%"} left={"210px"} bg={"#dddeee"} borderRadius={"full"} px={3} py={2} overflow={"hidden"}>
                   <Flex fontSize={"20px"} color={"#555"}><CgMailReply/></Flex>
-                  <Text className="header-logo-text" textTransform={"lowercase"}>@{replyTo.replyUserName.split(" ")[0]}:</Text>
+                  <Text className="header-logo-text" textTransform={"lowercase"}>@{replyTo.replyUserName.split(" ")[0] || "Unknow User"}:</Text>
                   <Text color={"#555"}>{replyTo.message}</Text>
                   <Flex fontSize={"20px"} color={"#999"} ml={3} cursor={"pointer"} _hover={{color: "#555"}} transition={"color .3s ease"} onClick={() => setReplyTo({messageId: null, message: "", replyUserName: ""})}><IoClose/></Flex>
-                </Flex>}
+                </Flex>} */}
 
                 {/* INPUT SECTION */}
                 <form onSubmit={(e) => e.preventDefault()}>

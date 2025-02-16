@@ -18,11 +18,11 @@ const ConversationDetailedDrawer = ({ isOpen, onClose, conversation }) => {
 
                 <Flex mt={2} alignItems={"center"} flexDir={"column"} justify={"center"}>
                     <Flex align={"center"}>
-                        <Avatar src={conversation.members[0].profilePic} size={"sm"} border={"2px solid #fff"}/>
-                        <Avatar src={conversation.members[1].profilePic} size={"sm"} border={"2px solid #fff"} ml={"-18px"}/>
-                        <Avatar src={conversation.members[2].profilePic} size={"sm"} border={"2px solid #fff"} ml={"-18px"}/>
-                        {conversation.members.length > 3 && <Flex fontSize={"12px"} pr={.5} align={"center"} justify={"center"} bg={"#dddeee"} ml={"-18px"} borderRadius={"full"} w={"32px"} height={"32px"} zIndex={1} border={"2px solid #fff"}>
-                            +{conversation.members.length - 3}
+                        <Avatar src={conversation?.members[0]?.profilePic} size={"sm"} border={"2px solid #fff"}/>
+                        <Avatar src={conversation?.members[1]?.profilePic} size={"sm"} border={"2px solid #fff"} ml={"-18px"}/>
+                        <Avatar src={conversation?.members[2]?.profilePic} size={"sm"} border={"2px solid #fff"} ml={"-18px"}/>
+                        {conversation?.members?.length > 3 && <Flex fontSize={"12px"} pr={.5} align={"center"} justify={"center"} bg={"#dddeee"} ml={"-18px"} borderRadius={"full"} w={"32px"} height={"32px"} zIndex={1} border={"2px solid #fff"}>
+                            +{conversation?.members?.length - 3}
                         </Flex>}
                     </Flex>
                     <Text fontSize={"15px"}>Members</Text>

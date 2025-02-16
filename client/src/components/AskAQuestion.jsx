@@ -98,6 +98,7 @@ const AskAQuestion = ({ isOpen, onClose }) => {
         showToast("Error", data.error, "error");
         return;
       }
+      showToast("Success", "Message sent", "success");
       onClose();
       setQuestion("");
       setProfessorId("");

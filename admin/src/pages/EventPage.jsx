@@ -124,10 +124,10 @@ const EventPage = () => {
               </Box>
         
               <Flex position={'absolute'} top={'10px'} right={'10px'} zIndex={4} gap={2}>
-                {user._id === event.userId._id && <Tooltip label={"Edit"} zIndex={4} {...TOOLTIPS_STYLE}>
+                {user._id === event?.userId?._id || user.role === "superAdmin" && <Tooltip label={"Edit"} zIndex={4} {...TOOLTIPS_STYLE}>
                   <IconButton {...ICONBUTTON_STYLE} icon={<TbEdit fontSize={"18px"}/>} onClick={()=> {onOpen(); setModelMode("edit"); setEventEditId(event._id)}}/>
                 </Tooltip>}
-                {user._id === event.userId._id && <Tooltip label={"Delete"} zIndex={4} {...TOOLTIPS_STYLE}>
+                {user._id === event?.userId?._id || user.role === "superAdmin" && <Tooltip label={"Delete"} zIndex={4} {...TOOLTIPS_STYLE}>
                   <IconButton {...ICONBUTTON_STYLE} icon={<MdDelete fontSize={"18px"}/>} onClick={() => handleDelete(event._id)} isLoading={event._id === isDeleting}/>
                 </Tooltip>}
                 <Tooltip label={"See image"} zIndex={4} {...TOOLTIPS_STYLE}>
@@ -144,8 +144,8 @@ const EventPage = () => {
                       <Badge fontWeight={'500'} textTransform={'capitalize'} fontSize={'13px'}>Date : {format(event.eventDate, "dd MMMM yyyy")}</Badge>
                       <Flex flexDir={"column"} alignItems={'end'}>
                         <Flex alignItems={'center'} gap={2}>
-                          <Avatar src={event.userId?.profilePic} size={"sm"}/>
-                          <Text fontSize={'20px'} fontWeight={'400'} color={"#fff"}>{event.userId?.fullName}</Text>
+                          <Avatar src={event.userId?.profilePic || ""} size={"sm"}/>
+                          <Text fontSize={'20px'} fontWeight={'400'} color={"#fff"}>{event.userId?.fullName || "Unknow User"}</Text>
                         </Flex>
                         <Text Text fontSize={'12px'} opacity={.8} color={"#fff"}>{formatDistanceToNow(new Date(event.createdAt))} ago</Text>
                       </Flex>

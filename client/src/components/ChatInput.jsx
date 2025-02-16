@@ -183,7 +183,7 @@ const ChatInput = ({conversationId, startConversation, isScholaraActive,setUserR
                         <IconButton onClick={() => {startConversation()}} {...GRADIENT_BUTTON_STYLE} isDisabled={botResponseLoading} icon={<PiHandWavingBold color="#fff" fontSize={'20px'} />}/>
                     </Tooltip>
                     
-                    <Tooltip label={"Activate Scholara"} {...TOOLTIP_STYLE}>
+                    <Tooltip label={"Activate Learnix"} {...TOOLTIP_STYLE}>
                         <IconButton onClick={()=> {activateScholara("Hello!")}} {...GRADIENT_BUTTON_STYLE} isDisabled={botResponseLoading} icon={<BsStars color="#fff" fontSize={'20px'} />}/>
                     </Tooltip>
                 </Flex>

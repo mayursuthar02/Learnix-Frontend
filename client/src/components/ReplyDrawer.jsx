@@ -87,9 +87,9 @@ const ReplyDrawer = ({ onClose, isOpen }) => {
                             <Box key={question._id} {...QUESTION_BOX_STYLE}>
                                 <Flex {...FLEX_STYLE}>
                                     <ReplyHeaderProfileSection
-                                        profilePic={question.studentId.profilePic}
-                                        fullName={question.studentId.fullName}
-                                        date={question.createdAt}
+                                        profilePic={question?.studentId?.profilePic || ""}
+                                        fullName={question?.studentId?.fullName || "Unkown User"}
+                                        date={question?.createdAt}
                                     />
                                     <Badge colorScheme="green">{question.status}</Badge>
                                 </Flex>
@@ -99,8 +99,8 @@ const ReplyDrawer = ({ onClose, isOpen }) => {
                                 <Divider my={4} borderColor={"#444"}/>
 
                                 <ReplyHeaderProfileSection
-                                    profilePic={question.professorId.profilePic}
-                                    fullName={question.professorId.fullName}
+                                    profilePic={question?.professorId?.profilePic || ""}
+                                    fullName={question?.professorId?.fullName || "Unknow User"}
                                     date={question.updatedAt}
                                 />
                                 <Flex alignItems={'center'} gap={3} mt={2}>
@@ -115,8 +115,8 @@ const ReplyDrawer = ({ onClose, isOpen }) => {
                             <Box key={question._id} {...QUESTION_BOX_STYLE}>
                                 <Flex {...FLEX_STYLE}>
                                     <ReplyHeaderProfileSection
-                                        profilePic={question.studentId.profilePic}
-                                        fullName={question.studentId.fullName}
+                                        profilePic={question?.studentId?.profilePic || ""}
+                                        fullName={question?.studentId?.fullName || "Unknow User"}
                                         date={question.createdAt}
                                     />
                                     <Badge colorScheme="red">Pending</Badge>
@@ -125,8 +125,8 @@ const ReplyDrawer = ({ onClose, isOpen }) => {
                                 <Flex alignItems={'center'} gap={3} mt={5}>
                                     <Text>To:</Text>
                                     <Flex alignItems={'center'} gap={2}>
-                                        <Avatar w={'30px'} height={'30px'} src={question.professorId.profilePic}/>
-                                        <Text {...TEXT_STYLE}>{question.professorId.fullName}</Text>
+                                        <Avatar w={'30px'} height={'30px'} src={question?.professorId?.profilePic || ""}/>
+                                        <Text {...TEXT_STYLE}>{question?.professorId?.fullName || "Unknow User"}</Text>
                                     </Flex>
                                 </Flex>
                             </Box>
@@ -148,9 +148,9 @@ export default ReplyDrawer
 export const ReplyHeaderProfileSection = ({ profilePic, fullName, date }) => {
     return (
         <Flex alignItems={'center'} gap={3}>
-            <Avatar w={'40px'} height={'40px'} src={profilePic} />
+            <Avatar w={'40px'} height={'40px'} src={profilePic || ""} />
             <Box>
-                <Text {...TEXT_STYLE} mb={-1}>{fullName}</Text>
+                <Text {...TEXT_STYLE} mb={-1}>{fullName || "Unknow User"}</Text>
                 <Text fontSize={'13px'} fontWeight={'400'} color={"#666"}>
                     {formatDistanceToNow(new Date(date))} ago
                 </Text>
