@@ -8,7 +8,7 @@ export default defineConfig({
     proxy: {
       "/api": {
         target: "https://learnix-backend-0k7c.onrender.com",
-        changeOrigin: true,
+        changeOrigin: true, 
         secure: false,
       }
     },
