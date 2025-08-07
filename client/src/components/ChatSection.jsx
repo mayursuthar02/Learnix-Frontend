@@ -65,6 +65,7 @@ const ChatSection = ({isDisableHelloButton}) => {
           navigate("/chats");
           return;
         }
+        console.log({Data: data.messages})
         setMessages(data.messages);
       } catch (error) {
         showToast("Error", error, "error");
@@ -96,10 +97,31 @@ const ChatSection = ({isDisableHelloButton}) => {
         showToast("Error", data.error, "error");
         return;
       }
-      navigate(`/chats/conversation/${data.newMessage?.conversationId}`)
+      const newConvId = data.newMessage?.conversationId;
+      if (!conversationId) {
+        navigate(`/chats/conversation/${data.newMessage?.conversationId}`)
+      }
       setIsScholaraActive(false);
-      setConversations((prev) => [data.conversation, ...prev]);
-      console.log(data)
+      setConversations((prev) => {
+      const conversationExists = prev.some(c => c._id === newConvId);
+
+      if (conversationExists) {
+        // Update title if conversation exists
+        return prev.map((conversation) =>
+          conversation._id === newConvId
+            ? {
+                ...conversation,
+                title: data.newMessage?.botResponse?.message || "",
+              }
+            : conversation
+        );
+      } else {
+        // Add new conversation if it doesn't exist
+        return [data.conversation, ...prev];
+      }
+      });
+
+      // console.log(data)
       setMessages((prev) => [...prev, data.newMessage]);
     } catch (error) {
       console.log(error);

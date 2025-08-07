@@ -228,7 +228,7 @@ const AiResponse = ({ message }) => {
         />
       </Tooltip>
 
-      <Tooltip {...TOOLTIP_STYLE} label={"Translate"}>
+      {/* <Tooltip {...TOOLTIP_STYLE} label={"Translate"}>
         <MotionIconButton
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -239,7 +239,7 @@ const AiResponse = ({ message }) => {
           icon={<MdOutlineTranslate />}
           // onClick={handleTranslation}
         />
-      </Tooltip>
+      </Tooltip> */}
 
       <Tooltip {...TOOLTIP_STYLE} label={"Copy"}>
         <MotionIconButton

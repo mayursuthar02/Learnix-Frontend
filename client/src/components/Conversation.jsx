@@ -30,7 +30,8 @@ const Conversation = ({ conversation, handleDeleteConversation, setIsDisableHell
   const {conversationId } = useParams();
 
   // ModifiedText
-  const modifiedText = conversation.title.length > 25 ? conversation.title.slice(0, 25) + "..." : conversation.title;
+  const modifiedText = conversation?.title?.length > 25 ? conversation?.title?.slice(0, 25) + "..." : conversation?.title;
+  // const modifiedText = conversation.title;
 
   return (
     <Tooltip label={modifiedText} {...TOOLTIP_STYLE} placement='right'>
@@ -55,7 +56,7 @@ const Conversation = ({ conversation, handleDeleteConversation, setIsDisableHell
         <Menu isLazy>
           <MenuButton as={IconButton} borderRadius={'full'} bg={'transparent'} icon={<SlOptionsVertical/>} border={"none"} color={"#333"} _hover={{bg: "#333", color: "#fff"}} _active={{bg: "#333", color: "#fff"}} transition={"color 0.3s ease, background 0.3s ease"} aria-label='Options' variant='outline'/>
           <MenuList bg={"#222"} border={"none"} borderRadius={"lg"} zIndex={3}>
-            <MenuItem {...MENUITEMS_STYLES}><IoMdShareAlt/> Share</MenuItem>
+            {/* <MenuItem {...MENUITEMS_STYLES}><IoMdShareAlt/> Share</MenuItem> */}
             <MenuItem {...MENUITEMS_STYLES} onClick={()=> handleDeleteConversation(conversation._id)}><MdDelete/> Delete</MenuItem>
           </MenuList>
         </Menu>

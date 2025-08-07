@@ -147,12 +147,12 @@ const ChatInput = ({conversationId, startConversation, isScholaraActive,setUserR
         <Box mb={5} pos={"relative"}>
             <form onSubmit={(e) => e.preventDefault()}>
                 <Flex alignItems={'end'} border={'1px solid #333'} gap={1} borderRadius={'30px'} p={1} w={'50vw'} transition={'width .5s ease-in-out'} minH={'50px'} className={isListening ? "input active" : "input"}>
-                    <Box>
+                    {/* <Box>
                       <Input type="file" hidden ref={fileRef} onChange={(e) => setFile(e.target.files[0])}/>
                       <Tooltip label={"Attachment"} {...TOOLTIP_STYLE}>
                         <IconButton borderRadius={'full'} onClick={() => {fileRef.current.click()}} {...BUTTON_STYLE} _active={{opacity: 0.7}} icon={<ImAttachment color="#fff" fontSize={'20px'} />} isDisabled={!isScholaraActive}/>
                       </Tooltip>
-                    </Box>
+                    </Box> */}
                   
                     <FormControl zIndex={3}>
                         <Textarea 
@@ -190,7 +190,7 @@ const ChatInput = ({conversationId, startConversation, isScholaraActive,setUserR
             </form>
 
             {/* Animation Text  */}
-            {!prompt && <Box pos={"absolute"} top={"13px"} left={"65px"} zIndex={1}>
+            {!prompt && <Box pos={"absolute"} top={"13px"} left={"20px"} zIndex={1}>
               <AnimatePresence mode="wait">
                 <motion.div key={currentIndex} initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} transition={{ duration: 0.5 }}>
                   <Text textAlign={'left'} fontSize={"15px"} fontWeight={"500"} color={"#555"} maxW={"520px"} overflow={"hidden"}>

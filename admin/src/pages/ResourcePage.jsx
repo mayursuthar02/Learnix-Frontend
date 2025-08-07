@@ -214,7 +214,7 @@ const ResourcePage = () => {
               DataMode === "timeTables" ? "Time Tables" : "Exam Papers"
               }/>
 
-              <TableContainer mt={3}>
+              <TableContainer mt={3} overflow={"scroll"}>
                 <Table>
                   <Thead>
                     <Tr>
@@ -257,7 +257,12 @@ const ResourcePage = () => {
                           <Td textTransform={'capitalize'}>{modifiedResourceTitle(resource?.title)}</Td>
 
                           {DataMode === "materials" ? (
-                            <Td textTransform={'capitalize'}>{resource?.subject}</Td>
+                            <Td textTransform={'capitalize'}>
+                              {
+                              // resource?.subject?.length
+                              resource?.subject?.length > 20 ? resource?.subject?.slice(0, 20) + "..." : resource?.subject
+                              }
+                              </Td>
                             ) : DataMode === "examDetails" || DataMode === "previousPapers" ? (
                               <Td textTransform={'capitalize'}>{resource?.examType}</Td>
                             ) :  (

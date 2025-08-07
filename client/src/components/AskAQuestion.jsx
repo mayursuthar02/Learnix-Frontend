@@ -102,6 +102,7 @@ const AskAQuestion = ({ isOpen, onClose }) => {
       onClose();
       setQuestion("");
       setProfessorId("");
+      setSelectedOption({fullName: "Select Professor"});
     } catch (error) {
       showToast("Error", "Something went wrong", "error");
       console.log(error);
@@ -135,7 +136,7 @@ const AskAQuestion = ({ isOpen, onClose }) => {
                         <Text fontSize={"16px"} fontWeight={"400"}>{selectedOption?.fullName}</Text>
                     </Flex>
                 </MenuButton>
-                <MenuList bg="#131313" borderColor="#222" maxH={'190px'} overflow={'scroll'}>
+                <MenuList bg="#131313" borderColor="#222" maxH={'275px'} overflow={'scroll'}>
                     {professorsList.map((option) => (
                     <MenuItem
                         w={'462px'}

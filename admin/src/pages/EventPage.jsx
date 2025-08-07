@@ -124,10 +124,10 @@ const EventPage = () => {
               </Box>
         
               <Flex position={'absolute'} top={'10px'} right={'10px'} zIndex={4} gap={2}>
-                {user._id === event?.userId?._id || user.role === "superAdmin" && <Tooltip label={"Edit"} zIndex={4} {...TOOLTIPS_STYLE}>
+                {user._id === event?.userId?._id && <Tooltip label={"Edit"} zIndex={4} {...TOOLTIPS_STYLE}>
                   <IconButton {...ICONBUTTON_STYLE} icon={<TbEdit fontSize={"18px"}/>} onClick={()=> {onOpen(); setModelMode("edit"); setEventEditId(event._id)}}/>
                 </Tooltip>}
-                {user._id === event?.userId?._id || user.role === "superAdmin" && <Tooltip label={"Delete"} zIndex={4} {...TOOLTIPS_STYLE}>
+                {user._id === event?.userId?._id && <Tooltip label={"Delete"} zIndex={4} {...TOOLTIPS_STYLE}>
                   <IconButton {...ICONBUTTON_STYLE} icon={<MdDelete fontSize={"18px"}/>} onClick={() => handleDelete(event._id)} isLoading={event._id === isDeleting}/>
                 </Tooltip>}
                 <Tooltip label={"See image"} zIndex={4} {...TOOLTIPS_STYLE}>
