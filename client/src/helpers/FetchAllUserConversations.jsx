@@ -1,7 +1,7 @@
 
 // Functions
 import { useRecoilState, useRecoilValue } from "recoil";
-import useShowToast from "../../../client/src/hooks/useShowToast";
+import useShowToast from "../hooks/useShowToast";
 import userConversationAtom from "../atoms/userConversationAtom";
 import userAtom from "../atoms/userAtom";
 
