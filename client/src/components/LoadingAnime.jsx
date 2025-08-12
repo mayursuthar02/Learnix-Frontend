@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react';
-import { keyframes } from '@chakra-ui/react';
+import { keyframes } from '@emotion/react';
 
 const loadingBar = keyframes`
   0% { transform: translateX(-100%) }
