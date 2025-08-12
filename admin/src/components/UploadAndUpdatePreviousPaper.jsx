@@ -9,6 +9,8 @@ import { GRADIENT_BUTTON_STYLE } from "../styles/globleStyles";
 import userAtom from "../atoms/userAtom";
 import { useRecoilValue } from "recoil";
   
+  // BASEURL
+  import { baseURL as BASEURL } from "../config/baseURL.js";
 
   const UploadAndUpdatePreviousPaper = ({ isOpen, onClose, modelMode, resourceIdForUpdate, getResources }) => {
   // State Management
@@ -58,7 +60,7 @@ import { useRecoilValue } from "recoil";
               setIsLoading((prev) => ({ ...prev, resource: true }));
       
               try {
-                const response = await fetch(`/api/previousPapers/getSinglePreviousPaperResource/${resourceIdForUpdate}`, {
+                const response = await fetch(`${BASEURL}/api/previousPapers/getSinglePreviousPaperResource/${resourceIdForUpdate}`, {
                   method: "GET",
                   headers: {
                     "Authorization": `Bearer ${user.token}`
@@ -105,8 +107,8 @@ import { useRecoilValue } from "recoil";
           resourceData.append("description", description);
       
           const endpoint = modelMode === "upload"
-            ? "/api/previousPapers/upload"
-            : `/api/previousPapers/update/${resourceIdForUpdate}`
+            ? `${BASEURL}/api/previousPapers/upload`
+            : `${BASEURL}/api/previousPapers/update/${resourceIdForUpdate}`
           const method = modelMode === "upload" ? "POST" : "PUT";
           const response = await fetch(endpoint, {
             method,

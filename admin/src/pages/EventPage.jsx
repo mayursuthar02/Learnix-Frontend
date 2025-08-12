@@ -21,6 +21,8 @@ import { useRecoilValue } from 'recoil';
 import userAtom from '../atoms/userAtom';
 import CustomHeading from '../components/Heading';
 
+  //BASEURL
+  import { baseURL as BASEURL } from "../config/baseURL.js";
 
 // STYLES
 const ICONBUTTON_STYLE = {
@@ -54,7 +56,7 @@ const EventPage = () => {
   const fetchAllEventsFunc = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch("/api/events/getAllEventsAdmin", {
+      const res = await fetch(`${BASEURL}/api/events/getAllEventsAdmin`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${user.token}`
@@ -82,7 +84,7 @@ const EventPage = () => {
   const handleDelete = async (eventId) => {
     setIsDeleting(eventId);
     try {
-      const response = await fetch(`/api/events/delete/${eventId}`, { 
+      const response = await fetch(`${BASEURL}/api/events/delete/${eventId}`, { 
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${user.token}`

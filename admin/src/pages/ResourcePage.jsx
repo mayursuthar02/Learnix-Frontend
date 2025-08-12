@@ -32,6 +32,9 @@ import CustomHeading from "../components/Heading";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 
+  //BASEURL
+  import { baseURL as BASEURL } from "../config/baseURL.js";
+
 
 // STYLES
 // -------------------------------------------------
@@ -85,7 +88,7 @@ const ResourcePage = () => {
   const [previousPaperResourceIdForUpdate, setPreviousPaperResourceIdForUpdate] = useState(null);
 
   const [isDeleteResource, setIsDeleteResource] = useState(null);
-  const [endpointDataMode, setEndpointDataMode] = useState("/api/resources/getResources");  
+  const [endpointDataMode, setEndpointDataMode] = useState(`${BASEURL}/api/resources/getResources`);  
   const [DataMode, setDataMode] = useState("materials");
 
   // Get All Data(Resource, ExamDetails, TimeTable, PreviousExamPapaer)
@@ -125,7 +128,7 @@ const ResourcePage = () => {
     }
     setIsDeleteResource(resourceId);
     try {
-      const response = await fetch(`/api/${endpointRoute}/delete/${resourceId}`, {
+      const response = await fetch(`${BASEURL}/api/${endpointRoute}/delete/${resourceId}`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${user.token}`
@@ -183,19 +186,19 @@ const ResourcePage = () => {
       {/* Tab Section For Materials, Exam Details, Time Table and Exam Paper */}
       <Tabs position='relative' variant='unstyled'>
         <TabList px={5}>
-          <Tab {...TABS_STYLE} onClick={() => {setEndpointDataMode("/api/resources/getResources"); setDataMode("materials")}}>
+          <Tab {...TABS_STYLE} onClick={() => {setEndpointDataMode(`${BASEURL}/api/resources/getResources`); setDataMode("materials")}}>
             <MdMenuBook />
             Materials
           </Tab>
-          <Tab {...TABS_STYLE} onClick={() => {setEndpointDataMode("/api/examDetails/getExamDetailsResources"); setDataMode("examDetails")}}>
+          <Tab {...TABS_STYLE} onClick={() => {setEndpointDataMode(`${BASEURL}/api/examDetails/getExamDetailsResources`); setDataMode("examDetails")}}>
             <LuNotebookText />
             Exam Details
           </Tab>
-          <Tab {...TABS_STYLE} onClick={() => {setEndpointDataMode("/api/timeTables/getTimeTableResources"); setDataMode("timeTables")}}>
+          <Tab {...TABS_STYLE} onClick={() => {setEndpointDataMode(`${BASEURL}/api/timeTables/getTimeTableResources`); setDataMode("timeTables")}}>
             <TbTableFilled />
             Time Tables
           </Tab>
-          <Tab {...TABS_STYLE} onClick={() => {setEndpointDataMode("/api/previousPapers/getPreviousPaperResources"); setDataMode("previousPapers")}}>
+          <Tab {...TABS_STYLE} onClick={() => {setEndpointDataMode(`${BASEURL}/api/previousPapers/getPreviousPaperResources`); setDataMode("previousPapers")}}>
             <CgNotes />
             Exam Papers
           </Tab>

@@ -7,6 +7,9 @@ import { GRADIENT_BUTTON_STYLE } from "../styles/globleStyles";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 
+// BASEURL
+import { baseURL as BASEURL } from "../config/baseURL.js";
+
 
 const UpdateUserDetails = ({ isOpen, onClose, userIdForUpdate, getAllUsers, profileType }) => {
     // State Management
@@ -31,7 +34,7 @@ const UpdateUserDetails = ({ isOpen, onClose, userIdForUpdate, getAllUsers, prof
                 setIsLoading((prev) => ({ ...prev, resource: true }));
 
                 try {
-                    const response = await fetch(`/api/users/fetchSingleUser/${userIdForUpdate}`, {
+                    const response = await fetch(`${BASEURL}/api/users/fetchSingleUser/${userIdForUpdate}`, {
                         method: "GET",
                         headers: {
                           "Authorization": `Bearer ${user.token}`
@@ -66,7 +69,7 @@ const UpdateUserDetails = ({ isOpen, onClose, userIdForUpdate, getAllUsers, prof
 
         try {
             console.log({fullName, email, role});
-            const response = await fetch(`/api/users/updateUserDetails/${userIdForUpdate}`, {
+            const response = await fetch(`${BASEURL}/api/users/updateUserDetails/${userIdForUpdate}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type":"application/json",

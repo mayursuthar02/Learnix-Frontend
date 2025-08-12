@@ -19,6 +19,10 @@ import { GRADIENT_BUTTON_STYLE, TOOLTIPS_STYLE } from "../styles/globleStyles";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 
+// BASEURL
+import { baseURL as BASEURL } from "../config/baseURL.js";
+
+
 // STYLES
 const INPUT_ICON_STYLES = {
     position: "absolute",
@@ -77,7 +81,7 @@ const SearchUsersModel = ({isOpen, onClose, fetchData}) => {
         setLoading(true);
     
         try {
-            const res = await fetch(`/api/users/searchUsers/${value}`, {
+            const res = await fetch(`${BASEURL}/api/users/searchUsers/${value}`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${user.token}`
@@ -122,7 +126,7 @@ const SearchUsersModel = ({isOpen, onClose, fetchData}) => {
         setLoading(true);
         try {
             const members = selectedMembers.map(member => member._id);
-            const response = await fetch("/api/userChats/createGroupConversation", {
+            const response = await fetch(`${BASEURL}/api/userChats/createGroupConversation`, {
                 method: "POST",
                 headers: {
                     "Content-Type" : "application/json",

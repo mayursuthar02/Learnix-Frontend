@@ -8,6 +8,9 @@ import { useEffect } from "react";
 import { GRADIENT_BUTTON_STYLE } from "../styles/globleStyles";
 import userAtom from "../atoms/userAtom";
 import { useRecoilValue } from "recoil";
+
+  // BASEURL
+  import { baseURL as BASEURL } from "../config/baseURL.js";
   
 
   const UploadAndUpdateTimeTable = ({ isOpen, onClose, modelMode, resourceIdForUpdate, getResources }) => {
@@ -60,7 +63,7 @@ import { useRecoilValue } from "recoil";
               setIsLoading((prev) => ({ ...prev, resource: true }));
       
               try {
-                const response = await fetch(`/api/timeTables/getSingleTimeTableResource/${resourceIdForUpdate}`, {
+                const response = await fetch(`${BASEURL}/api/timeTables/getSingleTimeTableResource/${resourceIdForUpdate}`, {
                   method: "GET",
                   headers: {
                     "Authorization": `Bearer ${user.token}`
@@ -107,8 +110,8 @@ import { useRecoilValue } from "recoil";
           resourceData.append("description", description);
       
           const endpoint = modelMode === "upload"
-            ? "/api/timeTables/upload"
-            : `/api/timeTables/update/${resourceIdForUpdate}`
+            ? `${BASEURL}/api/timeTables/upload`
+            : `${BASEURL}/api/timeTables/update/${resourceIdForUpdate}`
           const method = modelMode === "upload" ? "POST" : "PUT";
           const response = await fetch(endpoint, {
             method,

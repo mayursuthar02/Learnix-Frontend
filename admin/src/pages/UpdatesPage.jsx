@@ -24,6 +24,9 @@ import CustomHeading from "../components/Heading";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 
+  //BASEURL
+  import { baseURL as BASEURL } from "../config/baseURL.js";
+
 const UpdatesPage = () => {
   // Functions
   const showToast = useShowToast();
@@ -40,7 +43,7 @@ const UpdatesPage = () => {
   const getUpdates = async () => {
     setLoading(true);
     try {
-      const response = await fetch("/api/updates/getRequestingUserUpdates", {
+      const response = await fetch(`${BASEURL}/api/updates/getRequestingUserUpdates`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${user.token}`
@@ -71,7 +74,7 @@ const UpdatesPage = () => {
     }
     setIsDeleteUpdate(updateId);
     try {
-      const response = await fetch(`/api/updates/deleteUpdate/${updateId}`, {
+      const response = await fetch(`${BASEURL}/api/updates/deleteUpdate/${updateId}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${user.token}` }
       });

@@ -15,6 +15,8 @@ import CustomHeading from "../components/Heading";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 
+  //BASEURL
+  import { baseURL as BASEURL } from "../config/baseURL.js";
 
 // STYLES
 const TABS_STYLE = {fontWeight : "500", fontSize : "20px", color : "#222"}
@@ -35,7 +37,7 @@ const QuestionsPage = () => {
   const getProfessorQuestions = async () => {
     setIsQuestionsLoading(true);
     try {
-      const response = await fetch("/api/questions/getProfessorQuestions", {
+      const response = await fetch(`${BASEURL}/api/questions/getProfessorQuestions`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${user.token}`
@@ -77,7 +79,7 @@ const QuestionsPage = () => {
     }
     setIsReplying(questionId);
     try {
-      const response = await fetch(`/api/questions/replyQuestion/${questionId}`, {
+      const response = await fetch(`${BASEURL}/api/questions/replyQuestion/${questionId}`, {
         method: "PUT",
         headers: {
           "Content-Type" : "application/json",

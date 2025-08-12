@@ -6,6 +6,9 @@ import "./App.css";
 import { useEffect } from "react";
 import useShowToast from "./hooks/useShowToast";
 
+  //BASEURL
+  import { baseURL as BASEURL } from "./config/baseURL.js";
+
 const App = () => {
   const navigate = useNavigate();
   const showToast = useShowToast();
@@ -34,7 +37,7 @@ const App = () => {
       const token = storedData.token;
 
       try {
-        const response = await fetch("/api/auth/check", {
+        const response = await fetch(`${BASEURL}/api/auth/check`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

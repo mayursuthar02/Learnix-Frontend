@@ -10,6 +10,9 @@ import {useRecoilState} from 'recoil';
 import userAtom from '../atoms/userAtom';
 import { GRADIENT_BUTTON_STYLE } from '../styles/globleStyles';
 
+  //BASEURL
+  import { baseURL as BASEURL } from "../config/baseURL.js";
+
 
 const LoginPage = () => {
   const showToast = useShowToast(); //For toast
@@ -31,7 +34,7 @@ const LoginPage = () => {
     }
     setIsLoading(true);
     try {
-      const ressponse = await fetch('/api/auth/admin-login', {
+      const ressponse = await fetch(`${BASEURL}/api/auth/admin-login`, {
         method: "POST",
         headers: {"Content-Type":"application/json"},
         body: JSON.stringify({email, password})

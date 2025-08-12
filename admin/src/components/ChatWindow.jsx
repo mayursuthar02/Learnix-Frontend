@@ -44,6 +44,9 @@ import TypingIndicator from "./TypingIndicator";
 import userConversationAtom from "../atoms/userConversationAtom";
 import useUploadImage from "../hooks/useUploadImage";
 
+// BASEURL
+import { baseURL as BASEURL } from "../config/baseURL.js";
+
 
 // Main Function
 const ChatWindow = () => {
@@ -164,7 +167,7 @@ const ChatWindow = () => {
       setMessageLoading(true);
       setMessages([]);
       try {
-        const response = await fetch(`/api/userMessages/${selectedUserConversation._id}`, {
+        const response = await fetch(`${BASEURL}/api/userMessages/${selectedUserConversation._id}`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${user.token}`
@@ -193,7 +196,7 @@ const ChatWindow = () => {
   const sendMessage = async(e) => {
     if ((e.type === "click" || (e.key === "Enter" && newMessage)) && (newMessage || uploadImage))  {
       try {
-        const response = await fetch("/api/userMessages/sendMessage", {
+        const response = await fetch(`${BASEURL}/api/userMessages/sendMessage`, {
           method: "POST",
           headers: {
             "Content-Type" : "application/json",

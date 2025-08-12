@@ -9,6 +9,9 @@ import { useState } from "react";
 import userConversationAtom from "../atoms/userConversationAtom";
 import selectedUserConversationAtom from "../atoms/selectedUserConversationAtom";
 
+// BASEURL
+import { baseURL as BASEURL } from "../config/baseURL.js";
+
 const ConversationDetailedDrawer = ({ isOpen, onClose, conversation }) => {
   const [loading, setLoading] = useState(false);
   const user = useRecoilValue(userAtom);
@@ -19,7 +22,7 @@ const ConversationDetailedDrawer = ({ isOpen, onClose, conversation }) => {
   const deleteConversation = async() => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/userChats/deleteGroupConversation`, {
+      const res = await fetch(`${BASEURL}/api/userChats/deleteGroupConversation`, {
         method: "POST",
         headers: {
             "Authorization": `Bearer ${user.token}`,

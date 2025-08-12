@@ -20,6 +20,9 @@ import {
   import { GRADIENT_BUTTON_STYLE } from "../styles/globleStyles";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
+
+// BASEURL
+import { baseURL as BASEURL } from "../config/baseURL.js";
   
   const AddAndEditFAQ = ({ isOpen, onClose, modelMode, FAQIdForEdit, getFAQs}) => {
     // State Management
@@ -40,7 +43,7 @@ import userAtom from "../atoms/userAtom";
           setIsLoading((prev) => ({ ...prev, fetch: true }));
           try {
             const response = await fetch(
-              `/api/FAQs/getSingleFAQ/${FAQIdForEdit}`, {
+              `${BASEURL}/api/FAQs/getSingleFAQ/${FAQIdForEdit}`, {
                 method: "GET",
                 headers: {
                   "Authorization": `Bearer ${user.token}`
@@ -80,8 +83,8 @@ import userAtom from "../atoms/userAtom";
         const updateData = { title, description };
         const endpoint =
           modelMode === "add"
-            ? "/api/FAQs/addFAQ"
-            : `/api/FAQs/editFAQ/${FAQIdForEdit}`;
+            ? `${BASEURL}/api/FAQs/addFAQ`
+            : `${BASEURL}/api/FAQs/editFAQ/${FAQIdForEdit}`;
         const method = modelMode === "add" ? "POST" : "PUT";
   
         const response = await fetch(endpoint, {

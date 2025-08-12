@@ -9,6 +9,10 @@ import { GRADIENT_BUTTON_STYLE } from "../styles/globleStyles";
 import userAtom from "../atoms/userAtom";
 import { useRecoilValue } from "recoil";
   
+  // BASEURL
+  import { baseURL as BASEURL } from "../config/baseURL.js";
+
+
 
   const UploadAndUpdateResource = ({ isOpen, onClose, modelMode, resourceIdForUpdate, getResources }) => {
   // State Management
@@ -49,7 +53,7 @@ import { useRecoilValue } from "recoil";
               setIsLoading((prev) => ({ ...prev, resource: true }));
       
               try {
-                const response = await fetch(`/api/resources/getSingleResource/${resourceIdForUpdate}`, {
+                const response = await fetch(`${BASEURL}/api/resources/getSingleResource/${resourceIdForUpdate}`, {
                   method: "GET",
                   headers: {
                     "Authorization": `Bearer ${user.token}`
@@ -95,7 +99,7 @@ import { useRecoilValue } from "recoil";
           uploadData.append("resourceLink", resourceLink);
           uploadData.append("note", note);
     
-          const response = await fetch("/api/resources/upload", {
+          const response = await fetch(`${BASEURL}/api/resources/upload`, {
             method: "POST",
             headers: {
               "Authorization": `Bearer ${user.token}`
@@ -139,7 +143,7 @@ import { useRecoilValue } from "recoil";
             updateData.append("resourceLink", resourceLink);
             updateData.append("note", note);
     
-          const response = await fetch(`/api/resources/update/${resourceIdForUpdate}`, {
+          const response = await fetch(`${BASEURL}/api/resources/update/${resourceIdForUpdate}`, {
             method: 'PUT',
             headers: {
               "Authorization": `Bearer ${user.token}`

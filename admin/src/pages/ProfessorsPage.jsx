@@ -27,6 +27,9 @@ import {
 import { BUTTON_ICON_STYLE, TOOLTIPS_STYLE } from "../styles/globleStyles";
 import DataLoadingSpinner from "../components/DataLoadingSpinner";
 import CustomHeading from "../components/Heading";
+
+  //BASEURL
+  import { baseURL as BASEURL } from "../config/baseURL.js";
   
   const ProfessorsPage = () => {
     const headerCell = [
@@ -52,7 +55,7 @@ import CustomHeading from "../components/Heading";
     const getAllUsers = async () => {
       setDataLoading(true);
       try {
-        const response = await fetch("/api/users/getAllProfessors", {
+        const response = await fetch(`${BASEURL}/api/users/getAllProfessors`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${admin.token}`
@@ -81,7 +84,7 @@ import CustomHeading from "../components/Heading";
       }
       setIsLoading(userId);
       try {
-        const response = await fetch(`/api/users/update-role/${userId}`, {
+        const response = await fetch(`${BASEURL}/api/users/update-role/${userId}`, {
           method: "PUT",
           headers: {
             "Content-Type":"application/json",
@@ -115,7 +118,7 @@ import CustomHeading from "../components/Heading";
       }
       setIsDeletingUserLoading(userId);
       try {
-        const response = await fetch(`/api/users/delete-user/${userId}`, {
+        const response = await fetch(`${BASEURL}/api/users/delete-user/${userId}`, {
           method: "DELETE",
           headers: {
             "Authorization": `Bearer ${admin.token}`

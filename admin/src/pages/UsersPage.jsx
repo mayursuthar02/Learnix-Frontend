@@ -29,6 +29,9 @@ import { MdDelete } from "react-icons/md";
 // Styles
 import { BUTTON_ICON_STYLE, TOOLTIPS_STYLE } from "../styles/globleStyles";
 
+  //BASEURL
+  import { baseURL as BASEURL } from "../config/baseURL.js";
+
 
 const UsersPage = () => {
   const headerCell = [
@@ -54,7 +57,7 @@ const UsersPage = () => {
   const getAllUsers = async () => {
     setDataLoading(true);
     try {
-      const response = await fetch("/api/users/getAllStudents", {
+      const response = await fetch(`${BASEURL}/api/users/getAllStudents`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${admin.token}`
@@ -84,7 +87,7 @@ const UsersPage = () => {
     }
     setIsDeletingUserLoading(userId);
     try {
-      const response = await fetch(`/api/users/delete-user/${userId}`, {
+      const response = await fetch(`${BASEURL}/api/users/delete-user/${userId}`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${admin.token}`

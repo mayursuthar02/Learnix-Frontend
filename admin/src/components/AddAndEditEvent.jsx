@@ -32,6 +32,9 @@ import { useRef } from "react";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 
+// BASEURL
+import { baseURL as BASEURL } from "../config/baseURL.js";
+
 
 // MAIN FUNCTION  
 const AddAndEditEvent = ({ isOpen, onClose, modelMode, eventEditId, getData, setEventEditId}) => {
@@ -64,7 +67,7 @@ const AddAndEditEvent = ({ isOpen, onClose, modelMode, eventEditId, getData, set
           setIsLoading((prev) => ({ ...prev, fetch: true }));
           try {
             const response = await fetch(
-              `/api/events/getSingleEvent/${eventEditId}`, {
+              `${BASEURL}/api/events/getSingleEvent/${eventEditId}`, {
                 method: "GET",
                 headers: {
                   "Authorization": `Bearer ${user.token}`
@@ -103,8 +106,8 @@ const AddAndEditEvent = ({ isOpen, onClose, modelMode, eventEditId, getData, set
         const updateData = { title, description, eventDate, image: imgUrl };
         const endpoint =
           modelMode === "add"
-            ? "/api/events/add"
-            : `/api/events/edit/${eventEditId}`;
+            ? `${BASEURL}/api/events/add`
+            : `${BASEURL}/api/events/edit/${eventEditId}`;
         const method = modelMode === "add" ? "POST" : "PUT";
   
         const response = await fetch(endpoint, {

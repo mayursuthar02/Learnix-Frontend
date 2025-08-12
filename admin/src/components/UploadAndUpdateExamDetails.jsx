@@ -8,6 +8,9 @@ import { useEffect } from "react";
 import { GRADIENT_BUTTON_STYLE } from "../styles/globleStyles";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
+
+// BASEURL
+import { baseURL as BASEURL } from "../config/baseURL.js";
   
 
   const UploadAndUpdateExamDetails = ({ isOpen, onClose, modelMode, resourceIdForUpdate, getResources }) => {
@@ -58,7 +61,7 @@ import userAtom from "../atoms/userAtom";
               setIsLoading((prev) => ({ ...prev, resource: true }));
       
               try {
-                const response = await fetch(`/api/examDetails/getSingleExamDetailsResource/${resourceIdForUpdate}`, {
+                const response = await fetch(`${BASEURL}/api/examDetails/getSingleExamDetailsResource/${resourceIdForUpdate}`, {
                   method: "GET",
                   headers: {
                     "Authorization": `Bearer ${user.token}`
@@ -105,8 +108,8 @@ import userAtom from "../atoms/userAtom";
           resourceData.append("description", description);
       
           const endpoint = modelMode === "upload"
-            ? "/api/examDetails/upload"
-            : `/api/examDetails/update/${resourceIdForUpdate}`
+            ? `${BASEURL}/api/examDetails/upload`
+            : `${BASEURL}/api/examDetails/update/${resourceIdForUpdate}`
           const method = modelMode === "upload" ? "POST" : "PUT";
           const response = await fetch(endpoint, {
             method,

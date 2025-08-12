@@ -13,6 +13,9 @@ import CustomHeading from "../components/Heading";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 
+  //BASEURL
+  import { baseURL as BASEURL } from "../config/baseURL.js";
+
 
 const FAQsPage = () => {
   // Functions
@@ -30,7 +33,7 @@ const FAQsPage = () => {
     const getFAQs = async () => {
       setLoading(true);
       try {
-        const response = await fetch("/api/FAQs/getRequestingUserFAQs", {
+        const response = await fetch(`${BASEURL}/api/FAQs/getRequestingUserFAQs`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${user.token}`
@@ -62,7 +65,7 @@ const FAQsPage = () => {
     }
     setIsDeleteFAQ(FAQId);
     try {
-      const response = await fetch(`/api/FAQs/deleteFAQ/${FAQId}`, {
+      const response = await fetch(`${BASEURL}/api/FAQs/deleteFAQ/${FAQId}`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${user.token}`

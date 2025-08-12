@@ -28,6 +28,10 @@ import { useRef, useState } from "react";
 import useShowToast from "../hooks/useShowToast";
 import { GRADIENT_BUTTON_STYLE, TOOLTIPS_STYLE } from "../styles/globleStyles";
 
+// BASEURL
+import { baseURL as BASEURL } from "../config/baseURL.js";
+
+
 export default function UpdateProfile({ isOpen, onClose }) {
     // State
     const [user, setUser] = useRecoilState(userAtom);
@@ -45,7 +49,7 @@ export default function UpdateProfile({ isOpen, onClose }) {
       const updateUserProfile = async() => {
         setIsLoading(true);
         try {
-          const response = await fetch('/api/users/updateAdminUserProfile', {
+          const response = await fetch(`${BASEURL}/api/users/updateAdminUserProfile`, {
             method: "PUT",
             headers: {
               "Content-Type" : "application/json",

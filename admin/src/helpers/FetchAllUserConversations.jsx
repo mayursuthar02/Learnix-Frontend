@@ -5,6 +5,9 @@ import useShowToast from "../hooks/useShowToast";
 import userConversationAtom from "../atoms/userConversationAtom";
 import userAtom from "../atoms/userAtom";
 
+  //BASEURL
+  import { baseURL as BASEURL } from "../config/baseURL.js";
+
 const FetchAllUserConversations = () => {
     // Functions
     const showToast = useShowToast();
@@ -16,7 +19,7 @@ const FetchAllUserConversations = () => {
     // Fetch
     const fetchAllUserConversationsFunc = async () => {
         try {
-          const res = await fetch("/api/userChats/getAllUserConversation", {
+          const res = await fetch(`${BASEURL}/api/userChats/getAllUserConversation`, {
             method: "POST",
             headers: {
               "Content-Type":"application/json",

@@ -20,6 +20,9 @@ import { GRADIENT_BUTTON_STYLE } from "../styles/globleStyles";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 
+// BASEURL
+import { baseURL as BASEURL } from "../config/baseURL.js";
+
 const AddAndEditUpdate = ({ isOpen, onClose, modelMode, updateIdForEdit, getUpdates}) => {
   // State Management
   const [isLoading, setIsLoading] = useState({ submit: false, fetch: false });
@@ -38,7 +41,7 @@ const AddAndEditUpdate = ({ isOpen, onClose, modelMode, updateIdForEdit, getUpda
       const fetchUpdate = async () => {
         setIsLoading((prev) => ({ ...prev, fetch: true }));
         try {
-          const response = await fetch(`/api/updates/getSingleUpdate/${updateIdForEdit}`, {
+          const response = await fetch(`${BASEURL}/api/updates/getSingleUpdate/${updateIdForEdit}`, {
             method: "GET",
             headers: {
               "Authorization": `Bearer ${user.token}`
@@ -77,8 +80,8 @@ const AddAndEditUpdate = ({ isOpen, onClose, modelMode, updateIdForEdit, getUpda
       const updateData = { title, description };
       const endpoint =
         modelMode === "add"
-          ? "/api/updates/addUpdate"
-          : `/api/updates/editUpdate/${updateIdForEdit}`;
+          ? `${BASEURL}/api/updates/addUpdate`
+          : `${BASEURL}/api/updates/editUpdate/${updateIdForEdit}`;
       const method = modelMode === "add" ? "POST" : "PUT";
 
       const response = await fetch(endpoint, {
