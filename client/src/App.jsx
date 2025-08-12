@@ -7,7 +7,7 @@ import { useRecoilState } from "recoil";
 import userAtom from "./atoms/userAtom";
 
 // BASEURL
-import { baseURL as BASEURL } from "../config/baseURL.js";
+import { baseURL as BASEURL } from "./config/baseURL.js";
 
 const App = () => {
   const navigate = useNavigate();
