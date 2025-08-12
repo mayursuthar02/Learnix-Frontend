@@ -8,7 +8,7 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     // Initialize Socket.IO connection
-    const newSocket = io("http://localhost:5000", {
+    const newSocket = io("https://learnix-backend-0k7c.onrender.com", {
       // withCredentials: true,
       // transports: ["websocket"]
     });
