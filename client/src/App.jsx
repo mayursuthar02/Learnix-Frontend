@@ -64,7 +64,7 @@ const App = () => {
   const handleLogout = () => {
     localStorage.removeItem("learnixUserDetails");
     setUser(null);
-    navigate("/login");
+    navigate("/");
   };
 
   return <Layout />;
