@@ -22,6 +22,9 @@ import { GRADIENT_BUTTON_STYLE, TOOLTIP_STYLE } from "../styles/globleStyles";
 import conversationAtom from "../atoms/conversationAtom";
 import { languages } from "../data/textsForAnimation";
 
+// BASEURL
+import { baseURL as BASEURL } from "../config/baseURL.js";
+
 // MAIN FUNCTION
 const ChatSection = ({isDisableHelloButton}) => {
   // State
@@ -55,7 +58,7 @@ const ChatSection = ({isDisableHelloButton}) => {
       setMessages([]);
       setBotResponseLoading(true);
       try {
-        const response = await fetch(`/api/messages/getMessages/${conversationId}`, {
+        const response = await fetch(`${BASEURL}/api/messages/getMessages/${conversationId}`, {
           method: "GET",
           headers: { "Authorization": `Bearer ${user.token}` }
         });
@@ -84,7 +87,7 @@ const ChatSection = ({isDisableHelloButton}) => {
   const startConversation = async() => {
     setBotResponseLoading(true);
     try {
-      const response = await fetch('/api/chats/start', {
+      const response = await fetch(`${BASEURL}/api/chats/start`, {
         method: "POST",
         headers: {
           "Content-Type" : "application/json",
@@ -135,7 +138,7 @@ const ChatSection = ({isDisableHelloButton}) => {
   const activateScholara = async(prompt) => {
     setBotResponseLoading(true);
     try {
-      const response = await fetch(`/api/chats/activateScholara`, {
+      const response = await fetch(`${BASEURL}/api/chats/activateScholara`, {
         method: "POST",
         headers: {
           "Content-Type" : "application/json",

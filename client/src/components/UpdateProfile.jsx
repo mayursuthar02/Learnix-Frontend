@@ -33,6 +33,8 @@ import useShowToast from "../hooks/useShowToast";
 // STYLES
 import { GRADIENT_BUTTON_STYLE, BUTTON_STYLE, INPUT_STYLE, TOOLTIP_STYLE } from "../styles/globleStyles";
 
+// BASEURL
+import { baseURL as BASEURL } from "../config/baseURL.js";
 
 
 export default function UpdateProfile({ isOpen, onClose }) {
@@ -52,7 +54,7 @@ export default function UpdateProfile({ isOpen, onClose }) {
     const updateUserProfile = async() => {
       setIsLoading(true);
       try {
-        const response = await fetch('/api/users/updateUserProfile', {
+        const response = await fetch(`${BASEURL}/api/users/updateUserProfile`, {
           method: "PUT",
           headers: {
             "Content-Type" : "application/json",

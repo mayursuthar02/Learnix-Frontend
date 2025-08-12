@@ -32,6 +32,9 @@ import { BUTTON_STYLE, GRADIENT_BUTTON_STYLE } from "../styles/globleStyles";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 
+// BASEURL
+import { baseURL as BASEURL } from "../config/baseURL.js";
+
 
 // MAIN FUNCTIONS
 const AskAQuestion = ({ isOpen, onClose }) => {
@@ -51,7 +54,7 @@ const AskAQuestion = ({ isOpen, onClose }) => {
       const getAdminProfessors = async () => {
         setIsProfessorsLoading(true);
         try {
-          const response = await fetch('/api/users/getAdminProfessors', {
+          const response = await fetch(`${BASEURL}/api/users/getAdminProfessors`, {
             method: "GET",
             headers: {
               "Authorization": `Bearer ${user.token}`
@@ -85,7 +88,7 @@ const AskAQuestion = ({ isOpen, onClose }) => {
     
     setIsSubmiting(true);
     try {
-      const response = await fetch("/api/questions/ask-a-question", {
+      const response = await fetch(`${BASEURL}/api/questions/ask-a-question`, {
         method: "POST",
         headers: {
           "Content-Type" : "application/json",

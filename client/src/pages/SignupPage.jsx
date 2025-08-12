@@ -13,6 +13,9 @@ import useShowToast from '../hooks/useShowToast';
 // Styles
 import {BUTTON_STYLE, GRADIENT_BUTTON_STYLE, INPUT_STYLE, TOOLTIP_STYLE} from '../styles/globleStyles'
 
+// BASEURL
+import { baseURL as BASEURL } from "../config/baseURL.js";
+
 const SignupPage = () => {
   // Functions
   const showToast = useShowToast(); //For toast
@@ -62,7 +65,7 @@ const SignupPage = () => {
       if (profileType === "student") {
         userData.studentRollNo = studentRollNo;
       }
-      const response = await fetch("/api/auth/signup", {
+      const response = await fetch(`${BASEURL}/api/auth/signup`, {
         method: "POST",
         headers: {"Content-Type":"application/json"},
         body: JSON.stringify(userData)

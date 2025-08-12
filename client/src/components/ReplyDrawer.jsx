@@ -8,6 +8,9 @@ import { BiLock } from "react-icons/bi";
 import useShowToast from "../hooks/useShowToast";
 import userAtom from "../atoms/userAtom";
 
+// BASEURL
+import { baseURL as BASEURL } from "../config/baseURL.js";
+
 // STYLES 
 // --------------------------------
 const QUESTION_TITLE_STYLE = {
@@ -44,7 +47,7 @@ const ReplyDrawer = ({ onClose, isOpen }) => {
     const getUserReplies = async () => {
         setIsQuestionsLoading(true);
         try {
-          const response = await fetch("/api/questions/getUserReplies", {
+          const response = await fetch(`${BASEURL}/api/questions/getUserReplies`, {
             method: "GET",
             headers: { "Authorization": `Bearer ${user.token}` }
           });

@@ -32,6 +32,9 @@ import HandleUserLogout from "../helpers/HandleUserLogout"
 // Styles
 import { BUTTON_STYLE, TOOLTIP_STYLE } from "../styles/globleStyles";
 
+// BASEURL
+import { baseURL as BASEURL } from "../config/baseURL.js";
+
 const FAQsPage = () => {
     // State
   const [user, setUser] = useRecoilState(userAtom);
@@ -45,7 +48,7 @@ const FAQsPage = () => {
     const getAllFAQs = async () => {
       setIsLoading(true);
         try {
-            const resposne = await fetch("/api/FAQs/getAllFAQs", {
+            const resposne = await fetch(`${BASEURL}/api/FAQs/getAllFAQs`, {
               method: "GET",
               headers: {"Authorization": `Bearer ${user.token}`}
             });

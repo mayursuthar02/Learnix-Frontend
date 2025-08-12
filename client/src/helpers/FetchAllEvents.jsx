@@ -3,6 +3,9 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import eventsAtom from "../atoms/eventsAtom";
 import userAtom from "../atoms/userAtom";
 
+// BASEURL
+import { baseURL as BASEURL } from "../config/baseURL.js";
+
 const FetchAllEvents = () => {
   const [events, setEvents] = useRecoilState(eventsAtom);
   const showToast = useShowToast();
@@ -10,7 +13,7 @@ const FetchAllEvents = () => {
 
   const fetchAllEventsFunc = async () => {
     try {
-      const res = await fetch("/api/events/getAllEvents", {
+      const res = await fetch(`${BASEURL}/api/events/getAllEvents`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${user.token}`

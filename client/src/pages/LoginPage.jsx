@@ -14,6 +14,9 @@ import { Link as RouterLink, useNavigate} from 'react-router-dom';
 // Styles
 import { GRADIENT_BUTTON_STYLE, INPUT_STYLE } from '../styles/globleStyles';
 
+// BASEURL
+import { baseURL as BASEURL } from "../config/baseURL.js";
+
 
 const LoginPage = () => {
   const showToast = useShowToast(); //For toast
@@ -35,7 +38,7 @@ const LoginPage = () => {
     }
     setIsLoading(true);
     try {
-      const ressponse = await fetch('/api/auth/login', {
+      const ressponse = await fetch(`${BASEURL}/api/auth/login`, {
         method: "POST",
         headers: {"Content-Type":"application/json"},
         body: JSON.stringify({email, password})

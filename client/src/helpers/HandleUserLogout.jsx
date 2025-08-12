@@ -4,6 +4,8 @@ import { useRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
 import { useNavigate } from "react-router-dom";
 
+
+
 const HandleUserLogout = () => {
     const [user, setUser] = useRecoilState(userAtom);
       const [loading, setLoading] = useState(false);

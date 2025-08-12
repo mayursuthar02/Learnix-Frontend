@@ -14,6 +14,9 @@ import conversationAtom from "../atoms/conversationAtom.js";
 import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom.js";
 
+// BASEURL
+import { baseURL as BASEURL } from "../config/baseURL.js";
+
 
 const ConversationHistoryTabs = ({ setIsDisableHelloButton}) => {
   // States
@@ -28,7 +31,7 @@ const ConversationHistoryTabs = ({ setIsDisableHelloButton}) => {
   useEffect(()=> {
     const getConversations = async() => {
       try {
-        const response = await fetch("/api/conversations/getConversations", {
+        const response = await fetch(`${BASEURL}/api/conversations/getConversations`, {
           method: "GET",
           headers: { "Authorization": `Bearer ${user.token}` }
         });
@@ -51,7 +54,7 @@ const ConversationHistoryTabs = ({ setIsDisableHelloButton}) => {
   // Delete Conversation
   const handleDeleteConversation = async(conversation_Id) => {
     try {
-      const response = await fetch(`/api/conversations/deleteConversation/${conversation_Id}`, {
+      const response = await fetch(`${BASEURL}/api/conversations/deleteConversation/${conversation_Id}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${user.token}` }
       });

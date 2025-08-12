@@ -20,6 +20,9 @@ import { placeholderTexts } from "../data/textsForAnimation";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 
+// BASEURL
+import { baseURL as BASEURL } from "../config/baseURL.js";
+
 
 // MAIN FUNCTION
 const ChatInput = ({conversationId, startConversation, isScholaraActive,setUserReplyLoading, activateScholara, setMessages, botResponseLoading}) => {
@@ -58,7 +61,7 @@ const ChatInput = ({conversationId, startConversation, isScholaraActive,setUserR
       
       setUserReplyLoading(true);
       try {
-        const response = await fetch(`/api/messages/userPrompt`, {
+        const response = await fetch(`${BASEURL}/api/messages/userPrompt`, {
           method: "POST",
           headers: {
             "Content-Type" : "application/json",

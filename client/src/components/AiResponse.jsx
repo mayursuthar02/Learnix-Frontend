@@ -21,6 +21,8 @@ import { BUTTON_STYLE, TOOLTIP_STYLE } from "../styles/globleStyles.js";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom.js";
 
+// BASEURL
+import { baseURL as BASEURL } from "../config/baseURL.js";
 
 // Create a motion component for the Box
 const MotionBox = motion(Box);
@@ -65,7 +67,7 @@ const AiResponse = ({ message }) => {
   const userLikeDislikeResponse = async(goodOrBad) => {
     setIsLoading(goodOrBad);
     try {
-      const response = await fetch(`/api/messages/userLikeDislikeResponse/${message._id}`, {
+      const response = await fetch(`${BASEURL}/api/messages/userLikeDislikeResponse/${message._id}`, {
         method: "POST",
         headers: {
           "Content-Type":"application/json",
@@ -111,7 +113,7 @@ const AiResponse = ({ message }) => {
       // Function to play audio chunks sequentially
       const playAudioChunks = async (chunks) => {
         for (const chunk of chunks) {
-          const response = await fetch('/api/chats/textToSpeech', {
+          const response = await fetch(`${BASEURL}/api/chats/textToSpeech`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

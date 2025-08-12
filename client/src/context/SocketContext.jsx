@@ -1,6 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
+// BASEURL
+import { baseURL as BASEURL } from "../config/baseURL";
+
 const SocketContext = createContext();
 
 export const SocketProvider = ({ children }) => {
@@ -8,7 +11,7 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     // Initialize Socket.IO connection
-    const newSocket = io("http://localhost:5000", {
+    const newSocket = io(`${BASEURL}`, {
       // withCredentials: true,
       // transports: ["websocket"]
     });

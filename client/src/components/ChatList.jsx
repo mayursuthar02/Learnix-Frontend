@@ -18,6 +18,8 @@ import userAtom from "../atoms/userAtom";
 import conversationAtom from "../atoms/conversationAtom";
 import { useParams } from "react-router-dom";
 
+// BASEURL
+import { baseURL as BASEURL } from "../config/baseURL.js";
 
 // STYLE
 const AVATAR_STYLES = { objectFit : "cover", w : "40px", h : "40px" }
@@ -39,7 +41,7 @@ const ChatList = ({botResponseLoading, setBotResponseLoading, messages, setMessa
     async (apiRoute) => {
       setBotResponseLoading(true);
       try {
-        const response = await fetch(`/api/chats${apiRoute}`, {
+        const response = await fetch(`${BASEURL}/api/chats${apiRoute}`, {
           method: "POST",
           headers: { 
             "Content-Type": "application/json",
@@ -79,7 +81,7 @@ const ChatList = ({botResponseLoading, setBotResponseLoading, messages, setMessa
       setResponseLoadingDisableButton(true);
       setUserReplyLoading(true);
       try {
-        const response = await fetch(`/api/messages/userPrompt`, {
+        const response = await fetch(`${BASEURL}/api/messages/userPrompt`, {
           method: "POST",
           headers: { 
             "Content-Type": "application/json",

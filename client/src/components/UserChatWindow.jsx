@@ -45,6 +45,9 @@ import useUploadImage from "../hooks/useUploadImage";
 import { BUTTON_STYLE, TOOLTIP_STYLE } from "../styles/globleStyles";
 import { BUTTON_ICON_STYLE } from "../../../admin/src/styles/globleStyles";
 
+// BASEURL
+import { baseURL as BASEURL } from "../config/baseURL.js";
+
 const mockData = [
     {sender: "user", text: "Hello"},
     {sender: "user", text: "How are you ?"},
@@ -178,7 +181,7 @@ const UserChatWindow = () => {
       setMessageLoading(true);
       setMessages([]);
       try {
-        const response = await fetch(`/api/userMessages/${selectedUserConversation._id}`, {
+        const response = await fetch(`${BASEURL}/api/userMessages/${selectedUserConversation._id}`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${user.token}`
@@ -207,7 +210,7 @@ const UserChatWindow = () => {
   const sendMessage = async(e) => {
     if ((e.type === "click" || (e.key === "Enter" && newMessage)) && (newMessage || uploadImage)) {
       try {
-        const response = await fetch("/api/userMessages/sendMessage", {
+        const response = await fetch(`${BASEURL}/api/userMessages/sendMessage`, {
           method: "POST",
           headers: {
             "Content-Type" : "application/json",
